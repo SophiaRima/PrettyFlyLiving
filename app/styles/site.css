@@ -341,6 +341,11 @@ p { max-width: 62ch; }
   .filter-field { width: auto; }
 }
 
+/* Review cards: the guest's initial in a sage circle beside their name
+   (initials, not profile photos, which are the guests' own). */
+.person-row { display: flex; align-items: center; gap: 12px; }
+.avatar { flex-shrink: 0; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--sage2); color: var(--sage); font: 18px/1 var(--serif); }
+
 /* ==========================================================================
    Client revisions (requested after the concept was approved)
    Kept last so they override the concept rules above. AGENTS.md section 5.5.
