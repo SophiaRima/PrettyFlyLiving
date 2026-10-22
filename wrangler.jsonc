@@ -1,0 +1,45 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "prettyflyliving",
+  // Sophiah's Cloudflare account. Pinned so a deploy can never land in a
+  // developer's own account (not a secret).
+  "account_id": "e34ae98fa50d0dfc4a179509e15f463f",
+  "main": "./workers/app.ts",
+  "compatibility_date": "2026-10-19",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  },
+  "upload_source_maps": true,
+
+  // Production resources in Sophiah's account (D1 created 2026-10-22, region WEUR).
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "prettyflyliving-db",
+      "database_id": "82f39f35-f2c3-438f-afb6-b2f215e305b0",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "prettyflyliving-media"
+    }
+  ],
+
+  // Public, non-secret settings. Local overrides live in .dev.vars.
+  "vars": {
+    "SITE_URL": "https://prettyflyliving.com",
+    "NOTIFY_EMAIL": "info@prettyflyliving.com",
+    "EMAIL_FROM": "Pretty Fly Living <notifications@send.prettyflyliving.com>",
+    // Production Turnstile widget (public site key). Local dev uses the test
+    // key from .dev.vars. The secret key is a Worker secret.
+    "TURNSTILE_SITE_KEY": "0x4AAAAAAFg4mZQK73QnjtPJ"
+  },
+
+  // Set in production with `wrangler secret put <NAME>`; locally in .dev.vars.
+  "secrets": {
+    "required": ["RESEND_API_KEY", "TURNSTILE_SECRET_KEY"]
+  }
+}

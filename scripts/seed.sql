@@ -1,0 +1,192 @@
+-- Local placeholder content, taken from design/concept/index.html.
+-- Run with `npm run db:seed` (local D1 only). Safe to re-run: it clears the
+-- content tables first. Inbox and admin tables are left untouched.
+--
+-- Image keys starting with https:// are Unsplash placeholders. mediaUrl()
+-- passes them through unchanged; real uploads use R2 keys.
+
+DELETE FROM availability_blocks;
+DELETE FROM guide_photos;
+DELETE FROM property_photos;
+DELETE FROM reviews;
+DELETE FROM booking_requests;
+DELETE FROM properties;
+DELETE FROM guides;
+DELETE FROM faqs;
+DELETE FROM extra_services;
+
+-- ---------------------------------------------------------------- properties
+
+INSERT INTO properties (id, slug, name, area, address, property_type, tag, rating, description, bedrooms, bathrooms, sleeps, monthly_price_kes, min_nights, amenities, is_featured, is_published, sort_order) VALUES
+(1, 'the-lennox-residence', 'The Lennox Residence', 'Kilimani', 'Kilimani, Nairobi', 'Apartment', 'Guest favourite', 4.9,
+ 'A calm, light-filled apartment designed for slow mornings, comfortable workdays and easy evenings. Settle into a thoughtfully furnished home close to Nairobi’s cafés, shops and everyday essentials.',
+ 2, 2, 4, 180000, 30, '["Fast Wi-Fi","Fully equipped kitchen","Swimming pool","Secure parking","Smart TV","24/7 security"]', 1, 1, 1),
+(2, 'skyline-apartments', 'Skyline Apartments', 'Westlands', 'Westlands, Nairobi', 'Apartment', 'City views', 4.8,
+ 'An airy city base with modern finishes, generous windows and space to unwind after a day in Nairobi. Ideal for business trips, couples and longer visits.',
+ 2, 2, 4, 220000, 30, '["High-speed Wi-Fi","Balcony","Gym access","Equipped kitchen","Laundry","Secure access"]', 1, 1, 2),
+(3, 'the-urban-loft', 'The Urban Loft', 'Kileleshwa', 'Kileleshwa, Nairobi', 'Loft', 'Couples’ pick', 4.9,
+ 'A considered, comfortable loft in a leafy neighbourhood. Enjoy an easy-to-live-in layout, warm textures and a quieter side of the city, within reach of Nairobi’s favourite spots.',
+ 1, 1, 2, 140000, 30, '["Wi-Fi","Kitchenette","Smart TV","Lift access","On-site security","Fresh linens"]', 1, 1, 3),
+(4, 'the-garden-suite', 'The Garden Suite', 'Lavington', 'Lavington, Nairobi', 'Apartment', 'Room to unwind', 4.8,
+ 'A spacious apartment for families and small groups, with welcoming communal spaces and room to make yourself at home during a longer Nairobi stay.',
+ 3, 2, 6, 320000, 30, '["Full kitchen","Family dining","Wi-Fi","Laundry","Secure parking","24-hour security"]', 0, 1, 4),
+(5, 'parkview-hideaway', 'Parkview Hideaway', 'Kilimani', 'Kilimani, Nairobi', 'Apartment', 'Easy city living', 4.7,
+ 'A comfortable, well-appointed home base for solo travellers and couples, with the essentials covered and Nairobi on your doorstep.',
+ 1, 1, 2, 125000, 30, '["Wi-Fi","Kitchen","Smart TV","Lift","Security","Work-friendly desk"]', 0, 1, 5),
+(6, 'the-terrace-residence', 'The Terrace Residence', 'Westlands', 'Westlands, Nairobi', 'Apartment', 'Made for longer stays', 4.9,
+ 'A generous, light-filled residence with room for everyone. Settle in for a work assignment, family visit or extended city break.',
+ 3, 2, 6, 350000, 30, '["Balcony","Wi-Fi","Full kitchen","Laundry","Parking","Secure building"]', 0, 1, 6);
+
+INSERT INTO property_photos (property_id, r2_key, alt, sort_order) VALUES
+(1, 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85', 'The Lennox Residence living room', 0),
+(1, 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85', 'The Lennox Residence interior 2', 1),
+(1, 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=85', 'The Lennox Residence interior 3', 2),
+(1, 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=85', 'The Lennox Residence interior 4', 3),
+(1, 'https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1000&q=85', 'The Lennox Residence interior 5', 4),
+(2, 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=85', 'Skyline Apartments living area', 0),
+(2, 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85', 'Skyline Apartments interior 2', 1),
+(2, 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=85', 'Skyline Apartments interior 3', 2),
+(2, 'https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1000&q=85', 'Skyline Apartments interior 4', 3),
+(2, 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85', 'Skyline Apartments interior 5', 4),
+(3, 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1400&q=85', 'The Urban Loft living space', 0),
+(3, 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85', 'The Urban Loft interior 2', 1),
+(3, 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=85', 'The Urban Loft interior 3', 2),
+(3, 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85', 'The Urban Loft interior 4', 3),
+(3, 'https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1000&q=85', 'The Urban Loft interior 5', 4),
+(4, 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1400&q=85', 'The Garden Suite living room', 0),
+(4, 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85', 'The Garden Suite interior 2', 1),
+(4, 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=85', 'The Garden Suite interior 3', 2),
+(4, 'https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1000&q=85', 'The Garden Suite interior 4', 3),
+(4, 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=85', 'The Garden Suite interior 5', 4),
+(5, 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=85', 'Parkview Hideaway living room', 0),
+(5, 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85', 'Parkview Hideaway interior 2', 1),
+(5, 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=85', 'Parkview Hideaway interior 3', 2),
+(5, 'https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1000&q=85', 'Parkview Hideaway interior 4', 3),
+(5, 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=85', 'Parkview Hideaway interior 5', 4),
+(6, 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1400&q=85', 'The Terrace Residence living area', 0),
+(6, 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85', 'The Terrace Residence interior 2', 1),
+(6, 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85', 'The Terrace Residence interior 3', 2),
+(6, 'https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1000&q=85', 'The Terrace Residence interior 4', 3),
+(6, 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=85', 'The Terrace Residence interior 5', 4);
+
+-- Sample blocks so date search and the calendar have something to show.
+INSERT INTO availability_blocks (property_id, start_date, end_date, source, note) VALUES
+(1, '2026-11-01', '2026-12-01', 'booking', 'Seed: November booking'),
+(2, '2026-11-15', '2027-01-15', 'booking', 'Seed: two-month stay'),
+(3, '2026-12-20', '2027-01-05', 'admin', 'Seed: owner holiday');
+
+-- ------------------------------------------------------------------- reviews
+
+INSERT INTO reviews (guest_name, context, body, rating, is_featured, sort_order, is_published) VALUES
+('Guest review', 'Recent Nairobi stay', 'The apartment felt like home from the moment we walked in. Beautifully kept, easy to settle into, and the team was so helpful.', 5, 1, 1, 1),
+('Guest review', 'Nairobi, Kenya', 'A beautiful, comfortable apartment and communication that made everything simple. I’d happily stay again.', 5, 0, 2, 1);
+
+-- -------------------------------------------------------------------- guides
+
+INSERT INTO guides (slug, title, category, excerpt, cover_r2_key, highlights, body_md, is_featured, sort_order, is_published) VALUES
+('a-taste-of-nairobi', 'A taste of Nairobi', 'Food',
+ 'From slow brunches to Kenyan favourites, find your next table.',
+ 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=900&q=85',
+ '["Brunch & coffee","Kenyan favourites","Dinner tables"]',
+ '## Start with a table
+
+Nairobi’s food scene is best explored with curiosity. From relaxed brunch spots and cafés to Kenyan dishes and special-occasion dinners, there’s something for every kind of day.
+
+Ask your host or our team for current local recommendations, and check opening times before setting off.', 1, 1, 1),
+('the-city-after-dark', 'The city after dark', 'Nightlife',
+ 'Cocktail bars, live music and places with a little atmosphere.',
+ 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=900&q=85',
+ '["Golden-hour drinks","Live music","Late-night bites"]',
+ '## Find your own kind of night
+
+As the city settles into evening, Nairobi offers everything from intimate live-music rooms to rooftop drinks and lively restaurants. Choose your mood and plan your journey home.
+
+For a smooth evening, confirm event schedules in advance and use a trusted transport option.', 1, 2, 1),
+('wildlife-close-to-home', 'Wildlife close to home', 'Attractions',
+ 'A memorable day out, just beyond the city centre.',
+ 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=900&q=85',
+ '["Nairobi National Park","Conservation stories","Plan the drive"]',
+ '## A little wilderness, not far away
+
+One of Nairobi’s special qualities is how quickly the city can give way to open space and wildlife. A visit to Nairobi National Park or a conservation experience can make a memorable day.
+
+Check official attraction information for opening hours, tickets, access and any seasonal changes before travelling.', 1, 3, 1),
+('a-local-shopping-edit', 'A local shopping edit', 'Shopping',
+ 'Design finds, markets and independent Nairobi favourites.',
+ 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=900&q=85',
+ '["Design stores","Markets & makers","A little Nairobi"]',
+ '## Bring a little Nairobi home
+
+Explore a mix of shopping centres, independent shops, artisan markets and locally made pieces. Leave time to browse and discover items you won’t find anywhere else.
+
+Market days and vendor availability vary, so check current details and carry a suitable payment option.', 1, 4, 1),
+('make-a-day-of-it', 'Make a day of it', 'Activities',
+ 'Outdoor escapes and memorable experiences around Nairobi.',
+ 'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=900&q=85',
+ '["A nature walk","An active escape","A full-day plan"]',
+ '## Make the most of a free day
+
+Balance your city plans with a walk, a nature outing or an experience that takes you somewhere new. Nairobi has plenty to offer whether you prefer active adventures or an unhurried afternoon.
+
+Check weather, travel times and advance booking requirements for the activity you choose.', 0, 5, 1),
+('arts-culture-and-more', 'Arts, culture & more', 'Entertainment',
+ 'Creative spaces, galleries and the city’s cultural calendar.',
+ 'https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=900&q=85',
+ '["Gallery hopping","Live performance","Pop-ups & events"]',
+ '## Discover the creative side of the city
+
+Galleries, performances, pop-ups and cultural spaces offer another way to get to know Nairobi. Keep an eye on current listings and build a little flexibility into your plans.
+
+Schedules change regularly. Check venue websites or official social pages for up-to-date event information.', 0, 6, 1);
+
+-- Guide galleries (client revision: several photos per guide). The cover
+-- (guides.cover_r2_key) is shown first, then these in order.
+INSERT INTO guide_photos (guide_id, r2_key, alt, sort_order) VALUES
+((SELECT id FROM guides WHERE slug = 'a-taste-of-nairobi'), 'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=1400&q=80', 'Shared plates at a Nairobi table', 1),
+((SELECT id FROM guides WHERE slug = 'a-taste-of-nairobi'), 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=80', 'Freshly prepared dishes', 2),
+((SELECT id FROM guides WHERE slug = 'a-taste-of-nairobi'), 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=80', 'A relaxed restaurant interior', 3),
+((SELECT id FROM guides WHERE slug = 'a-taste-of-nairobi'), 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1400&q=80', 'Open-air terrace dining', 4),
+((SELECT id FROM guides WHERE slug = 'the-city-after-dark'), 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=1400&q=80', 'A cocktail on the bar', 1),
+((SELECT id FROM guides WHERE slug = 'the-city-after-dark'), 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=1400&q=80', 'A drink being poured', 2),
+((SELECT id FROM guides WHERE slug = 'the-city-after-dark'), 'https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?auto=format&fit=crop&w=1400&q=80', 'Bartender at work', 3),
+((SELECT id FROM guides WHERE slug = 'the-city-after-dark'), 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&w=1400&q=80', 'Live music on stage', 4),
+((SELECT id FROM guides WHERE slug = 'wildlife-close-to-home'), 'https://images.unsplash.com/photo-1523805009345-7448845a9e53?auto=format&fit=crop&w=1400&q=80', 'Giraffe at sunset', 1),
+((SELECT id FROM guides WHERE slug = 'wildlife-close-to-home'), 'https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=1400&q=80', 'Elephant in the bush', 2),
+((SELECT id FROM guides WHERE slug = 'wildlife-close-to-home'), 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1400&q=80', 'Game drive across the plains', 3),
+((SELECT id FROM guides WHERE slug = 'wildlife-close-to-home'), 'https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?auto=format&fit=crop&w=1400&q=80', 'Savanna and distant mountains', 4),
+((SELECT id FROM guides WHERE slug = 'a-local-shopping-edit'), 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=1400&q=80', 'An independent shop', 1),
+((SELECT id FROM guides WHERE slug = 'a-local-shopping-edit'), 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?auto=format&fit=crop&w=1400&q=80', 'Browsing a clothing rail', 2),
+((SELECT id FROM guides WHERE slug = 'a-local-shopping-edit'), 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1400&q=80', 'Shopping bags after a day out', 3),
+((SELECT id FROM guides WHERE slug = 'a-local-shopping-edit'), 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=1400&q=80', 'Handmade craft supplies', 4),
+((SELECT id FROM guides WHERE slug = 'make-a-day-of-it'), 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&w=1400&q=80', 'Hiking through green hills', 1),
+((SELECT id FROM guides WHERE slug = 'make-a-day-of-it'), 'https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1400&q=80', 'Walkers on a mountain trail', 2),
+((SELECT id FROM guides WHERE slug = 'make-a-day-of-it'), 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1400&q=80', 'A quiet forest path', 3),
+((SELECT id FROM guides WHERE slug = 'make-a-day-of-it'), 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1400&q=80', 'Sunset over the plains', 4),
+((SELECT id FROM guides WHERE slug = 'arts-culture-and-more'), 'https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1400&q=80', 'An evening event', 1),
+((SELECT id FROM guides WHERE slug = 'arts-culture-and-more'), 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=1400&q=80', 'Concert crowd and lights', 2),
+((SELECT id FROM guides WHERE slug = 'arts-culture-and-more'), 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1400&q=80', 'Audience at a performance', 3),
+((SELECT id FROM guides WHERE slug = 'arts-culture-and-more'), 'https://images.unsplash.com/photo-1561214115-f2f134cc4912?auto=format&fit=crop&w=1400&q=80', 'Colourful contemporary art', 4);
+
+-- ---------------------------------------------------------------------- faqs
+
+INSERT INTO faqs (audience, question, answer, sort_order, is_published) VALUES
+('guest', 'How do I book a stay?', 'Browse our available properties and submit a booking request with your preferred dates and contact details. Our team will check availability and contact you to confirm the next steps.', 1, 1),
+('guest', 'Is my booking confirmed when I send a request?', 'No. A request is an enquiry only. Your reservation is confirmed after our team has checked availability and explicitly confirmed the booking with you.', 2, 1),
+('guest', 'Can I book for a month or longer?', 'Many stays can accommodate extended visits. Share your dates and requirements so we can confirm the suitable options and rates.', 3, 1),
+('guest', 'What is included in the apartment?', 'Each listing describes its amenities. If something specific matters to your stay, please ask us before confirming.', 4, 1),
+('guest', 'How do I check in?', 'Arrival instructions and access details are shared once your reservation is confirmed.', 5, 1),
+('guest', 'Can I change my dates?', 'Please contact us as soon as possible. Changes depend on availability and the terms agreed for your reservation.', 6, 1),
+('owner', 'What does property management include?', 'Services can include listing set-up, pricing support, guest communication, check-in and check-out coordination, cleaning and maintenance coordination, reviews and booking-channel management. The scope is agreed with each owner.', 1, 1),
+('owner', 'Do you manage Airbnb and Booking.com listings?', 'We can discuss management across Airbnb, Booking.com and other relevant channels, depending on your property and the agreed scope.', 2, 1),
+('owner', 'How are fees calculated?', 'Fees and any additional operating costs are discussed transparently during the property assessment and documented before work begins.', 3, 1),
+('owner', 'Can I still use my property personally?', 'Owner stays and calendar blocks can be discussed as part of the management plan. Dates must be coordinated with existing reservations.', 4, 1),
+('owner', 'How do you handle repairs?', 'We coordinate maintenance according to the agreed process and approval limits. Larger or unexpected costs should be discussed with the owner.', 5, 1),
+('owner', 'How do I get started?', 'Send an enquiry through our property management form. We’ll learn about your property and arrange a conversation about your goals.', 6, 1);
+
+-- ------------------------------------------------------------ extra services
+-- Not in the concept; placeholders until Sophiah supplies the real list.
+
+INSERT INTO extra_services (title, description, image_r2_key, sort_order, is_published) VALUES
+('Airport transfers', 'A trusted driver waiting when you land, so your stay starts calmly.', 'https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=900&q=85', 1, 1),
+('Weekly housekeeping', 'Fresh linens and a tidy home, scheduled around your plans.', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=85', 2, 1),
+('Pre-arrival groceries', 'Arrive to a stocked kitchen with the essentials you asked for.', 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=900&q=85', 3, 1);

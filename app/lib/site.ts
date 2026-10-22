@@ -1,0 +1,103 @@
+import type { GuideCategory } from "./constants";
+
+/**
+ * Site-wide constants (AGENTS.md section 5.4).
+ *
+ * PLACEHOLDERS: the WhatsApp number and phone are not confirmed yet.
+ * Replace them with Sophiah's verified business contacts before launch.
+ */
+export const site = {
+  name: "Pretty Fly Living",
+  tagline: "Serviced apartments · Nairobi",
+  email: "info@prettyflyliving.com",
+  /** International format, digits only, for wa.me links. PLACEHOLDER. */
+  whatsappNumber: "254700000000",
+  /** Display format for tel: links. PLACEHOLDER. */
+  phone: "+254 700 000 000",
+  location: "Nairobi, Kenya",
+} as const;
+
+export const navItems = [
+  { to: "/", label: "Home" },
+  { to: "/stays", label: "Our stays" },
+  { to: "/why-us", label: "Why us" },
+  { to: "/things-to-do", label: "Things to do" },
+  { to: "/management", label: "Property management" },
+  { to: "/faqs", label: "FAQs" },
+  { to: "/contact", label: "Contact" },
+] as const;
+
+/**
+ * Marketing photos used outside property listings (in public/images).
+ * PLACEHOLDERS from the concept: swap the files for Sophiah's own photos.
+ */
+export const pageImages = {
+  hero: {
+    src: "/images/hero.jpg",
+    alt: "Warm, sunlit serviced apartment with elegant neutral interiors",
+  },
+  homeSplit: {
+    src: "/images/home-split.jpg",
+    alt: "Warm living room with natural textures",
+  },
+  whySplit: {
+    src: "/images/why-split.jpg",
+    alt: "Calm, warm and thoughtfully furnished living space",
+  },
+  managementSplit: {
+    src: "/images/management-split.jpg",
+    alt: "Beautifully staged apartment ready for guests",
+  },
+} as const;
+
+/** "Max monthly price" options on /stays. Adjust once real prices are in. */
+export const priceBrackets = [150000, 250000, 350000] as const;
+
+/**
+ * "Browse by" shortcuts on /things-to-do. Each one sets either a search term
+ * (matched against titles, excerpts and highlights) or a guide category.
+ */
+export const guideTopics: readonly { label: string; q?: string; category?: GuideCategory }[] = [
+  { label: "Live music", q: "live music" },
+  { label: "Markets", q: "market" },
+  { label: "Wildlife", q: "wildlife" },
+  { label: "Food & drink", category: "Food" },
+  { label: "Arts & culture", category: "Entertainment" },
+  { label: "Outdoor escapes", category: "Activities" },
+];
+
+export function whatsappUrl(message?: string): string {
+  const base = `https://wa.me/${site.whatsappNumber}`;
+  return message ? `${base}?text=${encodeURIComponent(message)}` : base;
+}
+
+/** Prefilled WhatsApp messages, worded as in the concept. */
+export const whatsappMessages = {
+  general: "Hello Pretty Fly Living, I would like to make an enquiry.",
+  property: (name: string, area: string): string =>
+    `Hello Pretty Fly Living, I am interested in ${name} in ${area}. Could you please share availability and rates?`,
+  bookingRequest: (request: {
+    property: string;
+    area: string;
+    checkIn: string;
+    checkOut: string;
+    guests: number;
+    name: string;
+    contact: string;
+  }): string =>
+    `Hello Pretty Fly Living, I'd like to request a stay at ${request.property} (${request.area}). Check-in: ${request.checkIn}; check-out: ${request.checkOut}; guests: ${request.guests}. Name: ${request.name}. Contact: ${request.contact}. Please confirm availability and total price.`,
+} as const;
+
+/** Concept's money() format: "KES 180,000". */
+export function formatKes(amount: number): string {
+  return `KES ${amount.toLocaleString("en-KE")}`;
+}
+
+/** Opening lines for replies from the dashboard; Sophiah finishes them in her email or WhatsApp. */
+export const replyMessages = {
+  booking: (request: { name: string; property: string; checkIn: string; checkOut: string }): string =>
+    `Hello ${request.name}, thank you for your request to stay at ${request.property} from ${request.checkIn} to ${request.checkOut}. `,
+  contact: (name: string): string => `Hello ${name}, thank you for getting in touch with Pretty Fly Living. `,
+  owner: (name: string, area: string): string =>
+    `Hello ${name}, thank you for your interest in property management with Pretty Fly Living for your property in ${area}. `,
+} as const;

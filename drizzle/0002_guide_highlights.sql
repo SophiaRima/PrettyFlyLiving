@@ -1,0 +1,1 @@
+ALTER TABLE `guides` ADD `highlights` text DEFAULT '[]' NOT NULL;

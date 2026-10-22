@@ -1,0 +1,156 @@
+/*
+ * Admin dashboard stylesheet: Tailwind CSS v4 + shadcn/ui (base-nova).
+ * Linked only by routes/admin/_layout.tsx, so Tailwind's preflight never
+ * touches the public site. Scanning is limited to admin code.
+ *
+ * On-brand but functional (AGENTS.md section 8): concept fonts (loaded in
+ * root.tsx) and the concept's sage as the primary colour.
+ */
+@import "tailwindcss" source(none);
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@source "../routes/admin";
+@source "../components/admin";
+@source "../components/ui";
+
+@theme inline {
+  --font-heading: "DM Serif Display", Georgia, serif;
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Concept tokens: ink #242820, muted #73766c, paper #f7f5ef, white #fffefa,
+   sage #536653, sage2 #e5e9df, line #e5e1d8. */
+:root {
+  --background: #f7f5ef;
+  --foreground: #242820;
+  --card: #fffefa;
+  --card-foreground: #242820;
+  --popover: #fffefa;
+  --popover-foreground: #242820;
+  --primary: #536653;
+  --primary-foreground: #ffffff;
+  --secondary: #e5e9df;
+  --secondary-foreground: #242820;
+  --muted: #eeece3;
+  --muted-foreground: #73766c;
+  --accent: #e5e9df;
+  --accent-foreground: #242820;
+  --destructive: #a74e48;
+  --border: #e5e1d8;
+  --input: #e5e1d8;
+  --ring: #536653;
+  --chart-1: #536653;
+  --chart-2: #9b7a45;
+  --chart-3: #73766c;
+  --chart-4: #c4887a;
+  --chart-5: #242820;
+  --radius: 0.5rem;
+  --sidebar: #fffefa;
+  --sidebar-foreground: #242820;
+  --sidebar-primary: #536653;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e5e9df;
+  --sidebar-accent-foreground: #242820;
+  --sidebar-border: #e5e1d8;
+  --sidebar-ring: #536653;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  /* 90% root, like the public site. Every rem-based size in the admin
+     (text, spacing, controls, widths) scales from this. */
+  html {
+    @apply font-sans;
+    font-size: 90%;
+  }
+}
+
+/* Calendar icons are always solid black (client rule), like the public
+   site's date fields. Unlayered, so it beats Tailwind's text-* colours. */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  filter: brightness(0);
+  cursor: pointer;
+}
+svg.lucide[class*="lucide-calendar"] {
+  color: #000;
+}
+
+/* Guide Markdown preview (routes/admin/guide-details): readable defaults,
+   since Tailwind's preflight removes heading and list styles. */
+.guide-preview h2 {
+  margin: 1.25em 0 0.5em;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+}
+.guide-preview h3 {
+  margin: 1em 0 0.4em;
+  font-weight: 600;
+}
+.guide-preview p,
+.guide-preview ul,
+.guide-preview ol {
+  margin: 0 0 0.9em;
+  line-height: 1.65;
+}
+.guide-preview ul {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+.guide-preview ol {
+  list-style: decimal;
+  padding-left: 1.4em;
+}
+.guide-preview a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+.guide-preview > div > :first-child {
+  margin-top: 0;
+}

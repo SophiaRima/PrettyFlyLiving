@@ -1,0 +1,13 @@
+# Copy to .dev.vars for local development. Never commit .dev.vars.
+# Values here override "vars" in wrangler.jsonc during `npm run dev`.
+
+SITE_URL=http://localhost:5173
+
+# Cloudflare Turnstile test keys (always pass). Production keys go in
+# wrangler.jsonc (site key) and `wrangler secret put` (secret key).
+TURNSTILE_SITE_KEY=1x00000000000000000000AA
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+
+# Resend API key. While it is the placeholder, email alerts are printed to the
+# `npm run dev` terminal instead of being sent.
+RESEND_API_KEY=re_placeholder

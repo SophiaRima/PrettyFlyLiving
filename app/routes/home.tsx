@@ -1,0 +1,188 @@
+import { Link } from "react-router";
+
+import { getFeaturedGuides, getFeaturedReview } from "~/.server/queries/content";
+import { getAreas, getFeaturedProperties } from "~/.server/queries/properties";
+import { dbFromContext } from "~/.server/request";
+import { CtaSection } from "~/components/site/cta-band";
+import { GuideTile } from "~/components/site/guide-cards";
+import { Img } from "~/components/site/img";
+import { PropertyCard } from "~/components/site/property-card";
+import { QuoteCard } from "~/components/site/quote-card";
+import { SearchPanel } from "~/components/site/search-panel";
+import { pageImages } from "~/lib/site";
+
+import type { Route } from "./+types/home";
+
+export function meta(): Route.MetaDescriptors {
+  return [
+    { title: "Pretty Fly Living  -  Your Home in Nairobi" },
+    {
+      name: "description",
+      content:
+        "Thoughtfully selected serviced apartments in Nairobi for short and extended stays. Explore Pretty Fly Living.",
+    },
+  ];
+}
+
+export async function loader({ context }: Route.LoaderArgs) {
+  const db = dbFromContext(context);
+  const [stays, areas, review, guides] = await Promise.all([
+    getFeaturedProperties(db, 4),
+    getAreas(db),
+    getFeaturedReview(db),
+    getFeaturedGuides(db, 4),
+  ]);
+  return { stays, areas, review, guides };
+}
+
+const benefits = [
+  ["01 · Thoughtful locations", "Neighbourhoods close to the things that bring you to Nairobi."],
+  ["02 · Ready to live in", "Comfortable furnishings and the everyday essentials already here."],
+  ["03 · A little flexibility", "Options for quick getaways and longer stays alike."],
+  ["04 · Human support", "Friendly, responsive help throughout your stay."],
+] as const;
+
+export default function Home({ loaderData }: Route.ComponentProps) {
+  const { stays, areas, review, guides } = loaderData;
+  return (
+    <main>
+      <section className="hero">
+        <div className="container">
+          <div className="hero-frame">
+            <div className="hero-photo">
+              <Img src={pageImages.hero.src} alt={pageImages.hero.alt} eager />
+            </div>
+            <div className="hero-copy">
+              <div className="eyebrow">Serviced apartments · Nairobi</div>
+              <h1>
+                Your home
+                <br />
+                in Nairobi.
+              </h1>
+              <p>
+                Beautiful apartments. Thoughtful service. Room to settle in,
+                whether you’re here for a weekend or a little longer.
+              </p>
+              <Link className="btn" to="/stays">
+                Browse our stays <span>↗</span>
+              </Link>
+              <div className="hero-note">
+                <span></span> Feel at home, wherever you’re from.
+              </div>
+            </div>
+          </div>
+          <SearchPanel areas={areas} />
+          <div className="intro-strip">
+            <span>Considered spaces</span>
+            <span>Comforts that matter</span>
+            <span>Local knowledge</span>
+            <span>Here when you need us</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <div className="eyebrow">A place to settle in</div>
+              <h2>Stays worth coming home to.</h2>
+            </div>
+            <div>
+              <p>
+                Discover thoughtfully furnished apartments in Nairobi’s
+                most-loved neighbourhoods, chosen for comfort, convenience and
+                a little breathing room.
+              </p>
+              <Link className="text-link" to="/stays">
+                Explore all stays ↗
+              </Link>
+            </div>
+          </div>
+          <div className="property-grid">
+            {stays.map((stay) => (
+              <PropertyCard key={stay.slug} property={stay} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section" style={{ paddingTop: 20 }}>
+        <div className="container split">
+          <div>
+            <div className="eyebrow">The Pretty Fly feeling</div>
+            <h2>More than a place to stay.</h2>
+            <p>
+              We believe the best stays feel effortless. That means inviting
+              spaces, the details taken care of, and a real person to turn to
+              when you need a hand.
+            </p>
+            <div className="benefits">
+              {benefits.map(([title, text]) => (
+                <div className="benefit" key={title}>
+                  <strong>{title}</strong>
+                  <p>{text}</p>
+                </div>
+              ))}
+            </div>
+            <Link className="btn" to="/why-us">
+              Why stay with us ↗
+            </Link>
+          </div>
+          <div className="split-image">
+            <Img src={pageImages.homeSplit.src} alt={pageImages.homeSplit.alt} />
+            <div className="image-caption">A softer landing in the city.</div>
+          </div>
+        </div>
+      </section>
+
+      {review && (
+        <section className="section quote-section">
+          <div className="container quote-grid">
+            <div>
+              <div className="eyebrow">Kind words, real stays</div>
+              <h2>Good stays stay with you.</h2>
+              <p>
+                We want every guest to feel looked after, comfortable and glad
+                they chose us.
+              </p>
+              <Link className="text-link" to="/why-us">
+                What makes us different ↗
+              </Link>
+            </div>
+            <QuoteCard review={review} />
+          </div>
+        </section>
+      )}
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <div className="eyebrow">Get to know the neighbourhood</div>
+              <h2>Make yourself at home in Nairobi.</h2>
+            </div>
+            <Link className="text-link" to="/things-to-do">
+              Discover the city ↗
+            </Link>
+          </div>
+          <div className="guide-grid">
+            {guides.map((guide) => (
+              <GuideTile key={guide.slug} guide={guide} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CtaSection
+        eyebrow="For property owners"
+        title="Your property. Our expertise."
+        text="Thoughtful property management, with your returns and your home in mind."
+      >
+        <Link className="btn" to="/management">
+          Explore property management ↗
+        </Link>
+      </CtaSection>
+    </main>
+  );
+}
