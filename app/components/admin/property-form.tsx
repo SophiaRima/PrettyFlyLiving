@@ -182,9 +182,9 @@ export function PropertyForm({
           {...common}
           name="goodToKnow"
           label="Good to know"
-          rows={3}
+          rows={10}
           defaultValue={values?.goodToKnow}
-          hint="Leave blank to show the standard text about minimum stays, availability and house rules."
+          hint="One paragraph per line. Start a line with a short label and a colon (e.g. House rules: …) to show the label in bold. Leave blank to show the standard text about check-in and house rules."
         />
       </FormSection>
 

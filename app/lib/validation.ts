@@ -256,7 +256,7 @@ export const propertySchema = z
       )
       .transform((v) => (v === null ? null : Math.round(v * 10) / 10)),
     description: requiredText("a description", 3000),
-    goodToKnow: nullableText(2000),
+    goodToKnow: nullableText(4000),
     bedrooms: wholeNumber("the number of bedrooms", 0, 20),
     bathrooms: wholeNumber("the number of bathrooms", 0, 20),
     sleeps: wholeNumber("how many guests it sleeps", 1, 50),

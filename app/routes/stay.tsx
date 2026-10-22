@@ -123,6 +123,24 @@ export async function action({ request, params, context }: Route.ActionArgs) {
 const DEFAULT_GOOD_TO_KNOW =
   "Check-in details are shared after your booking is confirmed. Please treat the apartment and neighbours with care. Smoking and events are not permitted unless agreed in writing.";
 
+/** A short "Label:" at the start of a Good to know line, shown in bold. */
+const LEAD_LABEL = /^([^:.\n]{1,30}):\s+(.+)$/;
+
+/** Good to know text: one paragraph per line, with an optional bold lead label. */
+function GoodToKnow({ text }: { text: string }) {
+  const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
+  return lines.map((line, i) => {
+    const match = LEAD_LABEL.exec(line);
+    return match ? (
+      <p key={i}>
+        <strong>{match[1]}:</strong> {match[2]}
+      </p>
+    ) : (
+      <p key={i}>{line}</p>
+    );
+  });
+}
+
 export default function Stay({ loaderData, actionData }: Route.ComponentProps) {
   const { property, similar, today, calendarEnd, turnstileSiteKey } = loaderData;
   const [checkIn, setCheckIn] = useState(
@@ -174,7 +192,7 @@ export default function Stay({ loaderData, actionData }: Route.ComponentProps) {
 
               <div className="detail-section">
                 <h3>Good to know</h3>
-                <p>{property.goodToKnow || DEFAULT_GOOD_TO_KNOW}</p>
+                <GoodToKnow text={property.goodToKnow || DEFAULT_GOOD_TO_KNOW} />
                 <p>
                   Location: {property.address || `${property.area}, Nairobi`}.
                   The exact address and arrival instructions will be provided
