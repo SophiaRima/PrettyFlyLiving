@@ -134,16 +134,18 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
           className="section"
           style={services.length > 0 ? { paddingTop: 0 } : undefined}
         >
-          <div className="container quote-grid">
-            <div>
-              <div className="eyebrow">Hospitality, thoughtfully done</div>
-              <h2>Here for the whole stay.</h2>
+          <div className="container">
+            <div className="section-head">
+              <div>
+                <div className="eyebrow">Hospitality, thoughtfully done</div>
+                <h2>Here for the whole stay.</h2>
+              </div>
               <p>
                 From the first enquiry to check-out, we aim to make the
                 experience feel considered and personal.
               </p>
             </div>
-            <div className="quote-stack">
+            <div className="review-grid">
               {reviews.map((review) => (
                 <QuoteCard key={review.id} review={review} />
               ))}

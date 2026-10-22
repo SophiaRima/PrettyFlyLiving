@@ -299,8 +299,21 @@ p { max-width: 62ch; }
   .cta-actions { width: 100%; }
 }
 
-/* Several reviews in the quote layout. */
-.quote-stack { display: grid; gap: 16px; }
+/* Why Us reviews: compact quote cards, three per row, with the guest's name
+   aligned to the bottom of each card. */
+.review-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.review-grid .quote-card { display: flex; flex-direction: column; padding: 20px 22px; }
+.review-grid .stars { font-size: 11px; letter-spacing: 2px; }
+.review-grid .quote-card blockquote { flex: 1; font-size: 15px; line-height: 1.5; margin: 8px 0 16px; }
+.review-grid .avatar { width: 32px; height: 32px; font-size: 15px; }
+.review-grid .person-row { gap: 10px; }
+@media (max-width: 980px) {
+  .review-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .review-grid { grid-template-columns: 1fr; gap: 12px; }
+  .review-grid .quote-card { padding: 20px; }
+}
 
 /* Text links inside the FAQ help box and contact rows. */
 .link-row { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 4px; }

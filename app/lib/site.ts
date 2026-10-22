@@ -51,7 +51,7 @@ export const pageImages = {
 } as const;
 
 /** How many published reviews Why Us shows (featured first, then by sort order). */
-export const whyUsReviewCount = 4;
+export const whyUsReviewCount = 6;
 
 /** "Max monthly price" options on /stays. Adjust once real prices are in. */
 export const priceBrackets = [150000, 250000, 350000] as const;
