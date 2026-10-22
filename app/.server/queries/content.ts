@@ -51,12 +51,14 @@ export async function getFeaturedReview(db: Database): Promise<ReviewData | null
   return review ?? null;
 }
 
-export async function getPublishedReviews(db: Database): Promise<ReviewData[]> {
+/** The first `limit` published reviews: featured first, then by sort order. */
+export async function getPublishedReviews(db: Database, limit: number): Promise<ReviewData[]> {
   return db
     .select(reviewColumns)
     .from(reviews)
     .where(eq(reviews.isPublished, true))
-    .orderBy(asc(reviews.sortOrder), asc(reviews.id));
+    .orderBy(desc(reviews.isFeatured), asc(reviews.sortOrder), asc(reviews.id))
+    .limit(limit);
 }
 
 // --------------------------------------------------------------------- guides

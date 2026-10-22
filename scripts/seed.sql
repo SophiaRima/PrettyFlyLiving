@@ -122,9 +122,20 @@ INSERT INTO availability_blocks (property_id, start_date, end_date, source, note
 
 -- ------------------------------------------------------------------- reviews
 
-INSERT INTO reviews (guest_name, context, body, rating, is_featured, sort_order, is_published) VALUES
-('Guest review', 'Recent Nairobi stay', 'The apartment felt like home from the moment we walked in. Beautifully kept, easy to settle into, and the team was so helpful.', 5, 1, 1, 1),
-('Guest review', 'Nairobi, Kenya', 'A beautiful, comfortable apartment and communication that made everything simple. I’d happily stay again.', 5, 0, 2, 1);
+-- The listing's real Airbnb reviews, word for word. The 4- and 3-star ones
+-- are seeded unpublished; Sophiah can publish them from /admin/reviews.
+INSERT INTO reviews (guest_name, context, body, rating, property_id, is_featured, sort_order, is_published) VALUES
+('Nelson', 'Stayed a few nights · Airbnb review', 'The place was incredibly neat, comfortable, and honestly even better than the pictures and description suggest; they simply don’t do it justice. The host was very responsive, collaborative, and easy to communicate with, which made the whole experience even better. I would definitely recommend the place.', 5, 7, 1, 1, 1),
+('Jack', 'Stayed one night · Airbnb review', 'Great little place. Extremely clean. Bathroom was really good. Had a smart TV. It is small but it is very fit for purpose and personally I thought it was great. Especially for shorter term stays. Would 100% return. Great communication and easy check in also! Very secure place', 5, 7, 0, 2, 1),
+('Alisha', 'Stayed a few nights · Airbnb review', 'Lovely stay! Sophiah was great and very responsive. The flat was cozy and clean, and I felt very safe', 5, 7, 0, 3, 1),
+('Patrick', 'Stayed one night · Airbnb review', 'Incredibly nice place, comfortable bed and the host is superb. Great value for money!', 5, 7, 0, 4, 1),
+('Faris', 'Stayed a few nights · Airbnb review', 'Great view in a great location. I will come back for sure.', 5, 7, 0, 5, 1),
+('Mike', 'Stayed a few nights · Airbnb review', 'Lovely place, great location, and an excellent host. Would definitely come back', 5, 7, 0, 6, 1),
+('Jonan', 'Stayed a few nights · Airbnb review', 'Its a small beautiful place. Sophiah responds promptly and is understanding', 5, 7, 0, 7, 1),
+('Abel', 'Stayed a few nights · Airbnb review', 'The Place is so nice,safe,Privacy and cost effective ,but also the Host Sophia is very proactive in Communications,even the receptionist at a gate they are so helpfully the moment i needed assistance,i really recommend for those people who are expecting to visit to Nairobi to check for this Appartment.', 5, 7, 0, 8, 1),
+('Pauline', 'Stayed a few nights · Airbnb review', 'Sophiahs place is exactly as described,very cozy suitable for an individual who needs access to all parts of Nairobi.The building is in a really nice neighborhood,near yaya center and other shopping centers. Sophiah is very responsive and I appreciate the late check out and early check in . The construction going on in the next lot is noisy but they do work within a set amount of hours . Thank you for a wonderful stay', 5, 7, 0, 9, 1),
+('Yohan', 'Airbnb review', 'There is construction going on the side of the building a lot of noise', 4, 7, 0, 10, 0),
+('Lailah', 'Stayed a few nights · Airbnb review', 'This dsq room is as described and fit for 1 person staying a short time, comfortable and clean. Its located near yaya shopping centre and the building is easy to get to. Be careful walking in the area at night as its not well lit and could be targetted and mugged. Instructions to get in were not clear nut once we reached out to Sophiah, she quickly gave us the information we needed. Thank you Sophiah for hosting me!', 3, 7, 0, 11, 0);
 
 -- -------------------------------------------------------------------- guides
 

@@ -26,6 +26,7 @@ import { ItemControls } from "~/components/admin/item-controls";
 import { Badge } from "~/components/ui/badge";
 import { Button, buttonVariants } from "~/components/ui/button";
 import type { AdminActionResult } from "~/lib/forms";
+import { whyUsReviewCount } from "~/lib/site";
 import { cn } from "~/lib/utils";
 import { reviewSchema } from "~/lib/validation";
 
@@ -116,7 +117,7 @@ function ReviewFields({
       </div>
       <TextAreaField {...common} name="body" label="Review" rows={4} defaultValue={review?.body} required hint="Use the guest’s real words. Never write or edit a review on their behalf." />
       <div className="grid gap-3 sm:grid-cols-2">
-        <CheckboxField failure={failure} name="isPublished" label="Published" defaultChecked={review?.isPublished ?? true} hint="Shown on the Why Us page." />
+        <CheckboxField failure={failure} name="isPublished" label="Published" defaultChecked={review?.isPublished ?? true} hint={`Why Us shows the first ${whyUsReviewCount} published reviews: featured first, then in list order.`} />
         <CheckboxField failure={failure} name="isFeatured" label="Featured on Home" defaultChecked={review?.isFeatured ?? false} hint="Home shows the first featured review." />
       </div>
       <FormError failure={failure} />
@@ -191,7 +192,7 @@ export default function AdminReviews({ loaderData }: Route.ComponentProps) {
   const { reviews, properties } = loaderData;
   return (
     <>
-      <AdminPageHeader title="Reviews" description="Guest reviews on the Why Us page, in the order shown." />
+      <AdminPageHeader title="Reviews" description={`Guest reviews. Why Us shows the first ${whyUsReviewCount} published ones (featured first, then in this order).`} />
       <div className="grid max-w-3xl gap-6">
         {reviews.length === 0 ? (
           <p className="text-sm text-muted-foreground">No reviews yet.</p>

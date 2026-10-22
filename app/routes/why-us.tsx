@@ -7,7 +7,7 @@ import { Img } from "~/components/site/img";
 import { PageHero } from "~/components/site/page-hero";
 import { QuoteCard } from "~/components/site/quote-card";
 import { ServiceGrid, type ServiceItem } from "~/components/site/service-grid";
-import { pageImages } from "~/lib/site";
+import { pageImages, whyUsReviewCount } from "~/lib/site";
 
 import type { Route } from "./+types/why-us";
 
@@ -26,7 +26,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   const db = dbFromContext(context);
   const [services, reviews] = await Promise.all([
     getExtraServices(db),
-    getPublishedReviews(db),
+    getPublishedReviews(db, whyUsReviewCount),
   ]);
   return { services, reviews };
 }

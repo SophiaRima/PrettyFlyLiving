@@ -3,15 +3,15 @@ import type { GuideCategory } from "./constants";
 /**
  * Site-wide constants (AGENTS.md section 5.4).
  *
- * PLACEHOLDERS: the WhatsApp number and phone are not confirmed yet.
- * Replace them with Sophiah's verified business contacts before launch.
+ * PLACEHOLDER: the phone number is not confirmed yet. Replace it with
+ * Sophiah's verified business number before launch.
  */
 export const site = {
   name: "Pretty Fly Living",
   tagline: "Serviced apartments · Nairobi",
   email: "info@prettyflyliving.com",
-  /** International format, digits only, for wa.me links. PLACEHOLDER. */
-  whatsappNumber: "254700000000",
+  /** International format, digits only, for wa.me links (+254 708 854755). */
+  whatsappNumber: "254708854755",
   /** Display format for tel: links. PLACEHOLDER. */
   phone: "+254 700 000 000",
   location: "Nairobi, Kenya",
@@ -49,6 +49,9 @@ export const pageImages = {
     alt: "Courtyard garden with seating in a Pretty Fly Living building",
   },
 } as const;
+
+/** How many published reviews Why Us shows (featured first, then by sort order). */
+export const whyUsReviewCount = 4;
 
 /** "Max monthly price" options on /stays. Adjust once real prices are in. */
 export const priceBrackets = [150000, 250000, 350000] as const;
