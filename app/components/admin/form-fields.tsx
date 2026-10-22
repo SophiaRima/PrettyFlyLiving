@@ -72,7 +72,8 @@ function FieldFrame({
 
 export function TextField(
   props: FieldProps & {
-    type?: "text" | "number" | "url" | "email" | "date";
+    type?: "text" | "number" | "url" | "email" | "date" | "password";
+    autoComplete?: string;
     required?: boolean;
     placeholder?: string;
     list?: string;
@@ -88,6 +89,7 @@ export function TextField(
         id={id}
         name={props.name}
         type={props.type ?? "text"}
+        autoComplete={props.autoComplete}
         defaultValue={value}
         required={props.required}
         placeholder={props.placeholder}

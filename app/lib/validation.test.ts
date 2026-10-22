@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  adminEmailChangeSchema,
+  adminPasswordChangeSchema,
   bookingRequestSchema,
   calendarRangeSchema,
   contactMessageSchema,
@@ -155,5 +157,35 @@ describe("reviewSchema and guideSchema", () => {
     const base = { title: "Weekend markets", excerpt: "Crafts.", sortOrder: "0" };
     expect(guideSchema.parse({ ...base, category: "Shopping" }).slug).toBe("weekend-markets");
     expect(guideSchema.safeParse({ ...base, category: "Spa" }).success).toBe(false);
+  });
+});
+
+describe("admin settings schemas", () => {
+  it("lowercases a new login email and needs the current password", () => {
+    const parsed = adminEmailChangeSchema.safeParse({ email: " Sophiah@Example.com ", currentPassword: "old password" });
+    expect(parsed.success && parsed.data.email).toBe("sophiah@example.com");
+    expect(adminEmailChangeSchema.safeParse({ email: "sophiah@example.com", currentPassword: "" }).success).toBe(false);
+    expect(adminEmailChangeSchema.safeParse({ email: "not-an-email", currentPassword: "x" }).success).toBe(false);
+  });
+
+  const valid = { currentPassword: "old password", newPassword: "a brand new one", confirmPassword: "a brand new one" };
+
+  it("accepts a new password of at least 10 characters that is repeated exactly", () => {
+    expect(adminPasswordChangeSchema.safeParse(valid).success).toBe(true);
+  });
+
+  it("flags the field that is wrong", () => {
+    const issueAt = (input: Record<string, string>) => {
+      const parsed = adminPasswordChangeSchema.safeParse(input);
+      return parsed.success ? null : parsed.error.issues[0]?.path[0];
+    };
+    expect(issueAt({ ...valid, newPassword: "short", confirmPassword: "short" })).toBe("newPassword");
+    expect(issueAt({ ...valid, confirmPassword: "a brand new on" })).toBe("confirmPassword");
+    expect(issueAt({ ...valid, newPassword: "old password", confirmPassword: "old password" })).toBe("newPassword");
+  });
+
+  it("does not trim passwords", () => {
+    const parsed = adminPasswordChangeSchema.safeParse({ ...valid, newPassword: " spaced out ", confirmPassword: " spaced out " });
+    expect(parsed.success && parsed.data.newPassword).toBe(" spaced out ");
   });
 });

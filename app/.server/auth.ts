@@ -1,11 +1,11 @@
-import { and, count, eq, gt, lt, sql } from "drizzle-orm";
+import { and, count, eq, gt, lt, ne, sql } from "drizzle-orm";
 import { redirect, type RouterContextProvider } from "react-router";
 
 import { adminUserContext, type AdminUser } from "~/context";
 
 import type { Database } from "./db/client";
 import { adminUsers, loginAttempts, sessions } from "./db/schema";
-import { verifyPassword } from "./password";
+import { hashPassword, verifyPassword } from "./password";
 
 /*
  * Admin sessions (AGENTS.md section 9): a 32-byte random token in an
@@ -178,4 +178,55 @@ export async function authenticate(
     .limit(1);
   const valid = await verifyPassword(password, user?.passwordHash ?? DUMMY_HASH);
   return user && valid ? { id: user.id, email: user.email } : null;
+}
+
+// ------------------------------------------------------------------ account
+
+/** True when `password` is this admin's current password. */
+export async function checkAdminPassword(
+  db: Database,
+  userId: number,
+  password: string,
+): Promise<boolean> {
+  const [user] = await db
+    .select({ passwordHash: adminUsers.passwordHash })
+    .from(adminUsers)
+    .where(eq(adminUsers.id, userId))
+    .limit(1);
+  const valid = await verifyPassword(password, user?.passwordHash ?? DUMMY_HASH);
+  return Boolean(user) && valid;
+}
+
+/** Changes the login email; "taken" when another admin already uses it. */
+export async function changeAdminEmail(
+  db: Database,
+  userId: number,
+  email: string,
+): Promise<"changed" | "taken"> {
+  const [other] = await db
+    .select({ id: adminUsers.id })
+    .from(adminUsers)
+    .where(and(eq(adminUsers.email, email), ne(adminUsers.id, userId)))
+    .limit(1);
+  if (other) return "taken";
+  await db.update(adminUsers).set({ email }).where(eq(adminUsers.id, userId));
+  return "changed";
+}
+
+/**
+ * Saves a new password and signs out every other session for this admin,
+ * keeping the one making the request.
+ */
+export async function changeAdminPassword(
+  db: Database,
+  request: Request,
+  userId: number,
+  password: string,
+): Promise<void> {
+  const token = readSessionToken(request);
+  const currentId = token ? await sha256Hex(token) : "";
+  await db.batch([
+    db.update(adminUsers).set({ passwordHash: await hashPassword(password) }).where(eq(adminUsers.id, userId)),
+    db.delete(sessions).where(and(eq(sessions.userId, userId), ne(sessions.id, currentId))),
+  ]);
 }

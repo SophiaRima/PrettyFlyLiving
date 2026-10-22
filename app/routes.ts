@@ -52,6 +52,7 @@ export default [
           index("routes/admin/guide-details.tsx"),
           route("photos", "routes/admin/guide-photos.tsx"),
         ]),
+        route("settings", "routes/admin/settings.tsx"),
       ]),
     ]),
   ]),

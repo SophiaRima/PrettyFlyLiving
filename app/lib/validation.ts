@@ -175,6 +175,41 @@ export const adminLoginSchema = z.object({
 });
 export type AdminLoginInput = z.infer<typeof adminLoginSchema>;
 
+/** Same minimum as scripts/create-admin.ts. */
+export const ADMIN_PASSWORD_MIN_LENGTH = 10;
+
+const currentPasswordField = z
+  .string({ error: "Please enter your current password." })
+  .min(1, "Please enter your current password.")
+  .max(200);
+
+/** Settings: change the login email (confirmed with the current password). */
+export const adminEmailChangeSchema = z.object({
+  email: emailField.transform((v) => v.toLowerCase()),
+  currentPassword: currentPasswordField,
+});
+export type AdminEmailChangeInput = z.infer<typeof adminEmailChangeSchema>;
+
+/** Settings: change the password. Passwords aren't trimmed. */
+export const adminPasswordChangeSchema = z
+  .object({
+    currentPassword: currentPasswordField,
+    newPassword: z
+      .string({ error: "Please enter a new password." })
+      .min(ADMIN_PASSWORD_MIN_LENGTH, `Please use at least ${ADMIN_PASSWORD_MIN_LENGTH} characters.`)
+      .max(200, "Please keep it under 200 characters."),
+    confirmPassword: z.string({ error: "Please repeat the new password." }),
+  })
+  .refine((v) => v.confirmPassword === v.newPassword, {
+    path: ["confirmPassword"],
+    message: "The new passwords don’t match.",
+  })
+  .refine((v) => v.newPassword !== v.currentPassword, {
+    path: ["newPassword"],
+    message: "Please choose a password different from your current one.",
+  });
+export type AdminPasswordChangeInput = z.infer<typeof adminPasswordChangeSchema>;
+
 /** Optional admin text: blank becomes null, so the site falls back to its default. */
 const nullableText = (max: number) =>
   z

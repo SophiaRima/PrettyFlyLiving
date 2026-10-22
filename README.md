@@ -57,8 +57,9 @@ From the dashboard you can:
 - confirm a booking with **Confirm & block dates**. A booking request never blocks dates by itself.
 - add and edit properties, their photos, and blocked dates (Calendar tab). Properties are never deleted; untick Published to hide one.
 - edit Nairobi guides (Markdown, with a preview), guide photos, reviews, FAQs and extra services.
+- change your login email or password under **Settings**. Both ask for your current password, and changing the password signs you out on every other device.
 
-Photos are resized to WebP in the browser, stored in R2 and served from `/media/…`. Five failed logins from one IP lock logins from that IP for 15 minutes.
+Photos are resized to WebP in the browser, stored in R2 and served from `/media/…`. Five failed logins (or wrong current passwords in Settings) from one IP lock logins from that IP for 15 minutes.
 
 ## Project layout
 

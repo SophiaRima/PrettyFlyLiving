@@ -8,6 +8,7 @@ import {
   LogOutIcon,
   MailIcon,
   MapIcon,
+  SettingsIcon,
   SparklesIcon,
   StarIcon,
   type LucideIcon,
@@ -37,6 +38,10 @@ const navGroups: { label: string; items: { to: string; label: string; icon: Luci
       { to: "/admin/faqs", label: "FAQs", icon: CircleHelpIcon },
       { to: "/admin/extra-services", label: "Extra services", icon: SparklesIcon },
     ],
+  },
+  {
+    label: "Account",
+    items: [{ to: "/admin/settings", label: "Settings", icon: SettingsIcon }],
   },
 ];
 

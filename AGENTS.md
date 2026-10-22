@@ -265,7 +265,7 @@ Resource routes: `/sitemap.xml` (dynamic from D1: stays and guides), `/robots.tx
 
 Admin pages share `routes/admin/_layout.tsx` (links `admin.css`), protected by middleware (or a loader guard, per the installed docs) that redirects to `/admin/login` without a valid session:
 
-`/admin/login`, `/admin/logout` (POST), `/admin` (overview: new-item counts, upcoming check-ins), `/admin/properties`, `/admin/properties/new`, `/admin/properties/:id` (tabs: Details · Photos · Calendar), `/admin/bookings` (+ `/:id`), `/admin/messages`, `/admin/enquiries`, `/admin/faqs`, `/admin/reviews`, `/admin/guides` (with a Photos tab for the guide gallery, like properties), `/admin/extra-services`.
+`/admin/login`, `/admin/logout` (POST), `/admin` (overview: new-item counts, upcoming check-ins), `/admin/properties`, `/admin/properties/new`, `/admin/properties/:id` (tabs: Details · Photos · Calendar), `/admin/bookings` (+ `/:id`), `/admin/messages`, `/admin/enquiries`, `/admin/faqs`, `/admin/reviews`, `/admin/guides` (with a Photos tab for the guide gallery, like properties), `/admin/extra-services`, `/admin/settings` (change the login email or password; both need the current password, and a password change signs out other sessions).
 
 Admin must stay out of search engines: `noindex` meta on every admin page and `Disallow: /admin` in `robots.txt`.
 
