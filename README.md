@@ -21,7 +21,7 @@ npm run db:seed                  # load the concept's sample stays, guides, FAQs
 npm run dev                      # http://localhost:5173
 ```
 
-`npm run db:seed` can be re-run at any time. It resets the content tables, but not the inboxes or admin users. It also copies the photos in `scripts/seed-media/` into local R2; those are Little Urban Nook's real photos, while the sample stays use Unsplash placeholders.
+`npm run db:seed` can be re-run at any time. It resets the content tables, but not the inboxes or admin users. It also copies the photos in `scripts/seed-media/` into local R2; those are Little Urban Nook's real photos, which every seeded stay and extra service uses for now. Only the Nairobi guides still use Unsplash placeholders. The page photos in `public/images/` come from the same set.
 
 ## Scripts
 

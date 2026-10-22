@@ -38,15 +38,15 @@ export const pageImages = {
   },
   homeSplit: {
     src: "/images/home-split.jpg",
-    alt: "Warm living room with natural textures",
+    alt: "Small double bed by the window with fresh towels",
   },
   whySplit: {
     src: "/images/why-split.jpg",
-    alt: "Calm, warm and thoughtfully furnished living space",
+    alt: "City view over Kilimani from a Pretty Fly Living window",
   },
   managementSplit: {
     src: "/images/management-split.jpg",
-    alt: "Beautifully staged apartment ready for guests",
+    alt: "Courtyard garden with seating in a Pretty Fly Living building",
   },
 } as const;
 
