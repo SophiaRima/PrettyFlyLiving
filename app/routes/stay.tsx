@@ -13,7 +13,7 @@ import { Gallery } from "~/components/site/gallery";
 import { PropertyCard } from "~/components/site/property-card";
 import { cloudflareContext } from "~/context";
 import { addDays, formatShortDate, nightsBetween, stayRangeError } from "~/lib/dates";
-import { formatKes, whatsappMessages, whatsappUrl } from "~/lib/site";
+import { bedroomLabel, countLabel, formatKes, whatsappMessages, whatsappUrl } from "~/lib/site";
 import { bookingRequestSchema } from "~/lib/validation";
 
 import type { Route } from "./+types/stay";
@@ -70,7 +70,7 @@ export async function action({ request, params, context }: Route.ActionArgs) {
     return data(formFailure(rangeError, form.values, { [field]: rangeError }), { status: 400 });
   }
   if (booking.guests > property.sleeps) {
-    const message = `This stay sleeps up to ${property.sleeps} guests.`;
+    const message = `This stay sleeps up to ${countLabel(property.sleeps, "guest")}.`;
     return data(formFailure(message, form.values, { guests: message }), { status: 400 });
   }
   if (await isRangeBlocked(db, property.id, booking.checkIn, booking.checkOut)) {
@@ -156,9 +156,9 @@ export default function Stay({ loaderData, actionData }: Route.ComponentProps) {
                   {property.rating !== null && (
                     <span>★ {property.rating.toFixed(1)} guest rating</span>
                   )}
-                  <span>{property.bedrooms} bedrooms</span>
-                  <span>{property.bathrooms} bathrooms</span>
-                  <span>Up to {property.sleeps} guests</span>
+                  <span>{bedroomLabel(property.bedrooms)}</span>
+                  <span>{countLabel(property.bathrooms, "bathroom")}</span>
+                  <span>Up to {countLabel(property.sleeps, "guest")}</span>
                 </div>
                 <p>{property.description}</p>
               </div>

@@ -93,6 +93,16 @@ export function formatKes(amount: number): string {
   return `KES ${amount.toLocaleString("en-KE")}`;
 }
 
+/** "1 guest", "2 guests". */
+export function countLabel(count: number, word: string): string {
+  return `${count} ${word}${count === 1 ? "" : "s"}`;
+}
+
+/** "Studio" for a stay without a separate bedroom, otherwise "2 bedrooms" (or "2 beds" on cards). */
+export function bedroomLabel(bedrooms: number, word = "bedroom"): string {
+  return bedrooms === 0 ? "Studio" : countLabel(bedrooms, word);
+}
+
 /** Opening lines for replies from the dashboard; Sophiah finishes them in her email or WhatsApp. */
 export const replyMessages = {
   booking: (request: { name: string; property: string; checkIn: string; checkOut: string }): string =>

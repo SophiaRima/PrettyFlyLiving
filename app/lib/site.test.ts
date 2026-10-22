@@ -1,12 +1,29 @@
 import { describe, expect, it } from "vitest";
 
 import { mediaUrl } from "./media";
-import { formatKes, whatsappMessages, whatsappUrl } from "./site";
+import { bedroomLabel, countLabel, formatKes, whatsappMessages, whatsappUrl } from "./site";
 
 describe("formatKes", () => {
   it("formats whole shillings with en-KE grouping, like the concept", () => {
     expect(formatKes(180000)).toBe("KES 180,000");
     expect(formatKes(950)).toBe("KES 950");
+  });
+});
+
+describe("countLabel", () => {
+  it("uses the singular only for one", () => {
+    expect(countLabel(1, "guest")).toBe("1 guest");
+    expect(countLabel(4, "guest")).toBe("4 guests");
+    expect(countLabel(0, "bathroom")).toBe("0 bathrooms");
+  });
+});
+
+describe("bedroomLabel", () => {
+  it("calls a stay without a bedroom a studio", () => {
+    expect(bedroomLabel(0)).toBe("Studio");
+    expect(bedroomLabel(0, "bed")).toBe("Studio");
+    expect(bedroomLabel(1)).toBe("1 bedroom");
+    expect(bedroomLabel(3, "bed")).toBe("3 beds");
   });
 });
 

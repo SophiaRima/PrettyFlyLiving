@@ -17,11 +17,11 @@ No Cloudflare account is needed for local development: D1 and R2 are simulated l
 npm install
 cp .dev.vars.example .dev.vars   # local secrets (Turnstile test keys, Resend placeholder)
 npm run db:migrate:local         # create the local D1 tables
-npm run db:seed                  # load the concept's sample stays, guides, FAQs and reviews
+npm run db:seed                  # load the concept's sample stays, guides, FAQs and reviews, plus Little Urban Nook
 npm run dev                      # http://localhost:5173
 ```
 
-`npm run db:seed` can be re-run at any time. It resets the content tables, but not the inboxes or admin users.
+`npm run db:seed` can be re-run at any time. It resets the content tables, but not the inboxes or admin users. It also copies the photos in `scripts/seed-media/` into local R2; those are Little Urban Nook's real photos, while the sample stays use Unsplash placeholders.
 
 ## Scripts
 
@@ -68,6 +68,7 @@ workers/app.ts       Cloudflare Worker entry
 wrangler.jsonc       bindings (D1, R2), public vars, required secrets
 drizzle/             SQL migrations
 scripts/seed.sql     local placeholder content
+scripts/seed-media/  seed photos, copied into local R2 by db:seed
 app/.server/         server-only code (database, auth, email, storage)
 app/lib/             shared helpers and site constants
 app/styles/site.css  public site styles (the concept CSS, ported verbatim)

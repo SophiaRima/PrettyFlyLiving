@@ -4,6 +4,10 @@
 --
 -- Image keys starting with https:// are Unsplash placeholders. mediaUrl()
 -- passes them through unchanged; real uploads use R2 keys.
+--
+-- Little Urban Nook (property 7) is a real Pretty Fly Living studio, using
+-- the client's own photos and details from its Airbnb listing. Its photos
+-- live in scripts/seed-media/ and npm run db:seed copies them into local R2.
 
 DELETE FROM availability_blocks;
 DELETE FROM guide_photos;
@@ -37,6 +41,14 @@ INSERT INTO properties (id, slug, name, area, address, property_type, tag, ratin
  'A generous, light-filled residence with room for everyone. Settle in for a work assignment, family visit or extended city break.',
  3, 2, 6, 350000, 30, '["Balcony","Wi-Fi","Full kitchen","Laundry","Parking","Secure building"]', 0, 1, 6);
 
+INSERT INTO properties (id, slug, name, area, address, property_type, tag, rating, description, good_to_know, bedrooms, bathrooms, sleeps, monthly_price_kes, min_nights, amenities, is_featured, is_published, sort_order) VALUES
+(7, 'little-urban-nook', 'Little Urban Nook', 'Kilimani', 'Near Yaya Centre, Kilimani, Nairobi', 'Apartment', 'Near Yaya Centre', 4.7,
+ 'The Little Urban Nook is best suited for one guest looking for a clean, comfortable and private place to stay in a prime location. Whether you’re in Nairobi for business, a quick city escape or simply passing through, you’ll have the essentials you need for a relaxing stay, and a peaceful little space to return to after a busy day. Small space, thoughtfully done, and everything you need in one little nook.',
+ 'Airport pick-up and drop-off can be arranged at an additional cost. Longer stays come with special discounts, complimentary cleaning, and free early check-in and late check-out when available. Please note that a new building is going up on the next plot, so there may be construction noise during working hours: Monday to Friday from about 9am to 5pm, and Saturday from 9am to about 2pm. There is no work on Sundays, and the digging stage is expected to finish soon.',
+ 0, 1, 1, 83000, 30,
+ '["Fast Wi-Fi","Ethernet connection","Smart TV","Free secure parking","Shared heated pool (seasonal)","Shared gym","Games room","Courtyard garden","Rooftop terrace","Coffee shop in the building","Lift","24/7 security","Doorman and reception","Security cameras in shared areas","Self check-in with lockbox","Luggage drop-off","Housekeeping twice a week","Microwave","Mini fridge","Kettle","Coffee","Dishes and cutlery","Wine glasses","Hot water","Shampoo, body soap and shower gel","Bidet","Towels, bed linen and toilet paper","Extra pillows and blankets","Wardrobe and hangers","Iron","Clothes drying rack","Cleaning products","Books and reading material","Laundromat nearby"]',
+ 1, 1, 0);
+
 INSERT INTO property_photos (property_id, r2_key, alt, sort_order) VALUES
 (1, 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85', 'The Lennox Residence living room', 0),
 (1, 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85', 'The Lennox Residence interior 2', 1),
@@ -67,7 +79,32 @@ INSERT INTO property_photos (property_id, r2_key, alt, sort_order) VALUES
 (6, 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85', 'The Terrace Residence interior 2', 1),
 (6, 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1000&q=85', 'The Terrace Residence interior 3', 2),
 (6, 'https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1000&q=85', 'The Terrace Residence interior 4', 3),
-(6, 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=85', 'The Terrace Residence interior 5', 4);
+(6, 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=85', 'The Terrace Residence interior 5', 4),
+(7, 'properties/40b00effbb1dc1c89efe7623591d1bc2.webp', 'Single bed with fresh towels beside the window', 0),
+(7, 'properties/6a803b346d43f3e2e9942d9d564087ff.webp', 'The studio, with the bed, smart TV, mini fridge and microwave', 1),
+(7, 'properties/fef864218620e55ca618464d69755e42.webp', 'City view over Kilimani from the window', 2),
+(7, 'properties/501c750f8e22a11f4ccdf0fd729cff5b.webp', 'Work desk and chair with shelves and the smart TV', 3),
+(7, 'properties/f343282c4dc9d5d973be06e489929abb.webp', 'Shower room with a glass screen, toilet and sink', 4),
+(7, 'properties/7b95f0e55a812ded97ecdbf61cb1c9d4.webp', 'Desk, smart TV and kitchenette corner', 5),
+(7, 'properties/37b3c730c2e917382cc790dfc432ae7e.webp', 'Made-up bed with a cushion and woven throw', 6),
+(7, 'properties/84afa3f201a4bccb9f88630a7da67c3d.webp', 'Bed by the window in the afternoon light', 7),
+(7, 'properties/2af83536ab9660a1d734ce3009724674.webp', 'Bed and bedside table under the window', 8),
+(7, 'properties/462807ae4a3185d8601505c967f2a0b3.webp', 'Bed with rolled towels and a city view', 9),
+(7, 'properties/11f3f516ba42dded022c86e0c984034d.webp', 'Fresh towels and bed linen', 10),
+(7, 'properties/45dbd32b3e70ba9014888a1b7bd7de75.webp', 'Smart TV, desk and mini fridge at the foot of the bed', 11),
+(7, 'properties/79f0175babb6f41f161e7aa7796f71a9.webp', 'Wooden desk chair and wall desk', 12),
+(7, 'properties/fe18945513d382d939d98112088008ef.webp', 'Bedside table by the window', 13),
+(7, 'properties/eebdee560cb8975cd6d25f8ec262d92d.webp', 'Kettle, glasses and dishes on the kitchenette shelves', 14),
+(7, 'properties/db751fa63b7c2d8fbb64ca38d935b7ba.webp', 'Microwave on top of the mini fridge', 15),
+(7, 'properties/d28b9cd9e64dbf42ea450150a3d8f9f5.webp', 'Mini fridge with a freezer compartment', 16),
+(7, 'properties/8f6ae1e90d34434a88eeb9b6e8060696.webp', 'Wardrobe with hangers and an iron', 17),
+(7, 'properties/3f33fffaadbe51f07fdb55ba337fcd25.webp', 'Bathroom sink with a lit mirror and shelves', 18),
+(7, 'properties/97ca53928501f550e43c020c3d9041a8.webp', 'Shower with a hand-held shower head', 19),
+(7, 'properties/922cd64a6a7bfa5c27662e7cbe3816d0.webp', 'Front door of the studio', 20),
+(7, 'properties/13ee750e71939f8a291c715ce8c34a70.webp', 'Entrance hall leading into the studio', 21),
+(7, 'properties/3fc03fe9ca39d5c0fb473531570b9d80.webp', 'Home fragrance diffuser on a shelf', 22),
+(7, 'properties/13e3fc0852980bc946109f6f3dd94cc4.webp', 'Lift lobby on the building''s 15th floor', 23),
+(7, 'properties/99511b3e10153857cdb6eecad2e9370f.webp', 'Secure basement parking', 24);
 
 -- Sample blocks so date search and the calendar have something to show.
 INSERT INTO availability_blocks (property_id, start_date, end_date, source, note) VALUES

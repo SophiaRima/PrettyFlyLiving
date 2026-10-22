@@ -1,7 +1,7 @@
 import type { MouseEvent } from "react";
 import { Link, useNavigate } from "react-router";
 
-import { formatKes } from "~/lib/site";
+import { bedroomLabel, countLabel, formatKes } from "~/lib/site";
 import type { PropertyCardData } from "~/lib/types";
 
 import { Img } from "./img";
@@ -45,11 +45,9 @@ export function PropertyCard({ property }: { property: PropertyCardData }) {
           )}
         </div>
         <div className="meta">
-          <span>
-            {property.bedrooms} bed{property.bedrooms > 1 ? "s" : ""}
-          </span>
+          <span>{bedroomLabel(property.bedrooms, "bed")}</span>
           <span>{property.bathrooms} bath</span>
-          <span>{property.sleeps} guests</span>
+          <span>{countLabel(property.sleeps, "guest")}</span>
           <span>{property.propertyType}</span>
         </div>
         <div className="price-row">
