@@ -67,7 +67,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 Browse our stays <span>↗</span>
               </Link>
               <div className="hero-note">
-                <span></span> Feel at home, wherever you’re from.
+                <span></span> Beautiful stays, thoughtfully managed.
               </div>
             </div>
           </div>
