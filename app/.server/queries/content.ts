@@ -168,8 +168,11 @@ export async function getExtraServices(db: Database): Promise<ExtraServiceData[]
   return db
     .select({
       id: extraServices.id,
+      eyebrow: extraServices.eyebrow,
       title: extraServices.title,
       description: extraServices.description,
+      details: extraServices.details,
+      ctaLabel: extraServices.ctaLabel,
       imageKey: extraServices.imageR2Key,
     })
     .from(extraServices)

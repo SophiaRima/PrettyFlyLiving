@@ -315,6 +315,39 @@ p { max-width: 62ch; }
   .review-grid .quote-card { padding: 20px; }
 }
 
+/* Why Us: the story's closing line, and the line under the standards grid. */
+.story-signoff { font: 20px/1.35 var(--serif); color: var(--ink); margin: 22px 0 26px; }
+.section-note { max-width: 640px; margin: 26px 0 0; font-size: 12px; }
+
+/* Extra service cards: optional eyebrow, a details line and an enquiry button. */
+.article-card:has(.service-card-body) { display: flex; flex-direction: column; }
+.article-card .service-card-body { flex: 1; display: flex; flex-direction: column; }
+.service-card-body .article-tag { margin-bottom: 6px; }
+.service-card-body p { flex: 1; }
+.service-card-body .service-details { flex: none; font-size: 10px; color: var(--muted); margin: 0 0 14px; }
+.service-card-body .btn { width: 100%; }
+
+/* Property Management Enquiry Form: numbered steps, radio and checkbox
+   lists, and the "property type + number of units" rows. */
+.form-step { grid-column: 1 / -1; margin: 16px 0 0; padding-top: 20px; border-top: 1px solid var(--line); font-size: 15px; }
+.form-grid > .form-step:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.form-hint { display: block; font-size: 10px; color: var(--muted); margin: 0 0 8px; }
+.choice-group { border: 0; padding: 0; margin: 0; min-width: 0; }
+.choice-group legend { padding: 0; font-size: 10px; margin-bottom: 8px; }
+.choice-list { display: grid; gap: 8px; }
+.choice-list.two-col { grid-template-columns: 1fr 1fr; gap: 8px 18px; }
+.form-group .choice { display: flex; align-items: flex-start; gap: 9px; margin: 0; font-size: 11px; line-height: 1.5; color: var(--ink); cursor: pointer; }
+.form-group select { color: var(--ink); }
+.form-group .choice input { width: auto; flex-shrink: 0; margin: 2px 0 0; padding: 0; border: 0; accent-color: var(--sage); }
+.unit-rows { display: grid; gap: 8px; }
+.unit-row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 8px; }
+.unit-row-head { font-size: 10px; color: var(--muted); }
+.add-row { justify-self: start; border: 0; background: none; padding: 4px 0; font-size: 11px; font-weight: 600; color: var(--sage); }
+.add-row:hover { color: var(--ink); }
+@media (max-width: 720px) {
+  .choice-list.two-col { grid-template-columns: 1fr; }
+}
+
 /* Text links inside the FAQ help box and contact rows. */
 .link-row { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 4px; }
 

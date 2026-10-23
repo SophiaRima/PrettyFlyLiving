@@ -77,6 +77,7 @@ export function whatsappUrl(message?: string): string {
 /** Prefilled WhatsApp messages, worded as in the concept. */
 export const whatsappMessages = {
   general: "Hello Pretty Fly Living, I would like to make an enquiry.",
+  service: (title: string): string => `Hello Pretty Fly Living, I would like to ask about ${title}.`,
   property: (name: string, area: string): string =>
     `Hello Pretty Fly Living, I am interested in ${name} in ${area}. Could you please share availability and rates?`,
   bookingRequest: (request: {

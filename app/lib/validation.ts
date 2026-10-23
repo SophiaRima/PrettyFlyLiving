@@ -4,8 +4,14 @@ import {
   bookingStatuses,
   enquiryTypes,
   guideCategories,
+  OWNER_UNIT_ROWS_MAX,
+  ownerContactMethods,
+  ownerFurnishingOptions,
+  ownerListedOnlineOptions,
   ownerPropertyTypes,
-  ownerUnitCounts,
+  ownerSameLocationOptions,
+  ownerSupportOptions,
+  type OwnerUnitRow,
 } from "./constants";
 import { parseLines, slugify } from "./admin";
 import { isIsoDate } from "./dates";
@@ -85,6 +91,20 @@ const requiredText = (label: string, max: number) =>
     .min(1, `Please enter ${label}.`)
     .max(max, `Please keep ${label} under ${max} characters.`);
 
+/** Whole number typed into a form field; blank is an error, not 0. */
+const wholeNumber = (label: string, min: number, max: number) =>
+  z
+    .string({ error: `Please enter ${label}.` })
+    .trim()
+    .min(1, `Please enter ${label}.`)
+    .pipe(
+      z.coerce
+        .number<string>({ error: `Please enter ${label} as a number.` })
+        .int("Please enter a whole number.")
+        .min(min, `Please enter at least ${min}.`)
+        .max(max, `Please enter ${max} or less.`),
+    );
+
 const emailField = z
   .string({ error: "Please enter your email." })
   .trim()
@@ -147,20 +167,92 @@ export const contactMessageSchema = z.object({
 export type ContactMessageInput = z.infer<typeof contactMessageSchema>;
 
 /** Property Management owner enquiry form. */
-export const ownerEnquirySchema = z.object({
-  name: requiredText("your name", 100),
-  email: emailField,
-  phone: phoneField,
-  location: requiredText("the property location", 120),
-  type: z.enum(ownerPropertyTypes, { error: "Please choose a property type." }),
-  units: z.enum(ownerUnitCounts, { error: "Please choose the number of units." }),
-  message: z
+/** An optional radio answer: blank or missing becomes undefined. */
+const optionalChoice = <T extends readonly [string, ...string[]]>(options: T) =>
+  z
+    .union([z.literal(""), z.enum(options, { error: "Please choose one of the options." })])
+    .optional()
+    .transform((v) => (v ? v : undefined));
+
+const optionalLongText = (max: number) =>
+  z
     .string()
     .trim()
-    .max(3000, "Please keep your message under 3000 characters.")
+    .max(max, `Please keep this under ${max} characters.`)
     .optional()
-    .transform((v) => (v ? v : undefined)),
+    .transform((v) => (v ? v : undefined));
+
+/**
+ * The form posts repeated answers under numbered names (unitType1,
+ * unitCount1 … support1 …), since the shared form reader keeps one value per
+ * name. This gathers them into `unitRows` and `support` before validation.
+ */
+function gatherOwnerLists(input: unknown): unknown {
+  if (typeof input !== "object" || input === null) return input;
+  const values = input as Record<string, unknown>;
+  const text = (key: string): string => (typeof values[key] === "string" ? (values[key] as string).trim() : "");
+  const unitRows: { type: string; count: string }[] = [];
+  for (let i = 1; i <= OWNER_UNIT_ROWS_MAX; i++) {
+    const row = { type: text(`unitType${i}`), count: text(`unitCount${i}`) };
+    if (row.type || row.count) unitRows.push(row);
+  }
+  const support = ownerSupportOptions.map((_, i) => text(`support${i + 1}`)).filter(Boolean);
+  return { ...values, unitRows, support };
+}
+
+const ownerUnitRowSchema = z.object({
+  type: z.enum(ownerPropertyTypes, { error: "Please choose a property type in each row." }),
+  count: z
+    .string()
+    .regex(/^\d+$/, "Please enter the number of units in each row.")
+    .transform(Number)
+    .pipe(z.number().int().min(1, "Please enter at least 1 unit in each row.").max(500)),
 });
+
+/** Property Management Enquiry Form (client copy, 2026-10). */
+export const ownerEnquirySchema = z.preprocess(
+  gatherOwnerLists,
+  z
+    .object({
+      location: requiredText("where your property is", 120),
+      units: wholeNumber("how many units you'd like us to manage", 1, 500),
+      type: optionalChoice(ownerPropertyTypes),
+      unitRows: z.array(ownerUnitRowSchema).max(OWNER_UNIT_ROWS_MAX),
+      sameLocation: optionalChoice(ownerSameLocationOptions),
+      furnishing: optionalChoice(ownerFurnishingOptions),
+      listedOnline: optionalChoice(ownerListedOnlineOptions),
+      listingLinks: optionalLongText(1000),
+      support: z.array(z.enum(ownerSupportOptions)),
+      message: optionalLongText(3000),
+      name: requiredText("your full name", 100),
+      email: emailField,
+      phone: phoneField,
+      preferredContact: optionalChoice(ownerContactMethods),
+    })
+    .superRefine((v, issue) => {
+      if (v.units === 1 && !v.type) {
+        issue.addIssue({ code: "custom", path: ["type"], message: "Please choose your property type." });
+      }
+      if (v.units > 1 && v.unitRows.length === 0) {
+        issue.addIssue({
+          code: "custom",
+          path: ["unitRows"],
+          message: "Please add each property type and how many units of it you have.",
+        });
+      }
+    })
+    .transform(({ unitRows, type, ...rest }) => {
+      const several = rest.units > 1;
+      const breakdown: OwnerUnitRow[] | null = several ? unitRows : null;
+      return {
+        ...rest,
+        unitBreakdown: breakdown,
+        propertyType: breakdown
+          ? breakdown.map((row) => `${row.count} × ${row.type}`).join(", ")
+          : (type ?? ""),
+      };
+    }),
+);
 export type OwnerEnquiryInput = z.infer<typeof ownerEnquirySchema>;
 
 // ---------------------------------------------------------------- admin
@@ -207,20 +299,6 @@ const nullableText = (max: number) =>
     .max(max, `Please keep this under ${max} characters.`)
     .optional()
     .transform((v) => (v ? v : null));
-
-/** Whole number typed into a form field; blank is an error, not 0. */
-const wholeNumber = (label: string, min: number, max: number) =>
-  z
-    .string({ error: `Please enter ${label}.` })
-    .trim()
-    .min(1, `Please enter ${label}.`)
-    .pipe(
-      z.coerce
-        .number<string>({ error: `Please enter ${label} as a number.` })
-        .int("Please enter a whole number.")
-        .min(min, `Please enter at least ${min}.`)
-        .max(max, `Please enter ${max} or less.`),
-    );
 
 /** A checked checkbox posts "on"; an unchecked one posts nothing. */
 const checkbox = z
@@ -341,8 +419,11 @@ export const reviewSchema = z.object({
 export type ReviewInput = z.infer<typeof reviewSchema>;
 
 export const extraServiceSchema = z.object({
+  eyebrow: nullableText(60),
   title: requiredText("a title", 80),
   description: requiredText("a description", 600),
+  details: nullableText(120),
+  ctaLabel: nullableText(60),
   isPublished: checkbox,
 });
 export type ExtraServiceInput = z.infer<typeof extraServiceSchema>;

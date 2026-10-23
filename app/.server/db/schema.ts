@@ -13,6 +13,7 @@ import {
   bookingStatuses,
   enquiryTypes,
   guideCategories,
+  type OwnerUnitRow,
 } from "../../lib/constants";
 
 /*
@@ -158,8 +159,18 @@ export const ownerEnquiries = sqliteTable(
     email: text("email").notNull(),
     phone: text("phone").notNull(),
     propertyArea: text("property_area").notNull(),
+    /** The single unit's type, or a summary such as "2 × Studio, 1 × 1-bedroom apartment". */
     propertyType: text("property_type").notNull(),
     units: text("units").notNull(),
+    /** JSON [{ type, count }] for owners with several units; null for one unit. */
+    unitBreakdown: text("unit_breakdown", { mode: "json" }).$type<OwnerUnitRow[]>(),
+    sameLocation: text("same_location"),
+    furnishing: text("furnishing"),
+    listedOnline: text("listed_online"),
+    listingLinks: text("listing_links"),
+    /** JSON list of the support options the owner ticked. */
+    supportNeeded: text("support_needed", { mode: "json" }).$type<string[]>(),
+    preferredContact: text("preferred_contact"),
     message: text("message"),
     status: text("status", { enum: ["new", "handled"] })
       .notNull()
@@ -236,8 +247,14 @@ export const guidePhotos = sqliteTable(
 
 export const extraServices = sqliteTable("extra_services", {
   id: id(),
+  /** Small label above the title, e.g. "See the city differently". */
+  eyebrow: text("eyebrow"),
   title: text("title").notNull(),
   description: text("description").notNull(),
+  /** Short line under the description, e.g. "Available on request · Additional charges apply". */
+  details: text("details"),
+  /** Button text; the button opens WhatsApp with a message about this service. */
+  ctaLabel: text("cta_label"),
   imageR2Key: text("image_r2_key"),
   sortOrder: sortOrder(),
   isPublished: isPublished(),

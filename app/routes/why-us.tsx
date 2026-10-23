@@ -7,7 +7,7 @@ import { Img } from "~/components/site/img";
 import { PageHero } from "~/components/site/page-hero";
 import { QuoteCard } from "~/components/site/quote-card";
 import { ServiceGrid, type ServiceItem } from "~/components/site/service-grid";
-import { pageImages, whyUsReviewCount } from "~/lib/site";
+import { pageImages, whatsappMessages, whatsappUrl, whyUsReviewCount } from "~/lib/site";
 
 import type { Route } from "./+types/why-us";
 
@@ -31,14 +31,14 @@ export async function loader({ context }: Route.LoaderArgs) {
   return { services, reviews };
 }
 
-/** "The details matter": the brief's "our standards". */
+/** "Our Standards" (client copy, 2026-10). */
 const standards: readonly ServiceItem[] = [
-  { icon: "⌂", title: "Thoughtful locations", text: "Neighbourhoods that make it easy to get where you need to go." },
-  { icon: "✳", title: "Comfort-first spaces", text: "Furnished apartments with the essentials for real everyday living." },
-  { icon: "♡", title: "Responsive support", text: "A real team ready to help with questions before and during your stay." },
-  { icon: "◷", title: "Flexible options", text: "Tell us what your trip needs, from a few nights to a longer stay." },
-  { icon: "✓", title: "Clear communication", text: "Straightforward booking enquiries and practical arrival information." },
-  { icon: "⌘", title: "Local knowledge", text: "Helpful recommendations to make Nairobi feel a little more familiar." },
+  { icon: "✳", title: "Cleanliness", text: "Every space is cleaned and prepared with care before each arrival, so you can settle in comfortably." },
+  { icon: "♡", title: "Comfort", text: "From comfortable bedding to thoughtfully furnished interiors, we consider what makes a space pleasant to live in." },
+  { icon: "✓", title: "Reliability", text: "We aim to keep essential amenities working as they should, so you can focus on your day without unnecessary interruptions." },
+  { icon: "⌘", title: "Security", text: "We prioritise properties in secure settings, helping you feel more at ease throughout your stay." },
+  { icon: "⌂", title: "Convenient Locations", text: "Our properties are situated in well-connected neighbourhoods, with easy access to public transport, shopping centres, restaurants and other everyday essentials." },
+  { icon: "◷", title: "Thoughtful Hospitality", text: "We believe good hosting means being attentive, approachable and ready to help when you need us." },
 ];
 
 export default function WhyUs({ loaderData }: Route.ComponentProps) {
@@ -65,17 +65,40 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
       <section className="section">
         <div className="container split">
           <div>
-            <div className="eyebrow">A little more considered</div>
-            <h2>Comfort should come naturally.</h2>
+            <div className="eyebrow">Our story</div>
+            <h2>The difference is in the thinking.</h2>
             <p>
-              Pretty Fly Living is built around a simple idea: where you stay
-              shapes how you experience a place. Our aim is to make every
-              arrival easier, every day more comfortable, and every guest feel
-              welcome.
+              A place can look beautiful in photographs. But what makes it a
+              good place to stay is everything you discover once you walk
+              through the door.
             </p>
             <p>
-              From the neighbourhood we recommend to the small details in your
-              apartment, we put care into the parts of a stay that matter.
+              The bed that lets you rest properly. The Wi-Fi that works when
+              you need it. The cleanliness you can feel. The security that lets
+              you relax. The location that makes getting through your day a
+              little easier.
+            </p>
+            <p>
+              At Pretty Fly Living, these details are never incidental. They
+              are the starting point.
+            </p>
+            <p>
+              We believe a well-designed stay should do more than look good. It
+              should work beautifully, feel effortless and give you the freedom
+              to focus on the things that matter to you.
+            </p>
+            <p>
+              That belief shapes how we prepare our spaces, choose our
+              locations and care for the people who stay with us. Nothing is
+              too small to matter, and comfort is never something we leave to
+              chance.
+            </p>
+            <p>
+              You may come for the space. You may stay for the convenience. But
+              we hope you’ll remember how considered everything felt.
+            </p>
+            <p className="story-signoff">
+              Pretty Fly Living. Beautiful stays, thoughtfully managed.
             </p>
             <Link className="btn" to="/stays">
               Explore our stays ↗
@@ -92,10 +115,19 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
           <div className="section-head">
             <div>
               <div className="eyebrow">What you can expect</div>
-              <h2>The details matter.</h2>
+              <h2>Our standards.</h2>
             </div>
+            <p>
+              We hold ourselves to clear standards in the way we prepare and
+              manage our apartments.
+            </p>
           </div>
           <ServiceGrid items={standards} />
+          <p className="section-note">
+            These standards guide how we select, prepare and manage our
+            properties, helping us create stays that feel comfortable,
+            convenient and well cared for.
+          </p>
         </div>
       </section>
 
@@ -105,11 +137,13 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
             <div className="section-head">
               <div>
                 <div className="eyebrow">Extra services</div>
-                <h2>A little extra, when you need it.</h2>
+                <h2>More for your stay.</h2>
               </div>
               <p>
-                Add the services that make settling in easier. Ask us when you
-                send your booking request.
+                Make your stay even more seamless with a little help along the
+                way. From airport transfers to discovering Nairobi with a local,
+                we can help you arrange experiences that make your time here
+                easier and more memorable.
               </p>
             </div>
             <div className="article-grid">
@@ -118,9 +152,21 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
                   <div className="property-image">
                     <Img src={service.imageKey} alt={service.title} />
                   </div>
-                  <div className="property-body">
+                  <div className="property-body service-card-body">
+                    {service.eyebrow && <div className="article-tag">{service.eyebrow}</div>}
                     <h3>{service.title}</h3>
                     <p>{service.description}</p>
+                    {service.details && <p className="service-details">{service.details}</p>}
+                    {service.ctaLabel && (
+                      <a
+                        className="btn btn-light"
+                        href={whatsappUrl(whatsappMessages.service(service.title))}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {service.ctaLabel} ↗
+                      </a>
+                    )}
                   </div>
                 </article>
               ))}

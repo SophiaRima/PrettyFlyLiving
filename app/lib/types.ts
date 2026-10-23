@@ -65,7 +65,10 @@ export interface FaqData {
 
 export interface ExtraServiceData {
   id: number;
+  eyebrow: string | null;
   title: string;
   description: string;
+  details: string | null;
+  ctaLabel: string | null;
   imageKey: string | null;
 }

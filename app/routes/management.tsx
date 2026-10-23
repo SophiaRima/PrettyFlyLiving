@@ -1,16 +1,14 @@
-import { useEffect, useRef } from "react";
-import { data, Form, useNavigation } from "react-router";
+import { data, useNavigation } from "react-router";
 
 import { notifyInBackground } from "~/.server/email";
 import { readGuardedForm } from "~/.server/forms";
 import { createOwnerEnquiry } from "~/.server/queries/inbox";
 import { dbFromContext } from "~/.server/request";
-import { FormGuard, FormStatus, fieldHelpers } from "~/components/site/form-parts";
 import { Img } from "~/components/site/img";
+import { OwnerEnquiryForm } from "~/components/site/owner-enquiry-form";
 import { PageHero } from "~/components/site/page-hero";
 import { ServiceGrid, type ServiceItem } from "~/components/site/service-grid";
 import { cloudflareContext } from "~/context";
-import { ownerPropertyTypes, ownerUnitCounts } from "~/lib/constants";
 import { pageImages } from "~/lib/site";
 import { ownerEnquirySchema } from "~/lib/validation";
 
@@ -62,9 +60,15 @@ export async function action({ request, context }: Route.ActionArgs) {
       ["Name", enquiry.name],
       ["Email", enquiry.email],
       ["Phone / WhatsApp", enquiry.phone],
+      ["Preferred contact", enquiry.preferredContact ?? "-"],
       ["Property location", enquiry.location],
-      ["Property type", enquiry.type],
-      ["Number of units", enquiry.units],
+      ["Units to manage", String(enquiry.units)],
+      ["Property type", enquiry.propertyType],
+      ["Same location", enquiry.sameLocation ?? "-"],
+      ["Furnishing", enquiry.furnishing ?? "-"],
+      ["Listed online", enquiry.listedOnline ?? "-"],
+      ["Listing links", enquiry.listingLinks ?? "-"],
+      ["Support needed", enquiry.support.length > 0 ? enquiry.support.join("; ") : "-"],
       ["Message", enquiry.message ?? "-"],
     ],
     adminPath: "/admin/enquiries",
@@ -76,13 +80,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 
 export default function Management({ loaderData, actionData }: Route.ComponentProps) {
   const failure = actionData && !actionData.ok ? actionData : undefined;
-  const { field, error } = fieldHelpers("owner", failure);
   const sending = useNavigation().state === "submitting";
-  const formRef = useRef<HTMLFormElement>(null);
-
-  useEffect(() => {
-    if (actionData?.ok) formRef.current?.reset();
-  }, [actionData]);
 
   return (
     <main>
@@ -166,11 +164,11 @@ export default function Management({ loaderData, actionData }: Route.ComponentPr
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="container contact-grid" id="owner-enquiry">
           <div>
-            <div className="eyebrow">Let’s talk property</div>
-            <h2>Tell us what you have in mind.</h2>
+            <div className="eyebrow">Property management enquiry</div>
+            <h2>Tell us about your property.</h2>
             <p>
-              Share a few details about your property and we’ll get back to you
-              to discuss whether we’re a good fit.
+              Whether you own a single apartment or several properties, we’d
+              love to learn more about what you have and how we can help.
             </p>
             <div className="contact-method">
               <div className="service-icon">⌂</div>
@@ -187,70 +185,13 @@ export default function Management({ loaderData, actionData }: Route.ComponentPr
               </div>
             </div>
           </div>
-          <Form method="post" id="owner-form" ref={formRef} preventScrollReset>
-            <div className="form-grid">
-              <div className="form-group">
-                <label htmlFor="owner-name">Your name *</label>
-                <input {...field("name")} required placeholder="Full name" autoComplete="name" />
-                {error("name")}
-              </div>
-              <div className="form-group">
-                <label htmlFor="owner-email">Email *</label>
-                <input {...field("email")} type="email" required placeholder="you@example.com" autoComplete="email" />
-                {error("email")}
-              </div>
-              <div className="form-group">
-                <label htmlFor="owner-phone">Phone / WhatsApp *</label>
-                <input {...field("phone")} type="tel" required placeholder="+254…" autoComplete="tel" />
-                {error("phone")}
-              </div>
-              <div className="form-group">
-                <label htmlFor="owner-location">Property location *</label>
-                <input {...field("location")} required placeholder="e.g. Kilimani" />
-                {error("location")}
-              </div>
-              <div className="form-group">
-                <label htmlFor="owner-type">Property type</label>
-                <select {...field("type")}>
-                  {ownerPropertyTypes.map((type) => (
-                    <option key={type}>{type}</option>
-                  ))}
-                </select>
-                {error("type")}
-              </div>
-              <div className="form-group">
-                <label htmlFor="owner-units">Number of units</label>
-                <select {...field("units")}>
-                  {ownerUnitCounts.map((count) => (
-                    <option key={count}>{count}</option>
-                  ))}
-                </select>
-                {error("units")}
-              </div>
-              <div className="form-group full">
-                <label htmlFor="owner-message">What would you like help with?</label>
-                <textarea {...field("message")} placeholder="Tell us about your property and goals…" />
-                {error("message")}
-              </div>
-              <div className="form-group full">
-                <FormGuard
-                  siteKey={loaderData.turnstileSiteKey}
-                  action="owner"
-                  resetKey={actionData}
-                />
-                <button className="btn" type="submit" disabled={sending}>
-                  {sending ? "Sending…" : "Send property enquiry ↗"}
-                </button>
-                {actionData?.ok && (
-                  <FormStatus tone="success">
-                    Thank you, your property enquiry has been sent. We’ll be in
-                    touch to talk through your property and goals.
-                  </FormStatus>
-                )}
-                {failure && <FormStatus tone="error">{failure.message}</FormStatus>}
-              </div>
-            </div>
-          </Form>
+          <OwnerEnquiryForm
+            failure={failure}
+            sent={actionData?.ok === true}
+            sending={sending}
+            siteKey={loaderData.turnstileSiteKey}
+            resetKey={actionData}
+          />
         </div>
       </section>
     </main>

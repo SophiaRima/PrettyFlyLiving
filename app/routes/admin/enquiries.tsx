@@ -6,6 +6,7 @@ import { getOwnerEnquiries, parseHandledStatus, setOwnerEnquiryStatus } from "~/
 import { dbFromContext } from "~/.server/request";
 import { AdminPageHeader } from "~/components/admin/admin-shell";
 import { FilterTabs, HandledBadge, HandledToggle, ReplyButton } from "~/components/admin/inbox";
+import { Badge } from "~/components/ui/badge";
 import { emailReplyUrl, formatReceived, whatsappReplyUrl } from "~/lib/admin";
 import { replyMessages } from "~/lib/site";
 
@@ -29,6 +30,17 @@ export async function action({ request, context }: Route.ActionArgs) {
   if (!Number.isSafeInteger(id) || !status) return data(formFailure("Unknown action.", {}), { status: 400 });
   await setOwnerEnquiryStatus(dbFromContext(context), id, status);
   return { ok: true as const, message: status === "handled" ? "Marked as handled" : "Marked as new" };
+}
+
+/** One answer from the form; older enquiries don't have the newer answers. */
+function Detail({ label, value }: { label: string; value: string | null }) {
+  if (!value) return null;
+  return (
+    <div>
+      <dt className="text-xs text-muted-foreground">{label}</dt>
+      <dd>{value}</dd>
+    </div>
+  );
 }
 
 export default function AdminEnquiries({ loaderData }: Route.ComponentProps) {
@@ -65,20 +77,33 @@ export default function AdminEnquiries({ loaderData }: Route.ComponentProps) {
                   </div>
                   <HandledToggle id={enquiry.id} status={enquiry.status} />
                 </div>
-                <dl className="mt-4 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-3">
-                  <div>
-                    <dt className="text-xs text-muted-foreground">Location</dt>
-                    <dd>{enquiry.propertyArea}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-xs text-muted-foreground">Property type</dt>
-                    <dd>{enquiry.propertyType}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-xs text-muted-foreground">Units</dt>
-                    <dd>{enquiry.units}</dd>
-                  </div>
+                <dl className="mt-4 grid gap-x-6 gap-y-3 text-sm sm:grid-cols-3">
+                  <Detail label="Location" value={enquiry.propertyArea} />
+                  <Detail label="Units" value={enquiry.units} />
+                  <Detail label="Property type" value={enquiry.propertyType} />
+                  <Detail label="Same location" value={enquiry.sameLocation} />
+                  <Detail label="Furnishing" value={enquiry.furnishing} />
+                  <Detail label="Listed online" value={enquiry.listedOnline} />
+                  <Detail label="Preferred contact" value={enquiry.preferredContact} />
                 </dl>
+                {enquiry.listingLinks && (
+                  <div className="mt-3 text-sm">
+                    <p className="text-xs text-muted-foreground">Listing links</p>
+                    <p className="break-all whitespace-pre-wrap">{enquiry.listingLinks}</p>
+                  </div>
+                )}
+                {enquiry.supportNeeded && enquiry.supportNeeded.length > 0 && (
+                  <div className="mt-3">
+                    <p className="text-xs text-muted-foreground">Support needed</p>
+                    <ul className="mt-1 flex flex-wrap gap-1.5">
+                      {enquiry.supportNeeded.map((item) => (
+                        <li key={item}>
+                          <Badge variant="secondary">{item}</Badge>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 {enquiry.message && <p className="mt-4 text-sm whitespace-pre-wrap">{enquiry.message}</p>}
                 <div className="mt-4 flex flex-wrap gap-2">
                   <ReplyButton

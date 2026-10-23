@@ -67,8 +67,15 @@ export async function createOwnerEnquiry(
       email: input.email,
       phone: input.phone,
       propertyArea: input.location,
-      propertyType: input.type,
-      units: input.units,
+      propertyType: input.propertyType,
+      units: String(input.units),
+      unitBreakdown: input.unitBreakdown,
+      sameLocation: input.sameLocation ?? null,
+      furnishing: input.furnishing ?? null,
+      listedOnline: input.listedOnline ?? null,
+      listingLinks: input.listingLinks ?? null,
+      supportNeeded: input.support.length > 0 ? input.support : null,
+      preferredContact: input.preferredContact ?? null,
       message: input.message ?? null,
     })
     .returning({ id: ownerEnquiries.id });

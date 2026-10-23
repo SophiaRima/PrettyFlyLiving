@@ -88,8 +88,19 @@ function ServiceFields({ service, result, idPrefix }: { service?: Service; resul
   const failure = result && !result.ok ? result : undefined;
   return (
     <>
-      <TextField idPrefix={idPrefix} failure={failure} name="title" label="Title" defaultValue={service?.title} required placeholder="e.g. Airport pickup" />
+      <TextField idPrefix={idPrefix} failure={failure} name="eyebrow" label="Small label above the title (optional)" defaultValue={service?.eyebrow} placeholder="e.g. See the city differently" />
+      <TextField idPrefix={idPrefix} failure={failure} name="title" label="Title" defaultValue={service?.title} required placeholder="e.g. Airport Transfers" />
       <TextAreaField idPrefix={idPrefix} failure={failure} name="description" label="Description" rows={3} defaultValue={service?.description} required />
+      <TextField idPrefix={idPrefix} failure={failure} name="details" label="Details line (optional)" defaultValue={service?.details} placeholder="e.g. Available on request · Additional charges apply" />
+      <TextField
+        idPrefix={idPrefix}
+        failure={failure}
+        name="ctaLabel"
+        label="Button text (optional)"
+        defaultValue={service?.ctaLabel}
+        placeholder="e.g. Enquire about airport transfers"
+        hint="The button opens WhatsApp with a message about this service. Leave blank for no button."
+      />
       <CheckboxField failure={failure} name="isPublished" label="Published" defaultChecked={service?.isPublished ?? true} hint="Shown on the Why Us page." />
       <FormError failure={failure} />
     </>

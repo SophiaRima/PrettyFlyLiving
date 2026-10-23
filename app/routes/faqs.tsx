@@ -2,6 +2,7 @@ import { Form, Link } from "react-router";
 
 import { getFaqs } from "~/.server/queries/content";
 import { dbFromContext } from "~/.server/request";
+import { CtaSection } from "~/components/site/cta-band";
 import { PageHero } from "~/components/site/page-hero";
 import { site, whatsappMessages, whatsappUrl } from "~/lib/site";
 
@@ -99,19 +100,66 @@ export default function Faqs({ loaderData }: Route.ComponentProps) {
             </div>
           </aside>
           <div>
-            <div className="eyebrow">{isGuests ? "Your stay" : "Property management"}</div>
-            <h2 style={{ fontSize: 35 }}>
-              {isGuests ? "Questions about staying?" : "Questions about your property?"}
-            </h2>
+            {isGuests ? (
+              <>
+                <div className="eyebrow">Guest FAQs</div>
+                <h2 style={{ fontSize: 35 }}>Everything you need to know before your stay.</h2>
+                <p>
+                  Planning an extended stay with Pretty Fly Living? Find answers
+                  to common questions about booking, our furnished apartments
+                  and what to expect during your stay.
+                </p>
+              </>
+            ) : (
+              <>
+                <div className="eyebrow">For property owners</div>
+                <h2 style={{ fontSize: 35 }}>Property owner FAQs.</h2>
+                <p>
+                  Considering partnering with Pretty Fly Living? Find answers to
+                  common questions about our property management services, how
+                  we work and how your property could become part of our
+                  growing portfolio.
+                </p>
+              </>
+            )}
             {faqs.map((faq) => (
               <details className="accordion" key={faq.id}>
                 <summary>{faq.question}</summary>
                 <p>{faq.answer}</p>
               </details>
             ))}
+            {isGuests && (
+              <p className="section-note">
+                Have a question?{" "}
+                <Link className="text-link" to="/contact">
+                  Contact Pretty Fly Living
+                </Link>
+                , and we’ll be happy to assist.
+              </p>
+            )}
           </div>
         </div>
       </section>
+
+      {isGuests ? (
+        <CtaSection
+          title="Find your next stay."
+          text="Discover furnished apartments designed for extended stays, with the comfort and practical amenities you need to feel at home."
+        >
+          <Link className="btn" to="/stays">
+            Explore our stays ↗
+          </Link>
+        </CtaSection>
+      ) : (
+        <CtaSection
+          title="Let’s talk about your property."
+          text="Whether you own a single apartment or multiple units, we’d love to learn more about your property and explore how we could work together."
+        >
+          <Link className="btn" to="/management#owner-enquiry">
+            Enquire about property management ↗
+          </Link>
+        </CtaSection>
+      )}
     </main>
   );
 }
