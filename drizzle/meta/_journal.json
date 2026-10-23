@@ -22,6 +22,13 @@
       "when": 1792652194967,
       "tag": "0002_guide_highlights",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1792695747905,
+      "tag": "0003_session_signed_in_at",
+      "breakpoints": true
     }
   ]
 }

@@ -11,6 +11,20 @@ export function safeAdminPath(value: string | null | undefined): string {
   return value;
 }
 
+/** How long after signing in the login email and password can be changed. */
+export const RECENT_SIGN_IN_MINUTES = 10;
+
+/**
+ * True when a session signed in within the last 10 minutes. Settings asks for
+ * a fresh sign-in instead of the current password, so changing the email or
+ * password never costs more than one password hash (Workers CPU limit).
+ */
+export function isRecentSignIn(signedInAt: string | null, now: number = Date.now()): boolean {
+  if (!signedInAt) return false;
+  const age = now - Date.parse(signedInAt);
+  return age >= 0 && age < RECENT_SIGN_IN_MINUTES * 60 * 1000;
+}
+
 /** URL slug from a name: "The Lennox Residence" → "the-lennox-residence". */
 export function slugify(value: string): string {
   return value

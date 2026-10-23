@@ -51,7 +51,7 @@ Everything runs on **Cloudflare's free tier in Sophiah's own account**.
 | Spam protection | Cloudflare Turnstile + honeypot field |
 | Validation | Zod |
 | Email alerts | Resend (sending domain `send.prettyflyliving.com`) to Sophiah's Zoho inbox |
-| Admin auth | PBKDF2 password hash (WebCrypto) + secure session cookie |
+| Admin auth | Peppered PBKDF2 password hash (WebCrypto) + secure session cookie |
 | Tests | Vitest for pure logic |
 
 Do **not** add: a separate backend framework, Node-only server packages (`@react-router/node`, `@react-router/serve`, Express), Docker, another database or ORM, an auth SaaS, a CSS-in-JS library, or paid Cloudflare products.
@@ -231,7 +231,7 @@ These were requested after the concept was approved and **override it**. Their C
 | `guide_photos` | id, guide_id, r2_key, alt, sort_order | gallery photos per guide (§5.5); shown after the cover |
 | `extra_services` | id, title, description, image_r2_key, sort_order, is_published | Why Us extra services cards |
 | `admin_users` | id, email, password_hash, created_at | one row, created with a CLI script |
-| `sessions` | id (SHA-256 of the token), user_id, expires_at | |
+| `sessions` | id (SHA-256 of the token), user_id, expires_at, signed_in_at (nullable) | `signed_in_at` gates Settings changes (§9) |
 | `login_attempts` | ip, attempted_at | throttle: 5 failures per 15 minutes |
 
 Rules:
@@ -265,7 +265,7 @@ Resource routes: `/sitemap.xml` (dynamic from D1: stays and guides), `/robots.tx
 
 Admin pages share `routes/admin/_layout.tsx` (links `admin.css`), protected by middleware (or a loader guard, per the installed docs) that redirects to `/admin/login` without a valid session:
 
-`/admin/login`, `/admin/logout` (POST), `/admin` (overview: new-item counts, upcoming check-ins), `/admin/properties`, `/admin/properties/new`, `/admin/properties/:id` (tabs: Details · Photos · Calendar), `/admin/bookings` (+ `/:id`), `/admin/messages`, `/admin/enquiries`, `/admin/faqs`, `/admin/reviews`, `/admin/guides` (with a Photos tab for the guide gallery, like properties), `/admin/extra-services`, `/admin/settings` (change the login email or password; both need the current password, and a password change signs out other sessions).
+`/admin/login`, `/admin/logout` (POST), `/admin` (overview: new-item counts, upcoming check-ins), `/admin/properties`, `/admin/properties/new`, `/admin/properties/:id` (tabs: Details · Photos · Calendar), `/admin/bookings` (+ `/:id`), `/admin/messages`, `/admin/enquiries`, `/admin/faqs`, `/admin/reviews`, `/admin/guides` (with a Photos tab for the guide gallery, like properties), `/admin/extra-services`, `/admin/settings` (change the login email or password; allowed only within 10 minutes of signing in, and a password change signs out other sessions).
 
 Admin must stay out of search engines: `noindex` meta on every admin page and `Disallow: /admin` in `robots.txt`.
 
@@ -325,8 +325,8 @@ Use React Router `<Form>` / `useFetcher` so forms work without JavaScript. On er
 
 ## 9. Security
 
-- Secrets (`RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`) are Worker secrets: set with `wrangler secret put` in production, and kept in `.dev.vars` locally (git-ignored; `.dev.vars.example` is committed). Never commit secrets or expose them to client code. Only the Turnstile **site key** is public.
-- Admin passwords use PBKDF2-SHA256 via WebCrypto (100,000 iterations, per-user random salt). Never store or log plain passwords.
+- Secrets (`RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, `PASSWORD_PEPPER`) are Worker secrets: set with `wrangler secret put` in production, and kept in `.dev.vars` locally (git-ignored; `.dev.vars.example` is committed). Never commit secrets or expose them to client code. Only the Turnstile **site key** is public.
+- Admin passwords use PBKDF2-SHA256 via WebCrypto over an HMAC-SHA256 of the password keyed with the `PASSWORD_PEPPER` secret (per-user random salt, at least 12 characters). The iteration count (4,000, in `app/.server/password.ts`) is sized so one hash fits the free plan's CPU limit; the pepper, which never lives in D1, is what protects a stolen database. Every request does at most one hash: changing the login email or password needs a sign-in within the last 10 minutes instead of the current password. Never store or log plain passwords.
 - Sessions: a 32-byte random token in an `HttpOnly; Secure; SameSite=Lax; Path=/` cookie. Only its SHA-256 hash is stored in D1, with a 30-day sliding expiry. Logout deletes the row.
 - Every admin mutation is a POST action that re-checks the session and checks the `Origin` header.
 - The login form uses Turnstile and the `login_attempts` throttle.
@@ -335,7 +335,7 @@ Use React Router `<Form>` / `useFetcher` so forms work without JavaScript. On er
 
 ### Free-tier limits to respect
 
-- Workers free plan allows about 10 ms CPU per request. Keep loaders lean, avoid heavy libraries in the server bundle, and measure the login (PBKDF2) cost.
+- Workers free plan allows about 10 ms CPU per request. Keep loaders lean, avoid heavy libraries in the server bundle, and measure the login (PBKDF2) cost on the live Worker before raising the iteration count.
 - Resend free tier: 100 emails/day, 3,000/month. Send one notification per submission, with no guest auto-replies unless asked.
 - D1: batch related writes, index `availability_blocks(property_id, start_date)`, `properties(slug)` and `guides(slug)`.
 

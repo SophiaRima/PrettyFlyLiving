@@ -4,6 +4,7 @@ import {
   contactReplyLink,
   emailReplyUrl,
   formatReceived,
+  isRecentSignIn,
   moveItem,
   parseLines,
   safeAdminPath,
@@ -101,5 +102,22 @@ describe("formatReceived", () => {
 
   it("returns unparseable input unchanged", () => {
     expect(formatReceived("soon")).toBe("soon");
+  });
+});
+
+describe("isRecentSignIn", () => {
+  const signedIn = "2026-10-22T12:00:00.000Z";
+  const at = (minutes: number) => Date.parse(signedIn) + minutes * 60 * 1000;
+
+  it("allows changes for 10 minutes after signing in", () => {
+    expect(isRecentSignIn(signedIn, at(0))).toBe(true);
+    expect(isRecentSignIn(signedIn, at(9.9))).toBe(true);
+    expect(isRecentSignIn(signedIn, at(10))).toBe(false);
+  });
+
+  it("refuses unknown, unreadable or future sign-in times", () => {
+    expect(isRecentSignIn(null, at(1))).toBe(false);
+    expect(isRecentSignIn("not a date", at(1))).toBe(false);
+    expect(isRecentSignIn(signedIn, at(-1))).toBe(false);
   });
 });

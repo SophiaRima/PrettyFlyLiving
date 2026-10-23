@@ -51,15 +51,15 @@ export async function action({ request, context }: Route.ActionArgs) {
   const parsed = adminLoginSchema.safeParse({ email, password: formData.get("password") });
   if (!parsed.success) return fail("Please enter your email and password.");
 
-  const user = await authenticate(db, parsed.data.email, parsed.data.password);
-  if (!user) {
+  const userId = await authenticate(db, parsed.data.email, parsed.data.password, env.PASSWORD_PEPPER);
+  if (userId === null) {
     await recordLoginFailure(db, ip);
     return fail("That email and password don’t match.", 401);
   }
 
   await clearLoginFailures(db, ip);
   return redirect(safeAdminPath(String(formData.get("next") ?? "")), {
-    headers: { "Set-Cookie": await createSession(db, user.id) },
+    headers: { "Set-Cookie": await createSession(db, userId) },
   });
 }
 

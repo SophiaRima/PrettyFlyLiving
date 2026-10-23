@@ -8,11 +8,15 @@
  * ADMIN_EMAIL and ADMIN_PASSWORD instead. Resetting a password signs out
  * every existing session for that user.
  *
+ * The hash needs the Worker's PASSWORD_PEPPER secret. Locally it is read from
+ * .dev.vars (or .env, which Wrangler uses when there is no .dev.vars). For
+ * --remote, pass the production value in the PASSWORD_PEPPER env variable.
+ *
  * Runs with Node 22.18+ (built-in TypeScript support) and hashes with the
  * same module the Worker uses, so the formats can't drift apart.
  */
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createInterface } from "node:readline/promises";
@@ -21,7 +25,7 @@ import { fileURLToPath } from "node:url";
 
 import { hashPassword } from "../app/.server/password.ts";
 
-const MIN_PASSWORD_LENGTH = 10;
+const MIN_PASSWORD_LENGTH = 12;
 const remote = process.argv.includes("--remote");
 
 async function prompt(): Promise<{ email: string; password: string }> {
@@ -55,6 +59,32 @@ function fail(message: string): never {
   process.exit(1);
 }
 
+/** A KEY=value entry from a dotenv-style file, without surrounding quotes. */
+function readEnvFile(file: string, key: string): string | undefined {
+  const path = fileURLToPath(new URL(`../${file}`, import.meta.url));
+  if (!existsSync(path)) return undefined;
+  for (const line of readFileSync(path, "utf8").split(/\r?\n/)) {
+    const match = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);
+    if (match?.[1] === key) return match[2].replace(/^(["'])(.*)\1$/, "$2");
+  }
+  return undefined;
+}
+
+function passwordPepper(): string {
+  if (process.env.PASSWORD_PEPPER) return process.env.PASSWORD_PEPPER;
+  if (remote) {
+    fail(
+      "Set PASSWORD_PEPPER to the production value (the one stored with `npx wrangler secret put PASSWORD_PEPPER`).",
+    );
+  }
+  // Same order as Wrangler: .dev.vars wins, .env only counts without it.
+  const devVarsExists = existsSync(fileURLToPath(new URL("../.dev.vars", import.meta.url)));
+  const pepper = devVarsExists ? readEnvFile(".dev.vars", "PASSWORD_PEPPER") : readEnvFile(".env", "PASSWORD_PEPPER");
+  return pepper ?? fail("PASSWORD_PEPPER is missing from .dev.vars. See .dev.vars.example.");
+}
+
+const pepper = passwordPepper();
+
 const input =
   process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD
     ? { email: process.env.ADMIN_EMAIL, password: process.env.ADMIN_PASSWORD }
@@ -68,7 +98,12 @@ if (input.password.length < MIN_PASSWORD_LENGTH) {
 
 // The hash is base64 plus "$" and the email has no quotes (checked above),
 // so both are safe inside single-quoted SQL strings.
-const hash = await hashPassword(input.password);
+let hash: string;
+try {
+  hash = await hashPassword(input.password, pepper);
+} catch (error) {
+  fail(error instanceof Error ? error.message : String(error));
+}
 const sql = `INSERT INTO admin_users (email, password_hash) VALUES ('${email}', '${hash}')
   ON CONFLICT(email) DO UPDATE SET password_hash = excluded.password_hash;
 DELETE FROM sessions WHERE user_id = (SELECT id FROM admin_users WHERE email = '${email}');

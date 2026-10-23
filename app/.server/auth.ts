@@ -5,7 +5,7 @@ import { adminUserContext, type AdminUser } from "~/context";
 
 import type { Database } from "./db/client";
 import { adminUsers, loginAttempts, sessions } from "./db/schema";
-import { hashPassword, verifyPassword } from "./password";
+import { DUMMY_HASH, hashPassword, verifyPassword } from "./password";
 
 /*
  * Admin sessions (AGENTS.md section 9): a 32-byte random token in an
@@ -21,13 +21,6 @@ const REFRESH_AFTER_MS = DAY_MS;
 
 const LOGIN_MAX_FAILURES = 5;
 const LOGIN_WINDOW = "-15 minutes";
-
-/**
- * Valid-format hash of a random password. Checked when the email is unknown
- * so a login takes the same time whether or not the account exists.
- */
-const DUMMY_HASH =
-  "pbkdf2-sha256$100000$3q2+7wAAAAAAAAAAAAAAAA==$7cq0eJv3yS1nV5VvM0KQyq3Bv6pX9mW0FQm8bN0kH1A=";
 
 function toHex(bytes: ArrayBuffer): string {
   return [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, "0")).join("");
@@ -77,6 +70,7 @@ export async function createSession(db: Database, userId: number): Promise<strin
     id: await sha256Hex(token),
     userId,
     expiresAt: new Date(Date.now() + SESSION_DAYS * DAY_MS).toISOString(),
+    signedInAt: new Date().toISOString(),
   });
   return sessionCookie(token, SESSION_DAYS * 24 * 60 * 60);
 }
@@ -94,7 +88,12 @@ export async function getSession(db: Database, request: Request): Promise<Sessio
 
   const id = await sha256Hex(token);
   const [row] = await db
-    .select({ userId: sessions.userId, expiresAt: sessions.expiresAt, email: adminUsers.email })
+    .select({
+      userId: sessions.userId,
+      expiresAt: sessions.expiresAt,
+      signedInAt: sessions.signedInAt,
+      email: adminUsers.email,
+    })
     .from(sessions)
     .innerJoin(adminUsers, eq(adminUsers.id, sessions.userId))
     .where(eq(sessions.id, id))
@@ -108,7 +107,7 @@ export async function getSession(db: Database, request: Request): Promise<Sessio
     return null;
   }
 
-  const user = { id: row.userId, email: row.email };
+  const user = { id: row.userId, email: row.email, signedInAt: row.signedInAt };
   const fullExpiry = now + SESSION_DAYS * DAY_MS;
   if (fullExpiry - expiresAt < REFRESH_AFTER_MS) return { user };
 
@@ -165,37 +164,23 @@ export async function clearLoginFailures(db: Database, ip: string): Promise<void
   await db.delete(loginAttempts).where(eq(loginAttempts.ip, ip));
 }
 
-/** The admin whose email and password match, or null. */
+/** The id of the admin whose email and password match, or null. */
 export async function authenticate(
   db: Database,
   email: string,
   password: string,
-): Promise<AdminUser | null> {
+  pepper: string,
+): Promise<number | null> {
   const [user] = await db
     .select()
     .from(adminUsers)
     .where(eq(adminUsers.email, email.toLowerCase()))
     .limit(1);
-  const valid = await verifyPassword(password, user?.passwordHash ?? DUMMY_HASH);
-  return user && valid ? { id: user.id, email: user.email } : null;
+  const valid = await verifyPassword(password, user?.passwordHash ?? DUMMY_HASH, pepper);
+  return user && valid ? user.id : null;
 }
 
 // ------------------------------------------------------------------ account
-
-/** True when `password` is this admin's current password. */
-export async function checkAdminPassword(
-  db: Database,
-  userId: number,
-  password: string,
-): Promise<boolean> {
-  const [user] = await db
-    .select({ passwordHash: adminUsers.passwordHash })
-    .from(adminUsers)
-    .where(eq(adminUsers.id, userId))
-    .limit(1);
-  const valid = await verifyPassword(password, user?.passwordHash ?? DUMMY_HASH);
-  return Boolean(user) && valid;
-}
 
 /** Changes the login email; "taken" when another admin already uses it. */
 export async function changeAdminEmail(
@@ -222,11 +207,12 @@ export async function changeAdminPassword(
   request: Request,
   userId: number,
   password: string,
+  pepper: string,
 ): Promise<void> {
   const token = readSessionToken(request);
   const currentId = token ? await sha256Hex(token) : "";
   await db.batch([
-    db.update(adminUsers).set({ passwordHash: await hashPassword(password) }).where(eq(adminUsers.id, userId)),
+    db.update(adminUsers).set({ passwordHash: await hashPassword(password, pepper) }).where(eq(adminUsers.id, userId)),
     db.delete(sessions).where(and(eq(sessions.userId, userId), ne(sessions.id, currentId))),
   ]);
 }

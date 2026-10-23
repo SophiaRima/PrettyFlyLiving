@@ -40,6 +40,6 @@
 
   // Set in production with `wrangler secret put <NAME>`; locally in .dev.vars.
   "secrets": {
-    "required": ["RESEND_API_KEY", "TURNSTILE_SECRET_KEY"]
+    "required": ["RESEND_API_KEY", "TURNSTILE_SECRET_KEY", "PASSWORD_PEPPER"]
   }
 }

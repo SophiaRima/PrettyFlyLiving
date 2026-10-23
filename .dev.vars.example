@@ -11,3 +11,9 @@ TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
 # Resend API key. While it is the placeholder, email alerts are printed to the
 # `npm run dev` terminal instead of being sent.
 RESEND_API_KEY=re_placeholder
+
+# Secret mixed into every admin password hash. Make your own with
+#   node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
+# and keep the production value in a password manager: `npm run admin:create
+# -- --remote` needs it, and changing it invalidates the admin password.
+PASSWORD_PEPPER=dev-only-pepper-replace-me-with-a-random-value

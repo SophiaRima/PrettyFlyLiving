@@ -46,10 +46,10 @@ After changing `wrangler.jsonc`, run `npm run typecheck` to regenerate `worker-c
 The dashboard is at `/admin`. Create a login for the local database first:
 
 ```bash
-npm run admin:create             # prompts for email and password (at least 10 characters)
+npm run admin:create             # prompts for email and password (at least 12 characters)
 ```
 
-It needs Node 22.18 or later (it runs TypeScript directly). Running it again with the same email resets the password and signs that user out everywhere. In production, run `npm run admin:create -- --remote`.
+It needs Node 22.18 or later (it runs TypeScript directly), and the `PASSWORD_PEPPER` secret from `.dev.vars` (see `.dev.vars.example`). Running it again with the same email resets the password and signs that user out everywhere. In production, run `PASSWORD_PEPPER=<the production value> npm run admin:create -- --remote`.
 
 From the dashboard you can:
 
@@ -57,9 +57,9 @@ From the dashboard you can:
 - confirm a booking with **Confirm & block dates**. A booking request never blocks dates by itself.
 - add and edit properties, their photos, and blocked dates (Calendar tab). Properties are never deleted; untick Published to hide one.
 - edit Nairobi guides (Markdown, with a preview), guide photos, reviews, FAQs and extra services.
-- change your login email or password under **Settings**. Both ask for your current password, and changing the password signs you out on every other device.
+- change your login email or password under **Settings**. This works for 10 minutes after signing in (otherwise it asks you to sign in again), and changing the password signs you out on every other device.
 
-Photos are resized to WebP in the browser, stored in R2 and served from `/media/…`. Five failed logins (or wrong current passwords in Settings) from one IP lock logins from that IP for 15 minutes.
+Photos are resized to WebP in the browser, stored in R2 and served from `/media/…`. Five failed logins from one IP lock logins from that IP for 15 minutes.
 
 ## Project layout
 
@@ -86,7 +86,7 @@ Production setup happens in Phase 5 (see AGENTS.md section 11), inside Sophiah's
 1. `npx wrangler d1 create prettyflyliving-db`, then paste the returned `database_id` into `wrangler.jsonc`.
 2. `npx wrangler r2 bucket create prettyflyliving-media`
 3. `npm run db:migrate:remote`
-4. `npx wrangler secret put RESEND_API_KEY` and `npx wrangler secret put TURNSTILE_SECRET_KEY`
+4. `npx wrangler secret put RESEND_API_KEY`, `npx wrangler secret put TURNSTILE_SECRET_KEY` and `npx wrangler secret put PASSWORD_PEPPER` (a new random value, see `.dev.vars.example`; keep it in Sophiah's password manager, since `admin:create -- --remote` needs it and changing it invalidates the admin password). Then create the admin with `PASSWORD_PEPPER=<that value> npm run admin:create -- --remote`, log in on the live site and check the Worker's metrics for `exceededCpu` (error 1102).
 5. Put the production Turnstile site key in `wrangler.jsonc`.
 6. `npm run deploy`, then attach the custom domain `prettyflyliving.com`.
 

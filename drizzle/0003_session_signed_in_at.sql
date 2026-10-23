@@ -1,0 +1,1 @@
+ALTER TABLE `sessions` ADD `signed_in_at` text;

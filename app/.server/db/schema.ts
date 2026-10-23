@@ -265,6 +265,8 @@ export const sessions = sqliteTable(
       .notNull()
       .references(() => adminUsers.id, { onDelete: "cascade" }),
     expiresAt: text("expires_at").notNull(),
+    /** When this session logged in (ISO). Null for sessions from before it was recorded. */
+    signedInAt: text("signed_in_at"),
   },
   (t) => [index("sessions_user_idx").on(t.userId)],
 );
