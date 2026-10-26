@@ -27,7 +27,8 @@ export const PHOTO_ACCEPT = "image/jpeg,image/png,image/webp";
 
 /**
  * Uploads one or more photos. With JavaScript each file is resized to WebP
- * and sent on its own; without it the form posts the original files.
+ * and sent on its own with its small copy ("thumb"); without it the form
+ * posts the original files and the server stores each one as its own copy.
  */
 export function PhotoUploader({
   intent = "upload",
@@ -57,7 +58,9 @@ export function PhotoUploader({
       const body = new FormData();
       body.set("intent", intent);
       for (const [name, value] of Object.entries(fields)) body.set(name, value);
-      body.set("photo", await prepareImage(file));
+      const { photo, thumb } = await prepareImage(file);
+      body.set("photo", photo);
+      body.set("thumb", thumb);
       await fetcher.submit(body, { method: "post", encType: "multipart/form-data" });
     }
     setProgress(null);

@@ -145,14 +145,14 @@ The concept is a hash-routed, hardcoded-data prototype. Rebuild its markup as Re
 - `admin.css` restricts Tailwind's scan to admin code: `@import "tailwindcss" source(none);` plus `@source` for `app/routes/admin`, `app/components/admin` and `app/components/ui`.
 - Use the concept's class names (`btn`, `btn-light`, `section`, `section-head`, `property-card`, `booking-card`, `cta-band` …) in JSX via `className`. No Tailwind utilities on public pages. When something new is needed, add a small rule at the end of `site.css` under a `/* Production additions */` comment, built from the existing tokens.
 - Inline `style=` attributes in the concept (for example `style="padding-top:20px"` on sections) become React `style` props with the same values.
-- Fonts are exactly the concept's: **DM Serif Display** (headings, `.serif`, brand) and **Poppins 300/400/500/600/700** (everything else), loaded from Google Fonts in `root.tsx` with the same `preconnect` links.
+- Fonts are exactly the concept's: **DM Serif Display** (headings, `.serif`, brand) and **Poppins 300/400/500/600/700** (everything else), **self-hosted** (latin + latin-ext woff2 in `app/styles/fonts/`, `@font-face` rules in `app/styles/fonts.css`). `root.tsx` links `fonts.css` and preloads Poppins 400 and DM Serif Display latin. No Google Fonts requests: they blocked the first paint (Phase 4 decision).
 
 ### 5.2 Tokens (from the concept; do not change)
 
 | Token | Value | Use |
 |---|---|---|
 | `--ink` | `#242820` | text, primary buttons, footer background |
-| `--muted` | `#73766c` | body copy, labels |
+| `--muted` | `#65685e` | body copy, labels (the concept's `#73766c`, darkened for WCAG AA contrast; override in `site.css` Production additions) |
 | `--paper` | `#f7f5ef` | page background |
 | `--white` | `#fffefa` | cards, panels |
 | `--sage` | `#536653` | accent, eyebrows, hover, CTA band |

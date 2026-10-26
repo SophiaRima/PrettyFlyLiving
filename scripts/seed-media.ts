@@ -5,7 +5,8 @@
  *   npm run db:seed    runs seed.sql, then this script
  *
  * Each file's path under seed-media/ is its R2 key (e.g.
- * properties/<hash>.webp), named the same way the dashboard names uploads.
+ * properties/<hash>.webp), named the same way the dashboard names uploads,
+ * including each photo's 800px small copy (properties/<hash>-800.webp).
  * Local only: production photos are uploaded through the dashboard.
  */
 import { spawnSync } from "node:child_process";

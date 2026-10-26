@@ -7,24 +7,23 @@ import {
   ScrollRestoration,
 } from "react-router";
 
+import serifLatin from "~/styles/fonts/dm-serif-display-400-latin.woff2?url";
+import sansLatin from "~/styles/fonts/poppins-400-latin.woff2?url";
+import fontFaces from "~/styles/fonts.css?inline";
+
 import type { Route } from "./+types/root";
 
 // No global stylesheet here on purpose: the public site links styles/site.css
 // from routes/_site.tsx and the admin links styles/admin.css from its layout
-// (AGENTS.md section 5.1). Root only loads the concept's fonts.
+// (AGENTS.md section 5.1). Root only loads the concept's fonts, self-hosted:
+// fonts.css holds @font-face rules only (inlined in <head>, under 1 KB
+// compressed, to save a render-blocking request), and the two faces every
+// page shows first are preloaded so text never waits on a font request chain.
 export const links: Route.LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Poppins:wght@300;400;500;600;700&display=swap",
-  },
+  { rel: "preload", href: sansLatin, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
+  { rel: "preload", href: serifLatin, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
   { rel: "icon", href: "/favicon.ico", sizes: "48x48" },
-  { rel: "icon", href: "/brand/icon-512.png", type: "image/png" },
+  { rel: "icon", href: "/brand/icon-192.png", type: "image/png", sizes: "192x192" },
   { rel: "apple-touch-icon", href: "/brand/apple-touch-icon.png" },
 ];
 
@@ -36,6 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#f6f3ed" />
         <Meta />
+        <style dangerouslySetInnerHTML={{ __html: fontFaces }} />
         <Links />
       </head>
       <body>

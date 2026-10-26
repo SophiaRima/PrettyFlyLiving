@@ -64,7 +64,7 @@ export async function action({ request, context }: Route.ActionArgs) {
       return { ok: true as const, message: "Service saved" };
     }
     case "image": {
-      const stored = await storeImage(bucket, "services", formData.get("photo"));
+      const stored = await storeImage(bucket, "services", formData.get("photo"), formData.get("thumb"));
       if (!stored.ok) return data(formFailure(stored.message, {}), { status: 400 });
       const old = await setExtraServiceImage(db, id, stored);
       if (old !== stored.key) await deleteImageIfUnused(bucket, db, old);

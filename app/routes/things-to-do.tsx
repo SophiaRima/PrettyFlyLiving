@@ -103,9 +103,11 @@ export default function ThingsToDo({ loaderData }: Route.ComponentProps) {
             })}
           </nav>
 
+          {/* Keeps the heading order h1 → h2 → card h3 for screen readers. */}
+          <h2 className="sr-only">Nairobi guides</h2>
           <div className="article-grid guide-article-grid">
             {guides.length > 0 ? (
-              guides.map((guide) => <GuideArticleCard key={guide.slug} guide={guide} />)
+              guides.map((guide, i) => <GuideArticleCard key={guide.slug} guide={guide} priority={i === 0} />)
             ) : (
               <div className="empty-state">
                 <h3>No guides found just yet</h3>

@@ -36,8 +36,8 @@ export const navItems = [
 export const pageImages = {
   hero: {
     src: "/images/hero-2000.webp",
-    /** Phones and 1× screens take the smaller file. */
-    srcSet: "/images/hero-1200.webp 1200w, /images/hero-2000.webp 2000w",
+    /** Phones take the 800px or 1200px file, 2× desktops the full size. */
+    srcSet: "/images/hero-800.webp 800w, /images/hero-1200.webp 1200w, /images/hero-2000.webp 2000w",
     sizes: "(max-width: 720px) 100vw, 1080px",
     width: 2000,
     height: 1360,

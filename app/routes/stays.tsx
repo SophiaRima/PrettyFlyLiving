@@ -155,9 +155,11 @@ export default function Stays({ loaderData }: Route.ComponentProps) {
             </span>
           </LiveFilterForm>
 
+          {/* Keeps the heading order h1 → h2 → card h3 for screen readers. */}
+          <h2 className="sr-only">Available stays</h2>
           <div className="property-grid" id="listing-grid">
             {stays.length > 0 ? (
-              stays.map((stay) => <PropertyCard key={stay.slug} property={stay} />)
+              stays.map((stay, i) => <PropertyCard key={stay.slug} property={stay} priority={i === 0} />)
             ) : (
               <div className="empty-state">
                 <h3>No stays found just yet</h3>

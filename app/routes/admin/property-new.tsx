@@ -2,7 +2,7 @@ import { data, Link, redirect } from "react-router";
 
 import { requireAdmin } from "~/.server/auth";
 import { formFailure, readAdminForm } from "~/.server/forms";
-import { checkImage, putImage, type CheckedImage } from "~/.server/media";
+import { checkImage, checkThumb, putImage, type CheckedImage } from "~/.server/media";
 import { addPhoto } from "~/.server/queries/photos";
 import { createProperty, getAllAreas, isPropertySlugTaken } from "~/.server/queries/properties";
 import { dbFromContext } from "~/.server/request";
@@ -50,11 +50,13 @@ export async function action({ request, context }: Route.ActionArgs) {
     if (!checked.ok) return invalid({ photos: `${file.name}: ${checked.message}` });
     photos.push(checked.image);
   }
+  // Small copies from the browser line up with "photos"; none without JavaScript.
+  const thumbFiles = formData.getAll("thumbs");
 
   const id = await createProperty(db, form.data);
   const bucket = context.get(cloudflareContext).env.MEDIA;
-  for (const photo of photos) {
-    const key = await putImage(bucket, "properties", photo);
+  for (const [index, photo] of photos.entries()) {
+    const key = await putImage(bucket, "properties", photo, await checkThumb(thumbFiles[index] ?? null));
     await addPhoto(db, "property", id, { key, width: photo.width, height: photo.height, alt: form.data.name });
   }
   // The Photos tab shows what was uploaded and is where alt text is written.

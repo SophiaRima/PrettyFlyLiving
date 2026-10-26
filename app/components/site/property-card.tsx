@@ -4,11 +4,17 @@ import { Link, useNavigate } from "react-router";
 import { bedroomLabel, countLabel, formatKes } from "~/lib/site";
 import type { PropertyCardData } from "~/lib/types";
 
-import { Img } from "./img";
+import { CARD_SIZES, Img } from "./img";
 import { useSavedStays } from "./saved-stays";
 
+interface PropertyCardProps {
+  property: PropertyCardData;
+  /** First card of a page whose photo is the likely LCP (e.g. /stays). */
+  priority?: boolean;
+}
+
 /** The concept's card(): exact markup, real data. */
-export function PropertyCard({ property }: { property: PropertyCardData }) {
+export function PropertyCard({ property, priority = false }: PropertyCardProps) {
   const navigate = useNavigate();
   const { isSaved, toggle } = useSavedStays();
   const href = `/stays/${property.slug}`;
@@ -29,6 +35,8 @@ export function PropertyCard({ property }: { property: PropertyCardData }) {
           alt={property.name}
           width={property.coverWidth}
           height={property.coverHeight}
+          sizes={CARD_SIZES}
+          priority={priority}
         />
         {property.tag && <span className="pill">{property.tag}</span>}
         <button

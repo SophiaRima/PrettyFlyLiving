@@ -1,6 +1,9 @@
 import type { SyntheticEvent } from "react";
 
-import { mediaUrl } from "~/lib/media";
+import { mediaSrcSet, mediaUrl } from "~/lib/media";
+
+/** `sizes` for photos in cards and tiles: full width on phones, a column otherwise. */
+export const CARD_SIZES = "(max-width: 720px) 100vw, 400px";
 
 interface ImgProps {
   /** R2 key, absolute URL or /public path. */
@@ -9,8 +12,15 @@ interface ImgProps {
   /** Intrinsic pixel size, when known (AGENTS.md section 8). CSS still sets the displayed size. */
   width?: number | null;
   height?: number | null;
+  /**
+   * Rendered width hint. When set, uploads also offer their small copy via
+   * srcset, so cards and tiles don't download the full-size photo.
+   */
+  sizes?: string;
   /** Above-the-fold images load eagerly (hero, first gallery photo). */
   eager?: boolean;
+  /** The page's likely LCP image: eager and fetched ahead of other images. */
+  priority?: boolean;
 }
 
 // Mirrors the concept's img() helper, including its soft fallback when an
@@ -20,16 +30,21 @@ function onImageError(event: SyntheticEvent<HTMLImageElement>): void {
   event.currentTarget.style.opacity = ".3";
 }
 
-export function Img({ src, alt, width, height, eager = false }: ImgProps) {
+export function Img({ src, alt, width, height, sizes, eager = false, priority = false }: ImgProps) {
   if (!src) return null;
-  const url = src.startsWith("/") ? src : mediaUrl(src);
+  const isPublicFile = src.startsWith("/");
+  const url = isPublicFile ? src : mediaUrl(src);
+  const srcSet = sizes && !isPublicFile ? mediaSrcSet(src, width) : undefined;
   return (
     <img
       src={url}
+      srcSet={srcSet}
+      sizes={srcSet ? sizes : undefined}
       alt={alt}
       width={width ?? undefined}
       height={height ?? undefined}
-      loading={eager ? "eager" : "lazy"}
+      loading={eager || priority ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : undefined}
       decoding="async"
       onError={onImageError}
     />

@@ -270,6 +270,19 @@ p { max-width: 62ch; }
    Small rules the concept did not need, built only from its tokens.
    ========================================================================== */
 
+/* Muted text, slightly darker than the concept's #73766c so body copy meets
+   WCAG AA (4.5:1) on paper, white and every tinted section (AGENTS.md 5.2). */
+:root { --muted: #65685e; }
+
+/* Buttons without their own colour (calendar days, the drawer's close X)
+   take the text colour around them, not the browser's ButtonText, which some
+   Windows/Edge setups render white on the paper background. */
+button { color: inherit; }
+
+/* The home search panel's fields hide the input outline (concept), so show
+   keyboard focus on the whole field, like the /stays filter fields. */
+.search-panel .field:focus-within { outline: 2px solid var(--sage); outline-offset: 2px; border-radius: 8px; }
+
 /* Client logo replaces the concept's text wordmark (AGENTS.md 5.3). The
    concept's global img rule would stretch it, so size it explicitly. */
 .brand img { width: auto; height: 52px; object-fit: contain; }
@@ -278,6 +291,15 @@ p { max-width: 62ch; }
   .brand img { height: 44px; }
   .site-footer .brand img { height: 64px; }
 }
+
+/* Footer column titles are h2 for a valid heading order (the concept used h4).
+   This repeats the concept's `.site-footer h4` look and undoes the h2 styles. */
+.site-footer h2.footer-heading { font: 700 11px/1.7 var(--sans); letter-spacing: normal; margin: 0 0 15px; }
+
+/* Skip link: hidden until it receives keyboard focus. */
+.skip-link { position: absolute; left: 16px; top: -60px; z-index: 100; background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+.skip-link:focus { top: 12px; }
+.skip-target:focus { outline: none; }
 
 /* The floating WhatsApp action is a link with a real icon. */
 .whatsapp { display: grid; place-items: center; }

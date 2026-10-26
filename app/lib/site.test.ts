@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { mediaUrl } from "./media";
+import { mediaSrcSet, mediaUrl, thumbKey } from "./media";
 import { bedroomLabel, countLabel, formatKes, whatsappMessages, whatsappUrl } from "./site";
 
 describe("formatKes", () => {
@@ -50,5 +50,31 @@ describe("mediaUrl", () => {
   it("passes absolute seed URLs through unchanged", () => {
     const url = "https://images.unsplash.com/photo-1?w=900";
     expect(mediaUrl(url)).toBe(url);
+  });
+});
+
+describe("thumbKey and mediaSrcSet", () => {
+  const key = "properties/0123456789abcdef0123456789abcdef.webp";
+
+  it("puts the small copy next to the upload", () => {
+    expect(thumbKey(key)).toBe("properties/0123456789abcdef0123456789abcdef-800.webp");
+    expect(thumbKey("services/0123456789abcdef0123456789abcdef.jpg")).toBe(
+      "services/0123456789abcdef0123456789abcdef-800.jpg",
+    );
+  });
+
+  it("has no small copy for seed URLs, public files or small copies themselves", () => {
+    expect(thumbKey("https://images.unsplash.com/photo-1?w=900")).toBeNull();
+    expect(thumbKey("/images/hero-2000.webp")).toBeNull();
+    expect(thumbKey("properties/0123456789abcdef0123456789abcdef-800.webp")).toBeNull();
+  });
+
+  it("offers both sizes only when the photo is wider than the small copy", () => {
+    expect(mediaSrcSet(key, 2000)).toBe(
+      "/media/properties/0123456789abcdef0123456789abcdef-800.webp 800w, /media/properties/0123456789abcdef0123456789abcdef.webp 2000w",
+    );
+    expect(mediaSrcSet(key, 800)).toBeUndefined();
+    expect(mediaSrcSet(key, null)).toBeUndefined();
+    expect(mediaSrcSet("https://images.unsplash.com/photo-1?w=900", 2000)).toBeUndefined();
   });
 });

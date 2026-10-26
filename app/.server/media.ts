@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 
 import { readImageSize } from "~/lib/image-size";
+import { THUMB_WIDTH, thumbKey } from "~/lib/media";
 
 import type { Database } from "./db/client";
 import { extraServices, guidePhotos, guides, propertyPhotos } from "./db/schema";
@@ -33,8 +34,13 @@ const TYPES = [
   },
 ] as const;
 
-/** Keys this app writes, e.g. properties/3f2a…9c.webp. Anything else is refused by /media. */
-export const MEDIA_KEY = /^(?:properties|guides|services)\/[a-f0-9]{32}\.(?:jpg|png|webp)$/;
+/**
+ * Keys this app writes, e.g. properties/3f2a…9c.webp and its small copy
+ * properties/3f2a…9c-800.webp. Anything else is refused by /media.
+ */
+export const MEDIA_KEY = new RegExp(
+  `^(?:properties|guides|services)/[a-f0-9]{32}(?:-${THUMB_WIDTH})?\\.(?:jpg|png|webp)$`,
+);
 
 /** A saved image: its R2 key and pixel size (null if the header couldn't be read). */
 export interface StoredImage {
@@ -66,31 +72,62 @@ export async function checkImage(file: FormDataEntryValue | null): Promise<Check
   return { ok: true, image: { bytes, type, width: size?.width ?? null, height: size?.height ?? null } };
 }
 
+/** A small copy is used only if it matches the photo's format and isn't larger. */
+function isUsableThumb(image: CheckedImage, thumb: CheckedImage | null): thumb is CheckedImage {
+  return (
+    thumb !== null &&
+    thumb.type.ext === image.type.ext &&
+    thumb.width !== null &&
+    image.width !== null &&
+    thumb.width <= image.width
+  );
+}
+
 /**
  * Saves a checked image under a content-hashed key (so the same photo
- * uploaded twice is stored once) and returns the key.
+ * uploaded twice is stored once) and returns the key. Its small copy goes
+ * next to it (see thumbKey); without a usable one from the browser, the photo
+ * itself is stored there, so cards can always ask for the small copy.
  */
-export async function putImage(bucket: R2Bucket, folder: MediaFolder, image: CheckedImage): Promise<string> {
+export async function putImage(
+  bucket: R2Bucket,
+  folder: MediaFolder,
+  image: CheckedImage,
+  thumb: CheckedImage | null = null,
+): Promise<string> {
   const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", image.bytes));
   const hash = [...digest.subarray(0, 16)].map((b) => b.toString(16).padStart(2, "0")).join("");
   const key = `${folder}/${hash}.${image.type.ext}`;
+  const httpMetadata = { contentType: image.type.mime, cacheControl: "public, max-age=31536000, immutable" };
 
-  await bucket.put(key, image.bytes, {
-    httpMetadata: { contentType: image.type.mime, cacheControl: "public, max-age=31536000, immutable" },
-  });
+  const small = isUsableThumb(image, thumb) ? thumb : image;
+  const smallKey = thumbKey(key);
+  await Promise.all([
+    bucket.put(key, image.bytes, { httpMetadata }),
+    smallKey ? bucket.put(smallKey, small.bytes, { httpMetadata }) : null,
+  ]);
   return key;
 }
 
-/** checkImage + putImage for a single upload. */
+/** Checks an optional small copy; anything unreadable is simply not used. */
+export async function checkThumb(file: FormDataEntryValue | null): Promise<CheckedImage | null> {
+  if (!(file instanceof File) || file.size === 0) return null;
+  const checked = await checkImage(file);
+  return checked.ok ? checked.image : null;
+}
+
+/** checkImage + putImage for a single upload and its optional small copy. */
 export async function storeImage(
   bucket: R2Bucket,
   folder: MediaFolder,
   file: FormDataEntryValue | null,
+  thumbFile: FormDataEntryValue | null = null,
 ): Promise<StoreResult> {
   const checked = await checkImage(file);
   if (!checked.ok) return checked;
   const { width, height } = checked.image;
-  return { ok: true, key: await putImage(bucket, folder, checked.image), width, height };
+  const key = await putImage(bucket, folder, checked.image, await checkThumb(thumbFile));
+  return { ok: true, key, width, height };
 }
 
 /** True while any row still shows this image. */
@@ -105,9 +142,9 @@ async function isKeyInUse(db: Database, key: string): Promise<boolean> {
 }
 
 /**
- * Deletes an image from R2 once nothing uses it. Call after the row that
- * referenced it has been removed or changed. Seed images (https:// URLs)
- * aren't in R2 and are skipped.
+ * Deletes an image and its small copy from R2 once nothing uses it. Call
+ * after the row that referenced it has been removed or changed. Seed images
+ * (https:// URLs) aren't in R2 and are skipped.
  */
 export async function deleteImageIfUnused(
   bucket: R2Bucket,
@@ -116,5 +153,6 @@ export async function deleteImageIfUnused(
 ): Promise<void> {
   if (!key || !MEDIA_KEY.test(key)) return;
   if (await isKeyInUse(db, key)) return;
-  await bucket.delete(key);
+  const smallKey = thumbKey(key);
+  await bucket.delete(smallKey ? [key, smallKey] : key);
 }

@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { getExtraServices, getPublishedReviews } from "~/.server/queries/content";
 import { dbFromContext } from "~/.server/request";
 import { CtaSection } from "~/components/site/cta-band";
-import { Img } from "~/components/site/img";
+import { CARD_SIZES, Img } from "~/components/site/img";
 import { PageHero } from "~/components/site/page-hero";
 import { QuoteCard } from "~/components/site/quote-card";
 import { ServiceGrid, type ServiceItem } from "~/components/site/service-grid";
@@ -154,6 +154,7 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
                       alt={service.title}
                       width={service.imageWidth}
                       height={service.imageHeight}
+                      sizes={CARD_SIZES}
                     />
                   </div>
                   <div className="property-body service-card-body">

@@ -23,7 +23,7 @@ export function SiteFooter() {
             </p>
           </div>
           <div>
-            <h4>Explore</h4>
+            <h2 className="footer-heading">Explore</h2>
             <div className="footer-links">
               <Link to="/stays">Our stays</Link>
               <Link to="/why-us">Why stay with us</Link>
@@ -32,7 +32,7 @@ export function SiteFooter() {
             </div>
           </div>
           <div>
-            <h4>Guest support</h4>
+            <h2 className="footer-heading">Guest support</h2>
             <div className="footer-links">
               <Link to="/faqs">Frequently asked questions</Link>
               <Link to="/contact">Contact us</Link>
@@ -41,7 +41,7 @@ export function SiteFooter() {
             </div>
           </div>
           <div>
-            <h4>Let’s connect</h4>
+            <h2 className="footer-heading">Let’s connect</h2>
             <p>Have a question about a stay or your property?</p>
             <div className="footer-links">
               <a href={`mailto:${site.email}`} target="_blank" rel="noopener noreferrer">

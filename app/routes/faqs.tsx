@@ -46,7 +46,10 @@ export default function Faqs({ loaderData }: Route.ComponentProps) {
       <section className="section">
         <div className="container faq-wrap">
           <aside>
-            <div className="eyebrow" style={{ margin: "10px 0" }}>
+            {/* The visible label is the concept's eyebrow; the hidden h2 keeps
+                the heading order h1 → h2 → "Need a human answer?" h3. */}
+            <h2 className="sr-only">Browse by topic</h2>
+            <div className="eyebrow" style={{ margin: "10px 0" }} aria-hidden="true">
               Browse by topic
             </div>
             {/* A GET form keeps the concept's <button> tabs working without JS. */}

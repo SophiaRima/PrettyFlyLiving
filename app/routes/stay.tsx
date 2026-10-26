@@ -185,6 +185,8 @@ export default function Stay({ loaderData, actionData }: Route.ComponentProps) {
                 <p>{property.description}</p>
               </div>
 
+              {/* The concept's section titles are h3; this keeps h1 → h2 → h3. */}
+              <h2 className="sr-only">About this stay</h2>
               <div className="detail-section">
                 <h3>The details that make it feel like home</h3>
                 <div className="amenity-grid">

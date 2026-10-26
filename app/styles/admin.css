@@ -59,8 +59,9 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Concept tokens: ink #242820, muted #73766c, paper #f7f5ef, white #fffefa,
-   sage #536653, sage2 #e5e9df, line #e5e1d8. */
+/* Concept tokens: ink #242820, muted #65685e (darkened from #73766c for
+   contrast), paper #f7f5ef, white #fffefa, sage #536653, sage2 #e5e9df,
+   line #e5e1d8. */
 :root {
   --background: #f7f5ef;
   --foreground: #242820;
@@ -73,7 +74,7 @@
   --secondary: #e5e9df;
   --secondary-foreground: #242820;
   --muted: #eeece3;
-  --muted-foreground: #73766c;
+  --muted-foreground: #65685e;
   --accent: #e5e9df;
   --accent-foreground: #242820;
   --destructive: #a74e48;

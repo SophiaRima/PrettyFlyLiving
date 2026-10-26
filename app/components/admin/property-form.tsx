@@ -101,7 +101,12 @@ export function PropertyForm({
     try {
       const body = new FormData(form);
       body.delete("photos");
-      for (const file of files) body.append("photos", await prepareImage(file));
+      // "thumbs" lines up with "photos" by position.
+      for (const file of files) {
+        const { photo, thumb } = await prepareImage(file);
+        body.append("photos", photo);
+        body.append("thumbs", thumb);
+      }
       await submit(body, { method: "post", encType: "multipart/form-data" });
     } finally {
       setPreparing(false);

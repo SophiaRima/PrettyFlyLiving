@@ -32,7 +32,7 @@ function renderHtml(notification: Notification, adminUrl: string): string {
   const rows = notification.rows
     .map(
       ([label, value]) =>
-        `<tr><td style="padding:8px 16px 8px 0;color:#73766c;vertical-align:top;white-space:nowrap">${escapeHtml(label)}</td><td style="padding:8px 0;color:#242820;white-space:pre-wrap">${escapeHtml(value)}</td></tr>`,
+        `<tr><td style="padding:8px 16px 8px 0;color:#65685e;vertical-align:top;white-space:nowrap">${escapeHtml(label)}</td><td style="padding:8px 0;color:#242820;white-space:pre-wrap">${escapeHtml(value)}</td></tr>`,
     )
     .join("");
   return `<!doctype html><html><body style="margin:0;background:#f7f5ef;font-family:Arial,sans-serif;font-size:14px;line-height:1.5"><div style="max-width:560px;margin:0 auto;padding:28px 20px"><h1 style="font-size:20px;font-weight:normal;color:#242820;margin:0 0 18px">${escapeHtml(notification.subject)}</h1><table style="border-collapse:collapse;width:100%">${rows}</table><p style="margin:24px 0 0"><a href="${escapeHtml(adminUrl)}" style="display:inline-block;background:#536653;color:#fff;text-decoration:none;padding:10px 16px;border-radius:4px">Open in dashboard</a></p></div></body></html>`;

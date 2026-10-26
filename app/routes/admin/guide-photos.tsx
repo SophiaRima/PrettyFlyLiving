@@ -32,7 +32,7 @@ export async function action({ request, params, context }: Route.ActionArgs) {
   const intent = String(formData.get("intent") ?? "");
 
   if (intent === "cover") {
-    const stored = await storeImage(bucket, "guides", formData.get("photo"));
+    const stored = await storeImage(bucket, "guides", formData.get("photo"), formData.get("thumb"));
     if (!stored.ok) return data(formFailure(stored.message, {}), { status: 400 });
     const old = await setGuideCover(db, guide.id, stored);
     if (old !== stored.key) await deleteImageIfUnused(bucket, db, old);

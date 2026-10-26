@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { mediaUrl } from "~/lib/media";
 import type { PhotoData } from "~/lib/types";
@@ -13,9 +13,14 @@ const GRID_SIZE = 5;
  */
 export function Gallery({ photos, name }: { photos: PhotoData[]; name: string }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  // The tile that opened the viewer gets focus back when it closes.
+  const openerRef = useRef<HTMLButtonElement | null>(null);
   const shown = photos.slice(0, GRID_SIZE);
   const hidden = photos.length - shown.length;
-  const close = useCallback(() => setOpenIndex(null), []);
+  const close = useCallback(() => {
+    setOpenIndex(null);
+    openerRef.current?.focus();
+  }, []);
 
   return (
     <>
@@ -32,13 +37,17 @@ export function Gallery({ photos, name }: { photos: PhotoData[]; name: string })
                   ? `View all ${photos.length} photos`
                   : `View photo ${i + 1} of ${photos.length}`
               }
-              onClick={() => setOpenIndex(i)}
+              onClick={(event) => {
+                openerRef.current = event.currentTarget;
+                setOpenIndex(i);
+              }}
             >
               <Img
                 src={photo.key}
                 alt={photo.alt || `${name} photo ${i + 1}`}
                 width={photo.width}
                 height={photo.height}
+                sizes={i === 0 ? "(max-width: 720px) 100vw, 500px" : "(max-width: 720px) 50vw, 250px"}
                 eager={i === 0}
               />
               {isLast && <span className="gallery-more-label">+{hidden} photos</span>}

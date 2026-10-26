@@ -46,10 +46,12 @@ export async function handlePhotoIntent(
 
   if (intent === "upload") {
     const files = formData.getAll("photo");
+    // Small copies from the browser, by position; none when JavaScript is off.
+    const thumbs = formData.getAll("thumb");
     if (files.length === 0) return formFailure("Please choose a photo.", {});
     let added = 0;
-    for (const file of files) {
-      const stored = await storeImage(bucket, target.folder, file);
+    for (const [index, file] of files.entries()) {
+      const stored = await storeImage(bucket, target.folder, file, thumbs[index] ?? null);
       if (!stored.ok) {
         return formFailure(added > 0 ? `${added} uploaded. ${stored.message}` : stored.message, {});
       }

@@ -36,8 +36,13 @@ function SiteFrame({ children }: { children: ReactNode }) {
   return (
     <ToastProvider>
       <SavedStaysProvider>
+        <a className="skip-link" href="#main">
+          Skip to content
+        </a>
         <SiteHeader />
-        {children}
+        <div id="main" tabIndex={-1} className="skip-target">
+          {children}
+        </div>
         <SiteFooter />
         <WhatsAppButton />
       </SavedStaysProvider>
