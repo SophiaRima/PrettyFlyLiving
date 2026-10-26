@@ -223,16 +223,16 @@ These were requested after the concept was approved and **override it**. Their C
 | Table | Key columns | Notes |
 |---|---|---|
 | `properties` | id, slug (unique), name, area, address, map_url, property_type (`Apartment`, `Loft`, …), tag (nullable, card pill), rating (nullable, admin-entered, e.g. `4.9`), description, good_to_know (nullable), bedrooms, bathrooms, sleeps, monthly_price_kes, min_nights (default 30), amenities (JSON text[]), is_featured, is_published, sort_order, created_at, updated_at | `area` powers search; featured → Home grid |
-| `property_photos` | id, property_id, r2_key, alt, sort_order | lowest `sort_order` is the card cover; first 5 fill the gallery |
+| `property_photos` | id, property_id, r2_key, alt, width, height (nullable, read from the upload), sort_order | lowest `sort_order` is the card cover; first 5 fill the gallery |
 | `availability_blocks` | id, property_id, start_date, end_date (**exclusive**), source (`admin` \| `booking` \| `ical`), external_uid (nullable), note | date **ranges**, not per-day rows |
 | `booking_requests` | id, property_id, check_in, check_out, guests, name, contact (email or phone, as entered), status (`new` \| `contacted` \| `confirmed` \| `declined`), admin_notes, created_at | admin reply link: `mailto:` if `contact` contains `@`, else `wa.me` |
 | `contact_messages` | id, enquiry_type (`Booking a stay` \| `Property management` \| `General question`), name, email, phone, message, status (`new` \| `handled`), created_at | |
 | `owner_enquiries` | id, name, email, phone, property_area, property_type, units, unit_breakdown (JSON [{type, count}], nullable), same_location, furnishing, listed_online, listing_links, support_needed (JSON text[]), preferred_contact, message, status, created_at | `property_type` holds the single type or a summary like "2 × Studio, 1 × 1-bedroom apartment"; the newer columns are null on older enquiries |
 | `faqs` | id, audience (`guest` \| `owner`), question, answer, sort_order, is_published | |
 | `reviews` | id, guest_name, context (e.g. "Recent Nairobi stay"), body, rating, property_id (nullable), is_featured, sort_order, is_published | featured → Home quote card |
-| `guides` | id, slug (unique), title, category, excerpt, cover_r2_key, highlights (JSON text[], card chips), body_md, is_featured, sort_order, is_published, created_at, updated_at | Things to Do; featured → Home guide grid |
-| `guide_photos` | id, guide_id, r2_key, alt, sort_order | gallery photos per guide (§5.5); shown after the cover |
-| `extra_services` | id, eyebrow (nullable), title, description, details (nullable), cta_label (nullable), image_r2_key, sort_order, is_published | Why Us extra services cards; the button opens WhatsApp about that service |
+| `guides` | id, slug (unique), title, category, excerpt, cover_r2_key, cover_width, cover_height, highlights (JSON text[], card chips), body_md, is_featured, sort_order, is_published, created_at, updated_at | Things to Do; featured → Home guide grid |
+| `guide_photos` | id, guide_id, r2_key, alt, width, height, sort_order | gallery photos per guide (§5.5); shown after the cover |
+| `extra_services` | id, eyebrow (nullable), title, description, details (nullable), cta_label (nullable), image_r2_key, image_width, image_height, sort_order, is_published | Why Us extra services cards; the button opens WhatsApp about that service |
 | `admin_users` | id, email, password_hash, created_at | one row, created with a CLI script |
 | `sessions` | id (SHA-256 of the token), user_id, expires_at, signed_in_at (nullable) | `signed_in_at` gates Settings changes (§9) |
 | `login_attempts` | ip, attempted_at | throttle: 5 failures per 15 minutes |

@@ -55,7 +55,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   const bucket = context.get(cloudflareContext).env.MEDIA;
   for (const photo of photos) {
     const key = await putImage(bucket, "properties", photo);
-    await addPhoto(db, "property", id, { key, alt: form.data.name });
+    await addPhoto(db, "property", id, { key, width: photo.width, height: photo.height, alt: form.data.name });
   }
   // The Photos tab shows what was uploaded and is where alt text is written.
   throw redirect(`/admin/properties/${id}/photos`);

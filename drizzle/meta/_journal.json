@@ -36,6 +36,13 @@
       "when": 1792746300015,
       "tag": "0004_owner_form_and_service_details",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1793011544686,
+      "tag": "0005_image_dimensions",
+      "breakpoints": true
     }
   ]
 }

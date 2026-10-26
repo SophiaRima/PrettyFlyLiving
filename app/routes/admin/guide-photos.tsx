@@ -34,7 +34,7 @@ export async function action({ request, params, context }: Route.ActionArgs) {
   if (intent === "cover") {
     const stored = await storeImage(bucket, "guides", formData.get("photo"));
     if (!stored.ok) return data(formFailure(stored.message, {}), { status: 400 });
-    const old = await setGuideCover(db, guide.id, stored.key);
+    const old = await setGuideCover(db, guide.id, stored);
     if (old !== stored.key) await deleteImageIfUnused(bucket, db, old);
     return { ok: true as const, message: "Cover photo saved" };
   }

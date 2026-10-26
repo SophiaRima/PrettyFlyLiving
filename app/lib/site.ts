@@ -35,19 +35,30 @@ export const navItems = [
  */
 export const pageImages = {
   hero: {
-    src: "/images/hero.jpg",
+    src: "/images/hero-2000.webp",
+    /** Phones and 1× screens take the smaller file. */
+    srcSet: "/images/hero-1200.webp 1200w, /images/hero-2000.webp 2000w",
+    sizes: "(max-width: 720px) 100vw, 1080px",
+    width: 2000,
+    height: 1360,
     alt: "Warm, sunlit serviced apartment with elegant neutral interiors",
   },
   homeSplit: {
-    src: "/images/home-split.jpg",
+    src: "/images/home-split.webp",
+    width: 900,
+    height: 1200,
     alt: "Small double bed by the window with fresh towels",
   },
   whySplit: {
-    src: "/images/why-split.jpg",
+    src: "/images/why-split.webp",
+    width: 1200,
+    height: 1200,
     alt: "City view over Kilimani from a Pretty Fly Living window",
   },
   managementSplit: {
-    src: "/images/management-split.jpg",
+    src: "/images/management-split.webp",
+    width: 1200,
+    height: 554,
     alt: "Courtyard garden with seating in a Pretty Fly Living building",
   },
 } as const;

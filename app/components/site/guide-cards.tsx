@@ -8,7 +8,7 @@ import { Img } from "./img";
 export function GuideTile({ guide }: { guide: GuideCardData }) {
   return (
     <Link className="guide-card" to={`/things-to-do/${guide.slug}`}>
-      <Img src={guide.coverKey} alt={guide.title} />
+      <Img src={guide.coverKey} alt={guide.title} width={guide.coverWidth} height={guide.coverHeight} />
       <div className="guide-copy">
         <small>{guide.category}</small>
         <h3>{guide.title}</h3>
@@ -36,7 +36,7 @@ export function GuideArticleCard({ guide }: { guide: GuideCardData }) {
       >
         {shown.map((photo) => (
           <span key={photo.key}>
-            <Img src={photo.key} alt="" />
+            <Img src={photo.key} alt="" width={photo.width} height={photo.height} />
           </span>
         ))}
       </Link>

@@ -30,6 +30,7 @@ import {
   type Review,
 } from "../db/schema";
 import { renderGuideMarkdown } from "../markdown";
+import type { StoredImage } from "../media";
 
 // -------------------------------------------------------------------- reviews
 
@@ -70,6 +71,8 @@ const guideCardColumns = {
   category: guides.category,
   excerpt: guides.excerpt,
   coverKey: guides.coverR2Key,
+  coverWidth: guides.coverWidth,
+  coverHeight: guides.coverHeight,
   highlights: guides.highlights,
 };
 
@@ -80,18 +83,26 @@ async function withPhotos(db: Database, rows: GuideRow[]): Promise<GuideCardData
   const byGuide = new Map<number, PhotoData[]>();
   if (rows.length > 0) {
     const photos = await db
-      .select({ guideId: guidePhotos.guideId, key: guidePhotos.r2Key, alt: guidePhotos.alt })
+      .select({
+        guideId: guidePhotos.guideId,
+        key: guidePhotos.r2Key,
+        alt: guidePhotos.alt,
+        width: guidePhotos.width,
+        height: guidePhotos.height,
+      })
       .from(guidePhotos)
       .where(inArray(guidePhotos.guideId, rows.map((r) => r.id)))
       .orderBy(asc(guidePhotos.sortOrder), asc(guidePhotos.id));
-    for (const photo of photos) {
-      const list = byGuide.get(photo.guideId) ?? [];
-      list.push({ key: photo.key, alt: photo.alt });
-      byGuide.set(photo.guideId, list);
+    for (const { guideId, ...photo } of photos) {
+      const list = byGuide.get(guideId) ?? [];
+      list.push(photo);
+      byGuide.set(guideId, list);
     }
   }
   return rows.map(({ id, ...row }) => {
-    const cover: PhotoData[] = row.coverKey ? [{ key: row.coverKey, alt: row.title }] : [];
+    const cover: PhotoData[] = row.coverKey
+      ? [{ key: row.coverKey, alt: row.title, width: row.coverWidth, height: row.coverHeight }]
+      : [];
     const gallery = (byGuide.get(id) ?? []).filter((p) => p.key !== row.coverKey);
     return { ...row, photos: [...cover, ...gallery] };
   });
@@ -190,6 +201,8 @@ export async function getExtraServices(db: Database): Promise<ExtraServiceData[]
       details: extraServices.details,
       ctaLabel: extraServices.ctaLabel,
       imageKey: extraServices.imageR2Key,
+      imageWidth: extraServices.imageWidth,
+      imageHeight: extraServices.imageHeight,
     })
     .from(extraServices)
     .where(eq(extraServices.isPublished, true))
@@ -299,13 +312,16 @@ export async function updateExtraService(db: Database, id: number, input: ExtraS
 }
 
 /** Sets the photo and returns the previous key, so it can be cleaned up. */
-export async function setExtraServiceImage(db: Database, id: number, key: string): Promise<string | null> {
+export async function setExtraServiceImage(db: Database, id: number, image: StoredImage): Promise<string | null> {
   const [old] = await db
     .select({ key: extraServices.imageR2Key })
     .from(extraServices)
     .where(eq(extraServices.id, id))
     .limit(1);
-  await db.update(extraServices).set({ imageR2Key: key }).where(eq(extraServices.id, id));
+  await db
+    .update(extraServices)
+    .set({ imageR2Key: image.key, imageWidth: image.width, imageHeight: image.height })
+    .where(eq(extraServices.id, id));
   return old?.key ?? null;
 }
 
@@ -374,11 +390,16 @@ export async function updateGuide(db: Database, id: number, input: GuideInput): 
 }
 
 /** Sets the cover photo and returns the previous key. */
-export async function setGuideCover(db: Database, id: number, key: string | null): Promise<string | null> {
+export async function setGuideCover(db: Database, id: number, image: StoredImage | null): Promise<string | null> {
   const [old] = await db.select({ key: guides.coverR2Key }).from(guides).where(eq(guides.id, id)).limit(1);
   await db
     .update(guides)
-    .set({ coverR2Key: key, updatedAt: sql`(CURRENT_TIMESTAMP)` })
+    .set({
+      coverR2Key: image?.key ?? null,
+      coverWidth: image?.width ?? null,
+      coverHeight: image?.height ?? null,
+      updatedAt: sql`(CURRENT_TIMESTAMP)`,
+    })
     .where(eq(guides.id, id));
   return old?.key ?? null;
 }

@@ -41,7 +41,7 @@ const cardColumns = {
   monthlyPriceKes: properties.monthlyPriceKes,
 };
 
-type CardRow = { id: number } & Omit<PropertyCardData, "coverKey" | "coverAlt">;
+type CardRow = { id: number } & Omit<PropertyCardData, "coverKey" | "coverAlt" | "coverWidth" | "coverHeight">;
 
 /** Photos for the given properties, in display order, grouped by property. */
 async function getPhotosByProperty(
@@ -56,15 +56,17 @@ async function getPhotosByProperty(
       propertyId: propertyPhotos.propertyId,
       key: propertyPhotos.r2Key,
       alt: propertyPhotos.alt,
+      width: propertyPhotos.width,
+      height: propertyPhotos.height,
     })
     .from(propertyPhotos)
     .where(inArray(propertyPhotos.propertyId, propertyIds))
     .orderBy(asc(propertyPhotos.sortOrder), asc(propertyPhotos.id));
 
-  for (const row of rows) {
-    const list = byProperty.get(row.propertyId) ?? [];
-    list.push({ key: row.key, alt: row.alt });
-    byProperty.set(row.propertyId, list);
+  for (const { propertyId, ...photo } of rows) {
+    const list = byProperty.get(propertyId) ?? [];
+    list.push(photo);
+    byProperty.set(propertyId, list);
   }
   return byProperty;
 }
@@ -79,8 +81,21 @@ async function withCovers(
   );
   return rows.map(({ id, ...row }) => {
     const cover = photos.get(id)?.[0];
-    return { ...row, coverKey: cover?.key ?? null, coverAlt: cover?.alt || row.name };
+    return { ...row, ...coverFields(cover, row.name) };
   });
+}
+
+/** The card's cover photo fields; the first photo is the cover. */
+function coverFields(
+  cover: PhotoData | undefined,
+  name: string,
+): Pick<PropertyCardData, "coverKey" | "coverAlt" | "coverWidth" | "coverHeight"> {
+  return {
+    coverKey: cover?.key ?? null,
+    coverAlt: cover?.alt || name,
+    coverWidth: cover?.width ?? null,
+    coverHeight: cover?.height ?? null,
+  };
 }
 
 export async function getFeaturedProperties(
@@ -169,7 +184,6 @@ export async function getPropertyBySlug(
   if (!property) return null;
 
   const photos = (await getPhotosByProperty(db, [property.id])).get(property.id) ?? [];
-  const cover = photos[0];
   return {
     id: property.id,
     slug: property.slug,
@@ -188,8 +202,7 @@ export async function getPropertyBySlug(
     minNights: property.minNights,
     amenities: property.amenities,
     photos,
-    coverKey: cover?.key ?? null,
-    coverAlt: cover?.alt || property.name,
+    ...coverFields(photos[0], property.name),
   };
 }
 

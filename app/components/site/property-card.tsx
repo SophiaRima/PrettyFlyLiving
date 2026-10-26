@@ -24,7 +24,12 @@ export function PropertyCard({ property }: { property: PropertyCardData }) {
     <article className="property-card">
       {/* Clicking the photo opens the stay, as in the concept. */}
       <div className="property-image" onClick={() => navigate(href)}>
-        <Img src={property.coverKey} alt={property.name} />
+        <Img
+          src={property.coverKey}
+          alt={property.name}
+          width={property.coverWidth}
+          height={property.coverHeight}
+        />
         {property.tag && <span className="pill">{property.tag}</span>}
         <button
           type="button"

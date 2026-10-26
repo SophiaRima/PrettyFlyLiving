@@ -30,9 +30,11 @@ const property: PropertyDetailData = {
   monthlyPriceKes: 60000,
   minNights: 30,
   amenities: ["Wi-Fi", "Pool"],
-  photos: Array.from({ length: 7 }, (_, i) => ({ key: `photos/${i}.webp`, alt: `Photo ${i}` })),
+  photos: Array.from({ length: 7 }, (_, i) => ({ key: `photos/${i}.webp`, alt: `Photo ${i}`, width: 924, height: 2000 })),
   coverKey: "photos/0.webp",
   coverAlt: "Photo 0",
+  coverWidth: 924,
+  coverHeight: 2000,
 };
 
 const guide: GuideDetailData = {
@@ -41,8 +43,10 @@ const guide: GuideDetailData = {
   category: "Food",
   excerpt: "Find your next table.",
   coverKey: "https://images.unsplash.com/cover.jpg",
+  coverWidth: null,
+  coverHeight: null,
   highlights: [],
-  photos: [{ key: "https://images.unsplash.com/cover.jpg", alt: "Cover" }],
+  photos: [{ key: "https://images.unsplash.com/cover.jpg", alt: "Cover", width: null, height: null }],
   bodyHtml: "<p>Body</p>",
   createdAt: "2026-10-20 08:00:00",
   updatedAt: "2026-10-22 09:15:30",

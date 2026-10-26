@@ -104,7 +104,7 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
             </Link>
           </div>
           <div className="split-image">
-            <Img src={pageImages.whySplit.src} alt={pageImages.whySplit.alt} />
+            <Img {...pageImages.whySplit} />
           </div>
         </div>
       </section>
@@ -149,7 +149,12 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
               {services.map((service) => (
                 <article className="article-card" key={service.id}>
                   <div className="property-image">
-                    <Img src={service.imageKey} alt={service.title} />
+                    <Img
+                      src={service.imageKey}
+                      alt={service.title}
+                      width={service.imageWidth}
+                      height={service.imageHeight}
+                    />
                   </div>
                   <div className="property-body service-card-body">
                     {service.eyebrow && <div className="article-tag">{service.eyebrow}</div>}

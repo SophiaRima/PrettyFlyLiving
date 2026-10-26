@@ -49,7 +49,16 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <div className="container">
           <div className="hero-frame">
             <div className="hero-photo">
-              <Img src={pageImages.hero.src} alt={pageImages.hero.alt} eager />
+              {/* The LCP image: never lazy. React adds a matching <link rel="preload"> in <head> for it. */}
+              <img
+                src={pageImages.hero.src}
+                srcSet={pageImages.hero.srcSet}
+                sizes={pageImages.hero.sizes}
+                width={pageImages.hero.width}
+                height={pageImages.hero.height}
+                alt={pageImages.hero.alt}
+                fetchPriority="high"
+              />
             </div>
             <div className="hero-copy">
               <div className="eyebrow">Serviced apartments · Nairobi</div>
@@ -129,7 +138,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             </Link>
           </div>
           <div className="split-image">
-            <Img src={pageImages.homeSplit.src} alt={pageImages.homeSplit.alt} />
+            <Img {...pageImages.homeSplit} />
             <div className="image-caption">A softer landing in the city.</div>
           </div>
         </div>

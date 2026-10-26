@@ -121,10 +121,7 @@ export default function Management({ loaderData, actionData }: Route.ComponentPr
             </a>
           </div>
           <div className="split-image">
-            <Img
-              src={pageImages.managementSplit.src}
-              alt={pageImages.managementSplit.alt}
-            />
+            <Img {...pageImages.managementSplit} />
           </div>
         </div>
       </section>

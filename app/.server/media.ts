@@ -1,5 +1,7 @@
 import { eq } from "drizzle-orm";
 
+import { readImageSize } from "~/lib/image-size";
+
 import type { Database } from "./db/client";
 import { extraServices, guidePhotos, guides, propertyPhotos } from "./db/schema";
 
@@ -34,11 +36,20 @@ const TYPES = [
 /** Keys this app writes, e.g. properties/3f2a…9c.webp. Anything else is refused by /media. */
 export const MEDIA_KEY = /^(?:properties|guides|services)\/[a-f0-9]{32}\.(?:jpg|png|webp)$/;
 
-export type StoreResult = { ok: true; key: string } | { ok: false; message: string };
+/** A saved image: its R2 key and pixel size (null if the header couldn't be read). */
+export interface StoredImage {
+  key: string;
+  width: number | null;
+  height: number | null;
+}
+
+export type StoreResult = ({ ok: true } & StoredImage) | { ok: false; message: string };
 
 export interface CheckedImage {
   bytes: Uint8Array<ArrayBuffer>;
   type: (typeof TYPES)[number];
+  width: number | null;
+  height: number | null;
 }
 
 export type CheckResult = { ok: true; image: CheckedImage } | { ok: false; message: string };
@@ -51,7 +62,8 @@ export async function checkImage(file: FormDataEntryValue | null): Promise<Check
   const bytes = new Uint8Array(await file.arrayBuffer());
   const type = TYPES.find((t) => t.magic(bytes));
   if (!type) return { ok: false, message: "Please upload a JPEG, PNG or WebP image." };
-  return { ok: true, image: { bytes, type } };
+  const size = readImageSize(bytes);
+  return { ok: true, image: { bytes, type, width: size?.width ?? null, height: size?.height ?? null } };
 }
 
 /**
@@ -77,7 +89,8 @@ export async function storeImage(
 ): Promise<StoreResult> {
   const checked = await checkImage(file);
   if (!checked.ok) return checked;
-  return { ok: true, key: await putImage(bucket, folder, checked.image) };
+  const { width, height } = checked.image;
+  return { ok: true, key: await putImage(bucket, folder, checked.image), width, height };
 }
 
 /** True while any row still shows this image. */

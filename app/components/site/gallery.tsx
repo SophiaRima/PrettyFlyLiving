@@ -34,7 +34,13 @@ export function Gallery({ photos, name }: { photos: PhotoData[]; name: string })
               }
               onClick={() => setOpenIndex(i)}
             >
-              <Img src={photo.key} alt={photo.alt || `${name} photo ${i + 1}`} eager={i === 0} />
+              <Img
+                src={photo.key}
+                alt={photo.alt || `${name} photo ${i + 1}`}
+                width={photo.width}
+                height={photo.height}
+                eager={i === 0}
+              />
               {isLast && <span className="gallery-more-label">+{hidden} photos</span>}
             </button>
           );
@@ -87,7 +93,12 @@ function ImageModal({ photos, index, onIndexChange, onClose }: ImageModalProps) 
         <button className="modal-close" type="button" aria-label="Close" onClick={onClose} autoFocus>
           ×
         </button>
-        <img src={mediaUrl(photo.key)} alt={photo.alt || `Photo ${index + 1}`} />
+        <img
+          src={mediaUrl(photo.key)}
+          alt={photo.alt || `Photo ${index + 1}`}
+          width={photo.width ?? undefined}
+          height={photo.height ?? undefined}
+        />
         {count > 1 && (
           <>
             <button

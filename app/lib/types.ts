@@ -16,11 +16,16 @@ export interface PropertyCardData {
   monthlyPriceKes: number;
   coverKey: string | null;
   coverAlt: string;
+  coverWidth: number | null;
+  coverHeight: number | null;
 }
 
 export interface PhotoData {
   key: string;
   alt: string;
+  /** Pixel size; null for photos uploaded before sizes were stored. */
+  width: number | null;
+  height: number | null;
 }
 
 export interface PropertyDetailData extends PropertyCardData {
@@ -47,6 +52,8 @@ export interface GuideCardData {
   category: string;
   excerpt: string;
   coverKey: string | null;
+  coverWidth: number | null;
+  coverHeight: number | null;
   /** Tag chips on the Things to Do card. */
   highlights: string[];
   /** Cover first, then the guide's gallery photos in order. */
@@ -74,4 +81,6 @@ export interface ExtraServiceData {
   details: string | null;
   ctaLabel: string | null;
   imageKey: string | null;
+  imageWidth: number | null;
+  imageHeight: number | null;
 }

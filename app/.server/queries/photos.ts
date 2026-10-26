@@ -2,6 +2,7 @@ import { and, asc, eq, max } from "drizzle-orm";
 
 import type { Database } from "../db/client";
 import { guidePhotos, propertyPhotos } from "../db/schema";
+import type { StoredImage } from "../media";
 
 /*
  * Photo galleries in the dashboard. Property and guide photos have the same
@@ -37,12 +38,12 @@ export async function addPhoto(
   db: Database,
   owner: PhotoOwner,
   ownerId: number,
-  photo: { key: string; alt: string },
+  photo: StoredImage & { alt: string },
 ): Promise<void> {
   const { table, ownerColumn } = photoTable(owner);
   const [row] = await db.select({ last: max(table.sortOrder) }).from(table).where(eq(ownerColumn, ownerId));
   const sortOrder = (row?.last ?? -1) + 1;
-  const values = { r2Key: photo.key, alt: photo.alt, sortOrder };
+  const values = { r2Key: photo.key, alt: photo.alt, width: photo.width, height: photo.height, sortOrder };
   if (owner === "property") await db.insert(propertyPhotos).values({ ...values, propertyId: ownerId });
   else await db.insert(guidePhotos).values({ ...values, guideId: ownerId });
 }

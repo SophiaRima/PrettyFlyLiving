@@ -53,7 +53,8 @@ export async function handlePhotoIntent(
       if (!stored.ok) {
         return formFailure(added > 0 ? `${added} uploaded. ${stored.message}` : stored.message, {});
       }
-      await addPhoto(db, owner, ownerId, { key: stored.key, alt: target.defaultAlt });
+      const { key, width, height } = stored;
+      await addPhoto(db, owner, ownerId, { key, width, height, alt: target.defaultAlt });
       added++;
     }
     return { ok: true, message: added === 1 ? "Photo added" : `${added} photos added` };

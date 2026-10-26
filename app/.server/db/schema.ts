@@ -81,6 +81,9 @@ export const propertyPhotos = sqliteTable(
       .references(() => properties.id, { onDelete: "cascade" }),
     r2Key: text("r2_key").notNull(),
     alt: text("alt").notNull().default(""),
+    /** Pixel size, read from the upload; null for photos added before it was stored. */
+    width: integer("width"),
+    height: integer("height"),
     sortOrder: sortOrder(),
   },
   (t) => [index("property_photos_property_idx").on(t.propertyId, t.sortOrder)],
@@ -215,6 +218,8 @@ export const guides = sqliteTable(
     category: text("category", { enum: guideCategories }).notNull(),
     excerpt: text("excerpt").notNull(),
     coverR2Key: text("cover_r2_key"),
+    coverWidth: integer("cover_width"),
+    coverHeight: integer("cover_height"),
     /** Short tag chips on the Things to Do card, e.g. "Brunch & coffee". */
     highlights: text("highlights", { mode: "json" })
       .$type<string[]>()
@@ -240,6 +245,8 @@ export const guidePhotos = sqliteTable(
       .references(() => guides.id, { onDelete: "cascade" }),
     r2Key: text("r2_key").notNull(),
     alt: text("alt").notNull().default(""),
+    width: integer("width"),
+    height: integer("height"),
     sortOrder: sortOrder(),
   },
   (t) => [index("guide_photos_guide_idx").on(t.guideId, t.sortOrder)],
@@ -256,6 +263,8 @@ export const extraServices = sqliteTable("extra_services", {
   /** Button text; the button opens WhatsApp with a message about this service. */
   ctaLabel: text("cta_label"),
   imageR2Key: text("image_r2_key"),
+  imageWidth: integer("image_width"),
+  imageHeight: integer("image_height"),
   sortOrder: sortOrder(),
   isPublished: isPublished(),
 });
