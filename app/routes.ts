@@ -18,6 +18,8 @@ export default [
     route("faqs", "routes/faqs.tsx"),
     route("contact", "routes/contact.tsx"),
     route("privacy-policy", "routes/privacy-policy.tsx"),
+    // Unknown URLs: a site-styled 404 (more specific routes always win).
+    route("*", "routes/not-found.tsx"),
   ]),
 
   // Resource routes
