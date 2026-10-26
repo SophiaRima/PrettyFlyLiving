@@ -8,6 +8,8 @@ import type { GuideCategory } from "./constants";
  */
 export const site = {
   name: "Pretty Fly Living",
+  /** Production origin for canonical, Open Graph and sitemap URLs, on every host. */
+  url: "https://prettyflyliving.com",
   tagline: "Serviced apartments · Nairobi",
   email: "info@prettyflyliving.com",
   /** International format, digits only, for wa.me links (+254 708 854755). */

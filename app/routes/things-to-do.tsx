@@ -7,20 +7,19 @@ import { GuideArticleCard } from "~/components/site/guide-cards";
 import { LiveFilterForm } from "~/components/site/live-filter-form";
 import { PageHero } from "~/components/site/page-hero";
 import { guideCategories } from "~/lib/constants";
+import { pageMeta } from "~/lib/seo";
 import { guideTopics } from "~/lib/site";
 import { guideFiltersSchema, parseSearchParams } from "~/lib/validation";
 
 import type { Route } from "./+types/things-to-do";
 
 export function meta(): Route.MetaDescriptors {
-  return [
-    { title: "Things to do in Nairobi  -  Pretty Fly Living" },
-    {
-      name: "description",
-      content:
-        "Neighbourhood favourites, food, nightlife, activities and local experiences to help you find your own rhythm in Nairobi.",
-    },
-  ];
+  return pageMeta({
+    title: "Things to do in Nairobi  -  Pretty Fly Living",
+    description:
+      "Neighbourhood favourites, food, nightlife, activities and local experiences to help you find your own rhythm in Nairobi.",
+    path: "/things-to-do",
+  });
 }
 
 export async function loader({ request, context }: Route.LoaderArgs) {

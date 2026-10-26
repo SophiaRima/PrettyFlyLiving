@@ -5,16 +5,22 @@ import { dbFromContext } from "~/.server/request";
 import { CtaBand } from "~/components/site/cta-band";
 import { Gallery } from "~/components/site/gallery";
 import { PageHero } from "~/components/site/page-hero";
+import { guideJsonLd, pageMeta } from "~/lib/seo";
 
 import type { Route } from "./+types/guide";
 
 export function meta({ loaderData }: Route.MetaArgs): Route.MetaDescriptors {
   if (!loaderData) return [{ title: "Guide not found  -  Pretty Fly Living" }];
   const { guide } = loaderData;
-  return [
-    { title: `${guide.title}  -  Nairobi guide  -  Pretty Fly Living` },
-    { name: "description", content: guide.excerpt },
-  ];
+  const cover = guide.photos[0];
+  return pageMeta({
+    title: `${guide.title}  -  Nairobi guide  -  Pretty Fly Living`,
+    description: guide.excerpt,
+    path: `/things-to-do/${guide.slug}`,
+    image: cover ? { src: cover.key, alt: cover.alt } : undefined,
+    type: "article",
+    jsonLd: guideJsonLd(guide),
+  });
 }
 
 export async function loader({ params, context }: Route.LoaderArgs) {

@@ -22,6 +22,8 @@ export default [
 
   // Resource routes
   route("media/*", "routes/media.ts"),
+  route("sitemap.xml", "routes/sitemap.ts"),
+  route("robots.txt", "routes/robots.ts"),
 
   // Admin: _layout links admin.css and checks Origin on every POST;
   // _authed requires a session for everything except the login page.

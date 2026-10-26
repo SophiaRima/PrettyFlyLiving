@@ -4,19 +4,21 @@ import { getFaqs } from "~/.server/queries/content";
 import { dbFromContext } from "~/.server/request";
 import { CtaSection } from "~/components/site/cta-band";
 import { PageHero } from "~/components/site/page-hero";
+import { faqJsonLd, pageMeta } from "~/lib/seo";
 import { site, whatsappMessages, whatsappUrl } from "~/lib/site";
 
 import type { Route } from "./+types/faqs";
 
-export function meta(): Route.MetaDescriptors {
-  return [
-    { title: "FAQs  -  Pretty Fly Living" },
-    {
-      name: "description",
-      content:
-        "Answers about staying with Pretty Fly Living in Nairobi, and about having us manage your property.",
-    },
-  ];
+export function meta({ loaderData }: Route.MetaArgs): Route.MetaDescriptors {
+  // Each tab is its own page of answers, so the owners tab keeps its query.
+  const owners = loaderData?.tab === "owners";
+  return pageMeta({
+    title: owners ? "FAQs for property owners  -  Pretty Fly Living" : "FAQs  -  Pretty Fly Living",
+    description:
+      "Answers about staying with Pretty Fly Living in Nairobi, and about having us manage your property.",
+    path: owners ? "/faqs?tab=owners" : "/faqs",
+    jsonLd: faqJsonLd(loaderData?.faqs ?? []),
+  });
 }
 
 export async function loader({ request, context }: Route.LoaderArgs) {

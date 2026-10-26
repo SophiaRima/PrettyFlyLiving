@@ -13,6 +13,7 @@ import { Gallery } from "~/components/site/gallery";
 import { PropertyCard } from "~/components/site/property-card";
 import { cloudflareContext } from "~/context";
 import { addDays, formatShortDate, nightsBetween, stayRangeError } from "~/lib/dates";
+import { pageMeta, stayJsonLd } from "~/lib/seo";
 import { bedroomLabel, countLabel, formatKes, whatsappMessages, whatsappUrl } from "~/lib/site";
 import { bookingRequestSchema } from "~/lib/validation";
 
@@ -21,10 +22,13 @@ import type { Route } from "./+types/stay";
 export function meta({ loaderData }: Route.MetaArgs): Route.MetaDescriptors {
   if (!loaderData) return [{ title: "Stay not found  -  Pretty Fly Living" }];
   const { property } = loaderData;
-  return [
-    { title: `${property.name}, ${property.area}  -  Pretty Fly Living` },
-    { name: "description", content: property.description.slice(0, 160) },
-  ];
+  return pageMeta({
+    title: `${property.name}, ${property.area}  -  Pretty Fly Living`,
+    description: property.description.slice(0, 160),
+    path: `/stays/${property.slug}`,
+    image: property.coverKey ? { src: property.coverKey, alt: property.coverAlt } : undefined,
+    jsonLd: stayJsonLd(property),
+  });
 }
 
 /** How far ahead the calendar shows availability (about 18 months). */

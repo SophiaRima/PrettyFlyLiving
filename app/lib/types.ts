@@ -55,6 +55,9 @@ export interface GuideCardData {
 
 export interface GuideDetailData extends GuideCardData {
   bodyHtml: string;
+  /** SQLite timestamps (UTC), for the Article JSON-LD. */
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface FaqData {

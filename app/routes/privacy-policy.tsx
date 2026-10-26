@@ -1,17 +1,16 @@
 import { PageHero } from "~/components/site/page-hero";
+import { pageMeta } from "~/lib/seo";
 import { site } from "~/lib/site";
 
 import type { Route } from "./+types/privacy-policy";
 
 export function meta(): Route.MetaDescriptors {
-  return [
-    { title: "Privacy policy  -  Pretty Fly Living" },
-    {
-      name: "description",
-      content:
-        "How Pretty Fly Living collects, uses and protects the details you share through booking requests and enquiries.",
-    },
-  ];
+  return pageMeta({
+    title: "Privacy policy  -  Pretty Fly Living",
+    description:
+      "How Pretty Fly Living collects, uses and protects the details you share through booking requests and enquiries.",
+    path: "/privacy-policy",
+  });
 }
 
 // DRAFT for Sophiah to review before launch (retention periods in particular).

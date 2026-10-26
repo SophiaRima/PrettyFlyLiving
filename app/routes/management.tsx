@@ -9,20 +9,19 @@ import { OwnerEnquiryForm } from "~/components/site/owner-enquiry-form";
 import { PageHero } from "~/components/site/page-hero";
 import { ServiceGrid, type ServiceItem } from "~/components/site/service-grid";
 import { cloudflareContext } from "~/context";
+import { pageMeta } from "~/lib/seo";
 import { pageImages } from "~/lib/site";
 import { ownerEnquirySchema } from "~/lib/validation";
 
 import type { Route } from "./+types/management";
 
 export function meta(): Route.MetaDescriptors {
-  return [
-    { title: "Property management in Nairobi  -  Pretty Fly Living" },
-    {
-      name: "description",
-      content:
-        "Thoughtful, end-to-end property management in Nairobi: listings, pricing, guest communication, cleaning, maintenance, Airbnb and Booking.com.",
-    },
-  ];
+  return pageMeta({
+    title: "Property management in Nairobi  -  Pretty Fly Living",
+    description:
+      "Thoughtful, end-to-end property management in Nairobi: listings, pricing, guest communication, cleaning, maintenance, Airbnb and Booking.com.",
+    path: "/management",
+  });
 }
 
 /** "What We Do" from the brief, as the concept's service cards. */

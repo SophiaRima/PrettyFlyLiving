@@ -9,20 +9,19 @@ import { FormGuard, FormStatus, fieldHelpers } from "~/components/site/form-part
 import { PageHero } from "~/components/site/page-hero";
 import { cloudflareContext } from "~/context";
 import { enquiryTypes } from "~/lib/constants";
+import { pageMeta } from "~/lib/seo";
 import { site, whatsappMessages, whatsappUrl } from "~/lib/site";
 import { contactMessageSchema } from "~/lib/validation";
 
 import type { Route } from "./+types/contact";
 
 export function meta(): Route.MetaDescriptors {
-  return [
-    { title: "Contact us  -  Pretty Fly Living" },
-    {
-      name: "description",
-      content:
-        "Planning a stay or considering property management in Nairobi? Reach Pretty Fly Living by WhatsApp, email, phone or the contact form.",
-    },
-  ];
+  return pageMeta({
+    title: "Contact us  -  Pretty Fly Living",
+    description:
+      "Planning a stay or considering property management in Nairobi? Reach Pretty Fly Living by WhatsApp, email, phone or the contact form.",
+    path: "/contact",
+  });
 }
 
 export function loader({ context }: Route.LoaderArgs) {

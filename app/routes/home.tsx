@@ -9,19 +9,18 @@ import { Img } from "~/components/site/img";
 import { PropertyCard } from "~/components/site/property-card";
 import { QuoteCard } from "~/components/site/quote-card";
 import { SearchPanel } from "~/components/site/search-panel";
+import { pageMeta } from "~/lib/seo";
 import { pageImages } from "~/lib/site";
 
 import type { Route } from "./+types/home";
 
 export function meta(): Route.MetaDescriptors {
-  return [
-    { title: "Pretty Fly Living  -  Your Home in Nairobi" },
-    {
-      name: "description",
-      content:
-        "Thoughtfully selected serviced apartments in Nairobi for short and extended stays. Explore Pretty Fly Living.",
-    },
-  ];
+  return pageMeta({
+    title: "Pretty Fly Living  -  Your Home in Nairobi",
+    description:
+      "Thoughtfully selected serviced apartments in Nairobi for short and extended stays. Explore Pretty Fly Living.",
+    path: "/",
+  });
 }
 
 export async function loader({ context }: Route.LoaderArgs) {

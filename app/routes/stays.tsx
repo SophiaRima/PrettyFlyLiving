@@ -6,20 +6,19 @@ import { CtaSection } from "~/components/site/cta-band";
 import { LiveFilterForm } from "~/components/site/live-filter-form";
 import { PageHero } from "~/components/site/page-hero";
 import { PropertyCard } from "~/components/site/property-card";
+import { pageMeta } from "~/lib/seo";
 import { formatKes, priceBrackets, site, whatsappMessages, whatsappUrl } from "~/lib/site";
 import { parseSearchParams, stayFiltersSchema } from "~/lib/validation";
 
 import type { Route } from "./+types/stays";
 
 export function meta(): Route.MetaDescriptors {
-  return [
-    { title: "Our stays  -  Pretty Fly Living" },
-    {
-      name: "description",
-      content:
-        "Considered serviced apartments in Nairobi, with the comforts of home and space to make the city your own.",
-    },
-  ];
+  return pageMeta({
+    title: "Our stays  -  Pretty Fly Living",
+    description:
+      "Considered serviced apartments in Nairobi, with the comforts of home and space to make the city your own.",
+    path: "/stays",
+  });
 }
 
 export async function loader({ request, context }: Route.LoaderArgs) {

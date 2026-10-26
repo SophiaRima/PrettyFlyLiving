@@ -211,6 +211,17 @@ export async function getSimilarProperties(
   return withCovers(db, sameAreaFirst);
 }
 
+/** Published stay slugs and edit times for /sitemap.xml. */
+export async function getSitemapProperties(
+  db: Database,
+): Promise<{ slug: string; updatedAt: string }[]> {
+  return db
+    .select({ slug: properties.slug, updatedAt: properties.updatedAt })
+    .from(properties)
+    .where(eq(properties.isPublished, true))
+    .orderBy(asc(properties.sortOrder), asc(properties.id));
+}
+
 // ------------------------------------------------------------------ admin
 
 export interface AdminPropertyRow {

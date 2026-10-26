@@ -7,19 +7,18 @@ import { Img } from "~/components/site/img";
 import { PageHero } from "~/components/site/page-hero";
 import { QuoteCard } from "~/components/site/quote-card";
 import { ServiceGrid, type ServiceItem } from "~/components/site/service-grid";
+import { pageMeta } from "~/lib/seo";
 import { pageImages, whatsappMessages, whatsappUrl, whyUsReviewCount } from "~/lib/site";
 
 import type { Route } from "./+types/why-us";
 
 export function meta(): Route.MetaDescriptors {
-  return [
-    { title: "Why stay with us  -  Pretty Fly Living" },
-    {
-      name: "description",
-      content:
-        "Inviting spaces, thoughtful details and genuinely helpful hospitality in Nairobi.",
-    },
-  ];
+  return pageMeta({
+    title: "Why stay with us  -  Pretty Fly Living",
+    description:
+      "Inviting spaces, thoughtful details and genuinely helpful hospitality in Nairobi.",
+    path: "/why-us",
+  });
 }
 
 export async function loader({ context }: Route.LoaderArgs) {

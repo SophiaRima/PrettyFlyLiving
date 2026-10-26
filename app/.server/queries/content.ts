@@ -139,14 +139,30 @@ export async function getGuideBySlug(
   slug: string,
 ): Promise<GuideDetailData | null> {
   const [guide] = await db
-    .select({ ...guideCardColumns, bodyMd: guides.bodyMd })
+    .select({
+      ...guideCardColumns,
+      bodyMd: guides.bodyMd,
+      createdAt: guides.createdAt,
+      updatedAt: guides.updatedAt,
+    })
     .from(guides)
     .where(and(eq(guides.slug, slug), eq(guides.isPublished, true)))
     .limit(1);
   if (!guide) return null;
-  const { bodyMd, ...row } = guide;
+  const { bodyMd, createdAt, updatedAt, ...row } = guide;
   const [card] = await withPhotos(db, [row]);
-  return { ...card, bodyHtml: renderGuideMarkdown(bodyMd) };
+  return { ...card, bodyHtml: renderGuideMarkdown(bodyMd), createdAt, updatedAt };
+}
+
+/** Published guide slugs and edit times for /sitemap.xml. */
+export async function getSitemapGuides(
+  db: Database,
+): Promise<{ slug: string; updatedAt: string }[]> {
+  return db
+    .select({ slug: guides.slug, updatedAt: guides.updatedAt })
+    .from(guides)
+    .where(eq(guides.isPublished, true))
+    .orderBy(asc(guides.sortOrder), asc(guides.id));
 }
 
 // ----------------------------------------------------------------------- faqs
