@@ -75,7 +75,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 Browse our stays <span>↗</span>
               </Link>
               <div className="hero-note">
-                <span></span> Beautiful stays, thoughtfully managed.
+                Beautiful stays, thoughtfully managed.
               </div>
             </div>
           </div>
