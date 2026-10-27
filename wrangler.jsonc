@@ -12,6 +12,13 @@
   },
   "upload_source_maps": true,
 
+  // Workers Custom Domains: Cloudflare creates the DNS records and certificates.
+  // www redirects to the bare domain (workers/app.ts).
+  "routes": [
+    { "pattern": "prettyflyliving.com", "custom_domain": true },
+    { "pattern": "www.prettyflyliving.com", "custom_domain": true }
+  ],
+
   // Production resources in Sophiah's account (D1 created 2026-10-22, region WEUR).
   "d1_databases": [
     {

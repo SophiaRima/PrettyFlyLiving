@@ -163,24 +163,26 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         </section>
       )}
 
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <div className="eyebrow">Get to know the neighbourhood</div>
-              <h2>Make yourself at home in Nairobi.</h2>
+      {guides.length > 0 && (
+        <section className="section">
+          <div className="container">
+            <div className="section-head">
+              <div>
+                <div className="eyebrow">Get to know the neighbourhood</div>
+                <h2>Make yourself at home in Nairobi.</h2>
+              </div>
+              <Link className="text-link" to="/things-to-do">
+                Discover the city ↗
+              </Link>
             </div>
-            <Link className="text-link" to="/things-to-do">
-              Discover the city ↗
-            </Link>
+            <div className="guide-grid">
+              {guides.map((guide) => (
+                <GuideTile key={guide.slug} guide={guide} />
+              ))}
+            </div>
           </div>
-          <div className="guide-grid">
-            {guides.map((guide) => (
-              <GuideTile key={guide.slug} guide={guide} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <CtaSection
         eyebrow="For property owners"
