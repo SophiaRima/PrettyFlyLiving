@@ -553,8 +553,10 @@ button { color: inherit; }
   .guide-collage { height: 190px; }
 }
 
-/* 6. Save heart: black outline for visibility (the saved ♥ keeps its red). */
-.heart { color: #000; }
+/* 6. Save heart: black outline for visibility (the saved ♥ keeps its red).
+   The glyph comes from each phone's symbol font, so centre it in its box
+   instead of relying on the button's padding and inherited line-height. */
+.heart { color: #000; display: grid; place-items: center; padding: 0; line-height: 1; }
 
 /* 7. More whitespace: a narrower content column with wider side margins at
    every breakpoint (header, sections and footer all use .container). */

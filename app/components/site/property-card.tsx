@@ -46,7 +46,8 @@ export function PropertyCard({ property, priority = false }: PropertyCardProps) 
           aria-pressed={saved}
           onClick={onSave}
         >
-          {saved ? "♥" : "♡"}
+          {/* U+FE0E keeps the ♥ a text glyph in the saved red, not an emoji (iOS). */}
+          {saved ? "♥\uFE0E" : "♡"}
         </button>
       </div>
       <div className="property-body">
