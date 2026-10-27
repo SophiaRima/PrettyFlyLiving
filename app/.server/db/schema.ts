@@ -309,6 +309,16 @@ export const loginAttempts = sqliteTable(
   (t) => [index("login_attempts_ip_idx").on(t.ip, t.attemptedAt)],
 );
 
+/**
+ * One row (id 1) counting dashboard saves. The public page cache files pages
+ * under this number, so a save makes every cached page stale at once
+ * (workers/page-cache.ts). No row yet means version 0.
+ */
+export const contentVersion = sqliteTable("content_version", {
+  id: integer("id").primaryKey(),
+  version: integer("version").notNull().default(0),
+});
+
 // --------------------------------------------------------------------- types
 
 export type Property = typeof properties.$inferSelect;

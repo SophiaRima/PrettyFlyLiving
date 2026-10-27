@@ -1,6 +1,8 @@
 import { isRouteErrorResponse, Link, Outlet } from "react-router";
 
 import { isSameOrigin } from "~/.server/auth";
+import { bumpContentVersion } from "~/.server/content-version";
+import { dbFromContext } from "~/.server/request";
 import adminCss from "~/styles/admin.css?url";
 
 import type { Route } from "./+types/_layout";
@@ -10,12 +12,25 @@ import type { Route } from "./+types/_layout";
 // session check and the dashboard shell.
 export const links: Route.LinksFunction = () => [{ rel: "stylesheet", href: adminCss }];
 
-/** CSRF check on every admin mutation, and keep admin pages out of caches and search. */
-const adminRequest: Route.MiddlewareFunction = async ({ request }, next) => {
-  if (request.method !== "GET" && request.method !== "HEAD" && !isSameOrigin(request)) {
+/**
+ * CSRF check on every admin mutation, and keep admin pages out of caches and
+ * search. A successful save moves the content version on, so the public page
+ * cache serves the change straight away (workers/page-cache.ts).
+ */
+const adminRequest: Route.MiddlewareFunction = async ({ request, context }, next) => {
+  const isMutation = request.method !== "GET" && request.method !== "HEAD";
+  if (isMutation && !isSameOrigin(request)) {
     throw new Response("Forbidden", { status: 403 });
   }
   const response = await next();
+  if (isMutation && response.status < 400) {
+    try {
+      await bumpContentVersion(dbFromContext(context));
+    } catch (error) {
+      // The save itself succeeded; cached pages expire within the hour anyway.
+      console.error("Couldn't move the content version on", error);
+    }
+  }
   response.headers.set("X-Robots-Tag", "noindex, nofollow");
   response.headers.set("Cache-Control", "private, no-store");
   return response;

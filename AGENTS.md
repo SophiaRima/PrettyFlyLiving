@@ -236,6 +236,7 @@ These were requested after the concept was approved and **override it**. Their C
 | `admin_users` | id, email, password_hash, created_at | one row, created with a CLI script |
 | `sessions` | id (SHA-256 of the token), user_id, expires_at, signed_in_at (nullable) | `signed_in_at` gates Settings changes (§9) |
 | `login_attempts` | ip, attempted_at | throttle: 5 failures per 15 minutes |
+| `content_version` | id (always 1), version | moved on by every successful dashboard POST (admin layout middleware); the public page cache (`workers/page-cache.ts`) keys pages by it and Nairobi's date, so edits show at once |
 
 Rules:
 

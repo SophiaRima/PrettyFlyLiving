@@ -9,7 +9,7 @@ export default defineConfig({
     alias: { "~": fileURLToPath(new URL("./app", import.meta.url)) },
   },
   test: {
-    include: ["app/**/*.test.ts"],
+    include: ["app/**/*.test.ts", "workers/**/*.test.ts"],
     environment: "node",
   },
 });

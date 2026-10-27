@@ -1,0 +1,15 @@
+# Browser caching for static files (Workers Static Assets). Without a rule,
+# Cloudflare sends "public, max-age=0, must-revalidate" and browsers re-check
+# every file on every page. Pages and /media are cached in Worker code.
+
+# Build output: the file names change whenever the contents do.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Logos and page photos keep their names between versions, so only a day.
+/brand/*
+  Cache-Control: public, max-age=86400
+/images/*
+  Cache-Control: public, max-age=86400
+/favicon.ico
+  Cache-Control: public, max-age=86400
