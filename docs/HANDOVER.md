@@ -15,7 +15,7 @@ The site went live on 27 October 2026. Guests can browse stays, check availabili
 | Reviews | 11 real Airbnb reviews: 9 published, the 4★ and 3★ ones waiting for Sophiah's decision |
 | FAQs | 10 for guests, 10 for owners |
 | Extra services | 3: Airport Transfers; Nairobi, With a Local; Extra Cleaning and Laundry |
-| Nairobi guides | None yet. The Things to Do page shows an empty state until guides are added. |
+| Nairobi guides | 6 draft guides (one per category, 5 photos each) loaded on 27 Oct 2026, waiting for Sophiah to review and publish under Nairobi guides. Photo credits are at the end of each guide. |
 | Email alerts | Not arriving yet: Truehost has not activated contact@prettyflyliving.com. Every request is still saved in the dashboard. |
 | prettyflyliving.co.ke | Not redirecting yet: its nameservers at the registrar are broken. |
 
@@ -126,7 +126,7 @@ These are the items left before the handover is complete.
 - [ ] Confirm the registrar and renewal date for prettyflyliving.com
 - [ ] Confirm the GitHub repository is owned by Sophiah's account, with 45Creatives as a collaborator only
 - [ ] Decide on the two unpublished reviews (4★ and 3★) under **Reviews**
-- [ ] Add the first Nairobi guides, with photos
+- [ ] Review the six draft Nairobi guides and tick Published (the first four are already Featured for the Home page)
 - [ ] Dashboard training session with Sophiah
 - [ ] After a quiet month, tighten the email DMARC policy (developer) and consider turning on HSTS in Cloudflare
 
