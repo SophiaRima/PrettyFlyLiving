@@ -121,7 +121,7 @@ export default function Management({ loaderData, actionData }: Route.ComponentPr
             </a>
           </div>
           <div className="split-image">
-            <Img {...pageImages.managementSplit} />
+            <Img {...pageImages.managementSplit} priority />
           </div>
         </div>
       </section>

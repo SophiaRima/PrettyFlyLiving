@@ -247,6 +247,14 @@ export async function confirmBookingRequest(db: Database, request: BookingReques
   ]);
 }
 
+/**
+ * Deletes a booking request. A confirmed request's calendar block stays:
+ * the dates are only freed from the property's calendar.
+ */
+export async function deleteBookingRequest(db: Database, id: number): Promise<void> {
+  await db.delete(bookingRequests).where(eq(bookingRequests.id, id));
+}
+
 export type HandledStatus = "new" | "handled";
 
 /** A "new"/"handled" value from a query string or form, or undefined. */

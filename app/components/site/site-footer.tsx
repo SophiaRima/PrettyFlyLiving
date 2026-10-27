@@ -10,7 +10,7 @@ export function SiteFooter() {
           <div>
             <Link className="brand" to="/" aria-label={`${site.name} home`}>
               <img
-                src="/brand/logo-light.png"
+                src="/brand/logo-light.webp"
                 alt={site.name}
                 width={101}
                 height={72}

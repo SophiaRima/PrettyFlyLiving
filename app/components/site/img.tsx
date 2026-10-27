@@ -17,6 +17,8 @@ interface ImgProps {
    * srcset, so cards and tiles don't download the full-size photo.
    */
   sizes?: string;
+  /** Explicit srcset for /public files (uploads build theirs from `sizes`). */
+  srcSet?: string;
   /** Above-the-fold images load eagerly (hero, first gallery photo). */
   eager?: boolean;
   /** The page's likely LCP image: eager and fetched ahead of other images. */
@@ -30,11 +32,11 @@ function onImageError(event: SyntheticEvent<HTMLImageElement>): void {
   event.currentTarget.style.opacity = ".3";
 }
 
-export function Img({ src, alt, width, height, sizes, eager = false, priority = false }: ImgProps) {
+export function Img({ src, alt, width, height, sizes, srcSet: fileSrcSet, eager = false, priority = false }: ImgProps) {
   if (!src) return null;
   const isPublicFile = src.startsWith("/");
   const url = isPublicFile ? src : mediaUrl(src);
-  const srcSet = sizes && !isPublicFile ? mediaSrcSet(src, width) : undefined;
+  const srcSet = fileSrcSet ?? (sizes && !isPublicFile ? mediaSrcSet(src, width) : undefined);
   return (
     <img
       src={url}

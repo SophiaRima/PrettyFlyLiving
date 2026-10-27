@@ -104,7 +104,7 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
             </Link>
           </div>
           <div className="split-image">
-            <Img {...pageImages.whySplit} />
+            <Img {...pageImages.whySplit} priority />
           </div>
         </div>
       </section>

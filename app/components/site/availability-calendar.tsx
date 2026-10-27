@@ -41,6 +41,7 @@ export function AvailabilityCalendar({
   const isLastMonth = toIsoDate(next.year, next.month, 1) >= until;
   const leading = firstWeekdayOfMonth(shown);
   const days = daysInMonth(shown);
+  const monthLabel = formatMonthLabel(shown);
 
   return (
     <>
@@ -53,7 +54,7 @@ export function AvailabilityCalendar({
         >
           ‹
         </button>
-        <strong aria-live="polite">{formatMonthLabel(shown)}</strong>
+        <strong aria-live="polite">{monthLabel}</strong>
         <button
           type="button"
           aria-label="Next month"
@@ -92,7 +93,8 @@ export function AvailabilityCalendar({
               className={classes || undefined}
               disabled={unavailable}
               data-date={date}
-              aria-label={date}
+              // Starts with the visible day number, so the spoken name matches it.
+              aria-label={`${i + 1} ${monthLabel}${isBlocked ? ", unavailable" : ""}`}
               aria-pressed={date === selected}
               onClick={() => onSelect(date)}
             >

@@ -45,14 +45,19 @@ export const pageImages = {
     height: 1200,
     alt: "Small double bed by the window with fresh towels",
   },
+  /** On phones the split photo is the page's largest image, so it has an 800px copy. */
   whySplit: {
     src: "/images/why-split.webp",
+    srcSet: "/images/why-split-800.webp 800w, /images/why-split.webp 1200w",
+    sizes: "(max-width: 720px) 100vw, 540px",
     width: 1200,
     height: 1200,
     alt: "City view over Kilimani from a Pretty Fly Living window",
   },
   managementSplit: {
     src: "/images/management-split.webp",
+    srcSet: "/images/management-split-800.webp 800w, /images/management-split.webp 1200w",
+    sizes: "(max-width: 720px) 100vw, 540px",
     width: 1200,
     height: 554,
     alt: "Courtyard garden with seating in a Pretty Fly Living building",

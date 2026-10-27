@@ -38,7 +38,7 @@ export function SiteHeader() {
       <div className="container nav-wrap">
         <Link className="brand" to="/" aria-label={`${site.name} home`}>
           <img
-            src="/brand/logo.png"
+            src="/brand/logo.webp"
             alt={site.name}
             width={73}
             height={52}

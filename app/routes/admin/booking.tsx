@@ -1,11 +1,13 @@
-import { CalendarCheckIcon, ExternalLinkIcon, TriangleAlertIcon } from "lucide-react";
-import { data, Form, Link, useNavigation } from "react-router";
+import { CalendarCheckIcon, ExternalLinkIcon, Trash2Icon, TriangleAlertIcon } from "lucide-react";
+import type { FormEvent } from "react";
+import { data, Form, Link, redirect, useNavigation } from "react-router";
 
 import { requireAdmin } from "~/.server/auth";
 import { formFailure, readAdminForm } from "~/.server/forms";
 import { isRangeBlocked } from "~/.server/queries/availability";
 import {
   confirmBookingRequest,
+  deleteBookingRequest,
   getBookingRequest,
   updateBookingRequest,
 } from "~/.server/queries/inbox";
@@ -43,6 +45,11 @@ export async function action({ request, params, context }: Route.ActionArgs) {
   if (!booking) throw new Response("Not found", { status: 404 });
   const formData = await request.formData();
 
+  if (formData.get("intent") === "delete") {
+    await deleteBookingRequest(db, booking.id);
+    throw redirect("/admin/bookings");
+  }
+
   if (formData.get("intent") === "confirm") {
     if (booking.status === "confirmed") return data(formFailure("This request is already confirmed.", {}), { status: 400 });
     if (booking.checkOut <= booking.checkIn) return data(formFailure("This request has invalid dates.", {}), { status: 400 });
@@ -60,6 +67,13 @@ export async function action({ request, params, context }: Route.ActionArgs) {
   if (form.kind === "invalid") return data(form.failure, { status: 400 });
   await updateBookingRequest(db, booking.id, form.data);
   return { ok: true as const, message: "Saved" };
+}
+
+function confirmDelete(event: FormEvent<HTMLFormElement>, confirmed: boolean): void {
+  const message = confirmed
+    ? "Delete this request? This can’t be undone. Its nights stay blocked: unblock them on the property’s calendar if the stay is off."
+    : "Delete this request? This can’t be undone.";
+  if (!window.confirm(message)) event.preventDefault();
 }
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -219,6 +233,21 @@ export default function AdminBooking({ loaderData, actionData }: Route.Component
               </Form>
             </CardContent>
           </Card>
+
+          <Form
+            method="post"
+            onSubmit={(event) => confirmDelete(event, booking.status === "confirmed")}
+            className="border-t pt-6"
+          >
+            <p className="mb-3 text-sm text-muted-foreground">
+              Deleting removes this request for good.
+              {booking.status === "confirmed" && " Its nights stay blocked on the property’s calendar."}
+            </p>
+            <Button type="submit" name="intent" value="delete" variant="destructive" disabled={busy}>
+              <Trash2Icon data-icon="inline-start" />
+              Delete request
+            </Button>
+          </Form>
         </div>
       </div>
     </>

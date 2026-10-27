@@ -37,7 +37,7 @@ export default function AdminBookings({ loaderData }: Route.ComponentProps) {
     <>
       <AdminPageHeader
         title="Booking requests"
-        description="Requests are not reservations. Click Manage to reply, update the status or notes, and Confirm & block dates once agreed."
+        description="Requests are not reservations. Click Manage to reply, update the status or notes, Confirm & block dates once agreed, or delete a request."
       />
       <FilterTabs
         active={status}

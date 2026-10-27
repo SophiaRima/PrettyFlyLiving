@@ -34,7 +34,7 @@ export function Gallery({ photos, name }: { photos: PhotoData[]; name: string })
               className={isLast ? "gallery-more" : undefined}
               aria-label={
                 isLast
-                  ? `View all ${photos.length} photos`
+                  ? `+${hidden} photos: view all ${photos.length}`
                   : `View photo ${i + 1} of ${photos.length}`
               }
               onClick={(event) => {
