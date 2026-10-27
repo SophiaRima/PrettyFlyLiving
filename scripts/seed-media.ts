@@ -5,6 +5,8 @@
  *   npm run db:seed                     runs seed.sql, then this script (local R2)
  *   node scripts/seed-media.ts --remote  production R2: only the photos that
  *                                        seed-production.sql uses
+ *   node scripts/seed-media.ts --remote --file scripts/guides-production.sql
+ *                                        production R2: the photos that file uses
  *
  * Each file's path under seed-media/ is its R2 key (e.g.
  * properties/<hash>.webp), named the same way the dashboard names uploads,
@@ -20,17 +22,20 @@ import { fileURLToPath } from "node:url";
 const BUCKET = "prettyflyliving-media";
 const root = fileURLToPath(new URL("./seed-media/", import.meta.url));
 const remote = process.argv.includes("--remote");
+const fileArg = process.argv.indexOf("--file");
+const productionSql = fileArg > 0 ? process.argv[fileArg + 1] : fileURLToPath(new URL("./seed-production.sql", import.meta.url));
 
 function fail(message: string): never {
   console.error(message);
   process.exit(1);
 }
 
-/** R2 keys the production seed references, with their 800px copies. */
+/** R2 keys the production SQL file references, with their 800px copies. */
 function productionKeys(): Set<string> {
-  const sql = readFileSync(fileURLToPath(new URL("./seed-production.sql", import.meta.url)), "utf8");
+  if (!productionSql) fail("--file needs the path of a SQL file.");
+  const sql = readFileSync(productionSql, "utf8");
   const keys = new Set<string>();
-  for (const [, dir, hash, ext] of sql.matchAll(/'(properties|services)\/([0-9a-f]{32})\.(webp|jpg|png)'/g)) {
+  for (const [, dir, hash, ext] of sql.matchAll(/'(properties|services|guides)\/([0-9a-f]{32})\.(webp|jpg|png)'/g)) {
     keys.add(`${dir}/${hash}.${ext}`);
     keys.add(`${dir}/${hash}-800.${ext}`);
   }
