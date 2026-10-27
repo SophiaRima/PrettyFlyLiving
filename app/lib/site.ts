@@ -1,21 +1,17 @@
 import type { GuideCategory } from "./constants";
 
-/**
- * Site-wide constants (AGENTS.md section 5.4).
- *
- * PLACEHOLDER: the phone number is not confirmed yet. Replace it with
- * Sophiah's verified business number before launch.
- */
+/** Site-wide constants (AGENTS.md section 5.4). */
 export const site = {
   name: "Pretty Fly Living",
   /** Production origin for canonical, Open Graph and sitemap URLs, on every host. */
   url: "https://prettyflyliving.com",
   tagline: "Serviced apartments · Nairobi",
-  email: "info@prettyflyliving.com",
+  /** Sophiah's domain mailbox (Truehost). */
+  email: "contact@prettyflyliving.com",
   /** International format, digits only, for wa.me links (+254 708 854755). */
   whatsappNumber: "254708854755",
-  /** Display format for tel: links. PLACEHOLDER. */
-  phone: "+254 700 000 000",
+  /** Display format; tel: links strip the spaces. Same number as WhatsApp (0708 854755). */
+  phone: "+254 708 854 755",
   location: "Nairobi, Kenya",
 } as const;
 
@@ -66,8 +62,8 @@ export const pageImages = {
 /** How many published reviews Why Us shows (featured first, then by sort order). */
 export const whyUsReviewCount = 6;
 
-/** "Max monthly price" options on /stays. Adjust once real prices are in. */
-export const priceBrackets = [150000, 250000, 350000] as const;
+/** "Max monthly price" options on /stays: the client's KES 60,000–250,000 range. */
+export const priceBrackets = [60000, 100000, 150000, 200000, 250000] as const;
 
 /**
  * "Browse by" shortcuts on /things-to-do. Each one sets either a search term

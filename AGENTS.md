@@ -50,7 +50,7 @@ Everything runs on **Cloudflare's free tier in Sophiah's own account**.
 | Image storage | Cloudflare R2 |
 | Spam protection | Cloudflare Turnstile + honeypot field |
 | Validation | Zod |
-| Email alerts | Resend (sending domain `send.prettyflyliving.com`) to Sophiah's Zoho inbox |
+| Email alerts | Resend (sending domain `send.prettyflyliving.com`) to Sophiah's Truehost mailbox `contact@prettyflyliving.com` |
 | Admin auth | Peppered PBKDF2 password hash (WebCrypto) + secure session cookie |
 | Tests | Vitest for pure logic |
 
@@ -334,7 +334,7 @@ Use React Router `<Form>` / `useFetcher` so forms work without JavaScript. On er
 - Every admin mutation is a POST action that re-checks the session and checks the `Origin` header.
 - The login form uses Turnstile and the `login_attempts` throttle.
 - Guide Markdown is rendered on the server with raw HTML disabled. Escape any user-supplied text placed in email HTML.
-- Every account (Cloudflare, Resend, Zoho, GitHub, Hosting.com) belongs to Sophiah. Do not hardcode personal or 45Creatives credentials anywhere.
+- Every account (Cloudflare, Resend, Truehost, GitHub, Hosting.com) belongs to Sophiah. Do not hardcode personal or 45Creatives credentials anywhere.
 
 ### Free-tier limits to respect
 
@@ -377,7 +377,7 @@ Work through these in order. Don't start a later phase's features early.
 2. **Availability, booking and forms:** date helpers + tests, the real calendar, search and filters, the three forms with Turnstile and Resend.
 3. **Admin dashboard:** auth, overview, properties + photos + calendar, inboxes, CRUD for FAQs, reviews, guides (+ guide photos) and extra services.
 4. **Polish:** SEO, performance (Lighthouse mobile ≥ 90), accessibility, error pages, final side-by-side concept comparison.
-5. **Deploy and handover:** Cloudflare resources and secrets, domains and the `.co.ke` redirect, Zoho and Resend DNS, admin user, training, handover doc, GitHub transfer.
+5. **Deploy and handover:** Cloudflare resources and secrets, domains and the `.co.ke` redirect, DNS in Cloudflare (nameservers moved there; Truehost mail and Resend records), admin user, training, handover doc, GitHub transfer.
 
 ---
 

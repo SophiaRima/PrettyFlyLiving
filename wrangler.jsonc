@@ -31,7 +31,8 @@
   // Public, non-secret settings. Local overrides live in .dev.vars.
   "vars": {
     "SITE_URL": "https://prettyflyliving.com",
-    "NOTIFY_EMAIL": "info@prettyflyliving.com",
+    // Sophiah's Truehost mailbox; every booking request and enquiry is sent here.
+    "NOTIFY_EMAIL": "contact@prettyflyliving.com",
     "EMAIL_FROM": "Pretty Fly Living <notifications@send.prettyflyliving.com>",
     // Production Turnstile widget (public site key). Local dev uses the test
     // key from .dev.vars. The secret key is a Worker secret.
