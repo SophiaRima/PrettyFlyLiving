@@ -81,13 +81,6 @@ public/brand/        logo exports, icons and the default share image
 
 ## Deployment
 
-Production setup happens in Phase 5 (see AGENTS.md section 11), inside Sophiah's Cloudflare account:
+Production runs in Sophiah's Cloudflare account and went live on 27 October 2026. [docs/HANDOVER.md](docs/HANDOVER.md) lists the production resources, secrets, DNS records and known issues.
 
-1. `npx wrangler d1 create prettyflyliving-db`, then paste the returned `database_id` into `wrangler.jsonc`.
-2. `npx wrangler r2 bucket create prettyflyliving-media`
-3. `npm run db:migrate:remote`
-4. `npx wrangler secret put RESEND_API_KEY`, `npx wrangler secret put TURNSTILE_SECRET_KEY` and `npx wrangler secret put PASSWORD_PEPPER` (a new random value, see `.dev.vars.example`; keep it in Sophiah's password manager, since `admin:create -- --remote` needs it and changing it invalidates the admin password). Then create the admin with `PASSWORD_PEPPER=<that value> npm run admin:create -- --remote`, log in on the live site and check the Worker's metrics for `exceededCpu` (error 1102).
-5. Put the production Turnstile site key in `wrangler.jsonc`.
-6. `npm run deploy`, then attach the custom domain `prettyflyliving.com`.
-
-Until step 1 is done, `wrangler.jsonc` holds a placeholder database id, so an early deploy fails instead of creating resources in the wrong account.
+To ship a change: run `npm run typecheck`, `npm run test` and `npm run build`; apply any new migration with `npm run db:migrate:remote`; then `npm run deploy`. To reset the admin password, run `PASSWORD_PEPPER=<the production value> npm run admin:create -- --remote`.
