@@ -562,18 +562,17 @@ button { color: inherit; }
    instead of relying on the button's padding and inherited line-height. */
 .heart { color: #000; display: grid; place-items: center; padding: 0; line-height: 1; }
 
-/* 7. Side margins (header, sections and footer all use .container). Laptops
-   and desktops get 48px margins and a 1440px cap (2026-10-28: the client found
-   the earlier 1080px column too small on her monitor). */
-.container { width: min(1440px, calc(100% - 96px)); }
-@media (min-width: 721px) and (max-width: 980px) {
-  .container { width: min(100% - 96px, 780px); }
-}
-@media (max-width: 720px) {
-  .container { width: min(100% - 48px, 560px); }
-}
+/* 7. Side margins (header, sections and footer all use .container). Full
+   width at every screen size with only a 24px edge (2026-10-28: the client
+   asked for the padding around the site to be removed). */
+.container { width: calc(100% - 48px); }
 @media (max-width: 520px) {
-  .container { width: min(100% - 44px, 480px); }
+  .container { width: calc(100% - 44px); }
+}
+/* The hero copy's 7% side padding grows with the full-width hero and broke
+   the headline into four lines on wide screens, so cap it. */
+@media (min-width: 981px) {
+  .hero-copy { padding-left: min(7%, 96px); padding-right: min(7%, 96px); }
 }
 @media (max-width: 390px) {
   .container { width: calc(100% - 40px); }
