@@ -82,7 +82,10 @@ export function notifyInBackground(
 ): void {
   ctx.waitUntil(
     sendNotification(env, notification).catch((error: unknown) => {
-      console.error(`Email alert failed (${notification.idempotencyKey})`, error);
+      // Log the message as text: Workers Observability drops an Error object's
+      // message and keeps only its stack frames.
+      const reason = error instanceof Error ? error.message : String(error);
+      console.error(`Email alert failed (${notification.idempotencyKey}): ${reason}`);
     }),
   );
 }
