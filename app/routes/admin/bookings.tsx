@@ -1,10 +1,11 @@
-import { Link } from "react-router";
+import { data, Link } from "react-router";
 
 import { requireAdmin } from "~/.server/auth";
-import { getBookingRequests, getBookingStatusCounts } from "~/.server/queries/inbox";
+import { formFailure } from "~/.server/forms";
+import { deleteBookingRequest, getBookingRequests, getBookingStatusCounts } from "~/.server/queries/inbox";
 import { dbFromContext } from "~/.server/request";
 import { AdminPageHeader } from "~/components/admin/admin-shell";
-import { BookingStatusBadge, bookingStatusLabel, FilterTabs } from "~/components/admin/inbox";
+import { BookingStatusBadge, bookingStatusLabel, DeleteItemButton, FilterTabs } from "~/components/admin/inbox";
 import { EditLink, RowActions } from "~/components/admin/row-actions";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "~/components/ui/table";
 import { formatReceived } from "~/lib/admin";
@@ -30,6 +31,23 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return { requests, counts, status: status ?? "all" };
 }
 
+export async function action({ request, context }: Route.ActionArgs) {
+  requireAdmin(context);
+  const formData = await request.formData();
+  const id = Number(formData.get("id"));
+  if (formData.get("intent") !== "delete" || !Number.isSafeInteger(id)) {
+    return data(formFailure("Unknown action.", {}), { status: 400 });
+  }
+  await deleteBookingRequest(dbFromContext(context), id);
+  return { ok: true as const, message: "Request deleted" };
+}
+
+function deleteQuestion(name: string, status: BookingStatus): string {
+  return status === "confirmed"
+    ? `Delete the request from ${name}? This can’t be undone. Its nights stay blocked: unblock them on the property’s calendar if the stay is off.`
+    : `Delete the request from ${name}? This can’t be undone.`;
+}
+
 export default function AdminBookings({ loaderData }: Route.ComponentProps) {
   const { requests, counts, status } = loaderData;
   const total = Object.values(counts).reduce((sum, n) => sum + n, 0);
@@ -37,7 +55,7 @@ export default function AdminBookings({ loaderData }: Route.ComponentProps) {
     <>
       <AdminPageHeader
         title="Booking requests"
-        description="Requests are not reservations. Click Manage to reply, update the status or notes, Confirm & block dates once agreed, or delete a request."
+        description="Requests are not reservations. Click Manage to reply, update the status or notes, or Confirm & block dates once agreed."
       />
       <FilterTabs
         active={status}
@@ -71,7 +89,7 @@ export default function AdminBookings({ loaderData }: Route.ComponentProps) {
                     <Link to={`/admin/bookings/${booking.id}`} className="text-primary hover:underline">
                       {booking.name}
                     </Link>
-                    <div className="text-xs font-normal text-muted-foreground">{booking.contact}</div>
+                    <div className="text-xs font-normal text-muted-foreground wrap-anywhere">{booking.contact}</div>
                     <div className="mt-1 grid gap-1 text-xs font-normal text-muted-foreground md:hidden">
                       <span>
                         {booking.propertyName} · {formatShortDate(booking.checkIn)} → {formatShortDate(booking.checkOut)}
@@ -96,6 +114,12 @@ export default function AdminBookings({ loaderData }: Route.ComponentProps) {
                   <TableCell>
                     <RowActions>
                       <EditLink to={`/admin/bookings/${booking.id}`} itemName={`request from ${booking.name}`} label="Manage" />
+                      <DeleteItemButton
+                        id={booking.id}
+                        size="sm"
+                        itemName={`request from ${booking.name}`}
+                        confirmMessage={deleteQuestion(booking.name, booking.status)}
+                      />
                     </RowActions>
                   </TableCell>
                 </TableRow>

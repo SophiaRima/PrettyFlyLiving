@@ -1,4 +1,5 @@
-import { CheckIcon, MailIcon, MessageCircleIcon, RotateCcwIcon } from "lucide-react";
+import { CheckIcon, MailIcon, MessageCircleIcon, RotateCcwIcon, Trash2Icon } from "lucide-react";
+import type { FormEvent } from "react";
 import { Link, useFetcher } from "react-router";
 
 import { Badge } from "~/components/ui/badge";
@@ -70,6 +71,56 @@ export function ReplyButton({ link, label }: { link: ReplyLink; label?: string }
       <Icon data-icon="inline-start" />
       {label ?? (link.kind === "email" ? "Reply by email" : "Reply on WhatsApp")}
     </a>
+  );
+}
+
+/** Deletes one inbox item (intent=delete) after a confirm prompt. */
+export function DeleteItemButton({
+  id,
+  confirmMessage,
+  itemName,
+  size = "default",
+}: {
+  id: number;
+  confirmMessage: string;
+  /** For screen readers, e.g. "request from Amina". */
+  itemName?: string;
+  size?: "default" | "sm";
+}) {
+  const fetcher = useFetcher<AdminActionResult>();
+  useSuccessToast(fetcher.data);
+
+  function onSubmit(event: FormEvent<HTMLFormElement>): void {
+    if (!window.confirm(confirmMessage)) event.preventDefault();
+  }
+
+  return (
+    <fetcher.Form method="post" onSubmit={onSubmit}>
+      <input type="hidden" name="id" value={id} />
+      <Button
+        type="submit"
+        name="intent"
+        value="delete"
+        variant="ghost"
+        size={size}
+        disabled={fetcher.state !== "idle"}
+        aria-label={itemName ? `Delete ${itemName}` : undefined}
+        className="text-destructive"
+      >
+        <Trash2Icon data-icon="inline-start" />
+        Delete
+      </Button>
+    </fetcher.Form>
+  );
+}
+
+/** Mark handled + Delete, top right of a message or enquiry card. */
+export function InboxItemActions({ id, status, confirmDelete }: { id: number; status: "new" | "handled"; confirmDelete: string }) {
+  return (
+    <div className="flex flex-wrap gap-1">
+      <HandledToggle id={id} status={status} />
+      <DeleteItemButton id={id} confirmMessage={confirmDelete} />
+    </div>
   );
 }
 

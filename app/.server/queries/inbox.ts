@@ -275,6 +275,10 @@ export async function setContactMessageStatus(db: Database, id: number, status: 
   await db.update(contactMessages).set({ status }).where(eq(contactMessages.id, id));
 }
 
+export async function deleteContactMessage(db: Database, id: number): Promise<void> {
+  await db.delete(contactMessages).where(eq(contactMessages.id, id));
+}
+
 export async function getOwnerEnquiries(db: Database, status?: HandledStatus): Promise<OwnerEnquiry[]> {
   return db
     .select()
@@ -286,4 +290,8 @@ export async function getOwnerEnquiries(db: Database, status?: HandledStatus): P
 
 export async function setOwnerEnquiryStatus(db: Database, id: number, status: HandledStatus): Promise<void> {
   await db.update(ownerEnquiries).set({ status }).where(eq(ownerEnquiries.id, id));
+}
+
+export async function deleteOwnerEnquiry(db: Database, id: number): Promise<void> {
+  await db.delete(ownerEnquiries).where(eq(ownerEnquiries.id, id));
 }

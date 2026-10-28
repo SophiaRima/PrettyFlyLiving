@@ -2,10 +2,15 @@ import { data } from "react-router";
 
 import { requireAdmin } from "~/.server/auth";
 import { formFailure } from "~/.server/forms";
-import { getOwnerEnquiries, parseHandledStatus, setOwnerEnquiryStatus } from "~/.server/queries/inbox";
+import {
+  deleteOwnerEnquiry,
+  getOwnerEnquiries,
+  parseHandledStatus,
+  setOwnerEnquiryStatus,
+} from "~/.server/queries/inbox";
 import { dbFromContext } from "~/.server/request";
 import { AdminPageHeader } from "~/components/admin/admin-shell";
-import { FilterTabs, HandledBadge, HandledToggle, ReplyButton } from "~/components/admin/inbox";
+import { FilterTabs, HandledBadge, InboxItemActions, ReplyButton } from "~/components/admin/inbox";
 import { Badge } from "~/components/ui/badge";
 import { emailReplyUrl, formatReceived, whatsappReplyUrl } from "~/lib/admin";
 import { replyMessages } from "~/lib/site";
@@ -26,8 +31,13 @@ export async function action({ request, context }: Route.ActionArgs) {
   requireAdmin(context);
   const formData = await request.formData();
   const id = Number(formData.get("id"));
+  if (!Number.isSafeInteger(id)) return data(formFailure("Unknown action.", {}), { status: 400 });
+  if (formData.get("intent") === "delete") {
+    await deleteOwnerEnquiry(dbFromContext(context), id);
+    return { ok: true as const, message: "Enquiry deleted" };
+  }
   const status = parseHandledStatus(formData.get("status"));
-  if (!Number.isSafeInteger(id) || !status) return data(formFailure("Unknown action.", {}), { status: 400 });
+  if (!status) return data(formFailure("Unknown action.", {}), { status: 400 });
   await setOwnerEnquiryStatus(dbFromContext(context), id, status);
   return { ok: true as const, message: status === "handled" ? "Marked as handled" : "Marked as new" };
 }
@@ -66,18 +76,22 @@ export default function AdminEnquiries({ loaderData }: Route.ComponentProps) {
             return (
               <li key={enquiry.id} className="rounded-xl bg-card p-5 ring-1 ring-foreground/10">
                 <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <p className="flex flex-wrap items-center gap-2 font-medium">
+                  <div className="min-w-0">
+                    <p className="flex flex-wrap items-center gap-2 font-medium wrap-anywhere">
                       {enquiry.name}
                       <HandledBadge status={enquiry.status} />
                     </p>
-                    <p className="mt-1 text-sm text-muted-foreground">
+                    <p className="mt-1 text-sm text-muted-foreground wrap-anywhere">
                       {enquiry.email} · {enquiry.phone} · {formatReceived(enquiry.createdAt)}
                     </p>
                   </div>
-                  <HandledToggle id={enquiry.id} status={enquiry.status} />
+                  <InboxItemActions
+                    id={enquiry.id}
+                    status={enquiry.status}
+                    confirmDelete={`Delete the enquiry from ${enquiry.name}? This can’t be undone.`}
+                  />
                 </div>
-                <dl className="mt-4 grid gap-x-6 gap-y-3 text-sm sm:grid-cols-3">
+                <dl className="mt-4 grid gap-x-6 gap-y-3 text-sm wrap-anywhere sm:grid-cols-3">
                   <Detail label="Location" value={enquiry.propertyArea} />
                   <Detail label="Units" value={enquiry.units} />
                   <Detail label="Property type" value={enquiry.propertyType} />
@@ -104,7 +118,7 @@ export default function AdminEnquiries({ loaderData }: Route.ComponentProps) {
                     </ul>
                   </div>
                 )}
-                {enquiry.message && <p className="mt-4 text-sm whitespace-pre-wrap">{enquiry.message}</p>}
+                {enquiry.message && <p className="mt-4 text-sm whitespace-pre-wrap wrap-anywhere">{enquiry.message}</p>}
                 <div className="mt-4 flex flex-wrap gap-2">
                   <ReplyButton
                     link={{ kind: "email", href: emailReplyUrl(enquiry.email, "Property management with Pretty Fly Living", opening) }}

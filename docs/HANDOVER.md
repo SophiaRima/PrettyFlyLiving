@@ -64,7 +64,7 @@ Everything below happens in the dashboard at prettyflyliving.com/admin. The **Ov
 2. Open it and click **Reply by email** or **Reply on WhatsApp**: your own email app or WhatsApp opens with a message already written.
 3. Set the status to *Contacted* and add private notes if useful.
 4. Once the stay is agreed and paid as you arrange it, click **Confirm & block dates**. The request becomes *Confirmed* and those nights disappear from the stay's calendar for other guests.
-5. If it doesn't go ahead, set it to *Declined*, or click **Delete request** at the bottom of the page. Deleting a confirmed request leaves its nights blocked; unblock them on the calendar if the stay is off.
+5. If it doesn't go ahead, set it to *Declined*, or delete it: **Delete** on its row in the list, or **Delete request** at the bottom of its page. Deleting a confirmed request leaves its nights blocked; unblock them on the calendar if the stay is off.
 
 ### Keeping calendars in step with Airbnb
 
@@ -74,6 +74,10 @@ The site does not sync with Airbnb or Booking.com. When a stay is booked elsewhe
 
 - **Messages**: the Contact page form. Reply from the message, then click **Mark handled**.
 - **Owner enquiries**: the Property Management form, with the owner's answers to all four steps.
+
+Each message and enquiry also has a **Delete** button, for spam or anything you no longer need. Deleting can't be undone.
+
+On a phone or tablet, the dashboard's sections are under the **Menu** button at the top right.
 
 ### Editing content
 
