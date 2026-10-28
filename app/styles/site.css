@@ -573,6 +573,11 @@ button { color: inherit; }
    the headline into four lines on wide screens, so cap it. */
 @media (min-width: 981px) {
   .hero-copy { padding-left: min(7%, 96px); padding-right: min(7%, 96px); }
+  /* A fixed 640px height made the full-width hero a long strip on wide
+     screens (2.9:1 at 1920px), showing only half the photo, zoomed in. The
+     height now grows with the width, keeping about the concept's
+     proportions, but never taller than the screen. The copy stays centred. */
+  .hero-frame { min-height: clamp(640px, 45vw, calc(100svh - 120px)); display: flex; align-items: center; }
 }
 @media (max-width: 390px) {
   .container { width: calc(100% - 40px); }
@@ -598,3 +603,37 @@ input[type="date"]::-webkit-datetime-edit-day-field,
 input[type="date"]::-webkit-datetime-edit-month-field,
 input[type="date"]::-webkit-datetime-edit-year-field { color: #000; }
 input[type="date"]::-webkit-calendar-picker-indicator { opacity: 1; filter: brightness(0); cursor: pointer; }
+
+/* 10. Photo boxes keep their proportions on the full-width layout. With fixed
+   pixel heights, boxes that grew wider turned into long strips (a stay card
+   was 2.6:1 at 1920px), zooming into the middle of each photo. Above 720px
+   the heights now follow the widths, at about the concept's proportions;
+   phones keep their fixed heights. */
+@media (min-width: 721px) {
+  .property-card .property-image { height: auto; aspect-ratio: 3 / 2; }
+  .article-card .property-image { height: auto; aspect-ratio: 16 / 9; }
+}
+@media (min-width: 981px) {
+  .split-image { height: auto; aspect-ratio: 6 / 5; max-height: 760px; }
+  /* Management's photo is a wide panorama (1200x554): a squarer box would
+     crop it to half its width and stretch it, so it keeps a 520px height. */
+  .split-image.split-image-wide { aspect-ratio: auto; height: 520px; }
+  /* Stay pages only: the guide-page gallery sits in a fixed 790px column. */
+  .detail-grid .gallery { grid-template-rows: clamp(210px, 16vw, 330px) clamp(170px, 13vw, 270px); }
+  .guide-collage { height: auto; aspect-ratio: 11 / 5; }
+}
+
+/* 11. Wide screens adapt instead of stretching. Forms, the FAQ list and the
+   booking card keep comfortable widths, guide cards go three to a row, and
+   above 1920px screens (where everything kept growing) the page stays at the
+   1920px layout, centred. */
+.container { width: min(calc(100% - 48px), 1872px); }
+@media (min-width: 1101px) {
+  .contact-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 860px); }
+  .faq-wrap { grid-template-columns: 240px minmax(0, 960px); }
+  .detail-grid { grid-template-columns: minmax(0, 1fr) minmax(320px, 440px); }
+  .detail-content { max-width: 960px; }
+}
+@media (min-width: 1500px) {
+  .guide-article-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

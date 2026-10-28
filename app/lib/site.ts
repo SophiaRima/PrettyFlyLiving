@@ -32,24 +32,30 @@ export const navItems = [
 export const pageImages = {
   hero: {
     src: "/images/hero-2000.webp",
-    /** Phones take the 800px or 1200px file, 2× desktops the full size. */
-    srcSet: "/images/hero-800.webp 800w, /images/hero-1200.webp 1200w, /images/hero-2000.webp 2000w",
-    sizes: "(max-width: 720px) 100vw, 1080px",
+    /**
+     * The hero spans the full-width container (100% − 48px), so sizes must
+     * say so: with the old "1080px" a 1920px desktop loaded the 1200px file
+     * stretched to 1872px. Phones take 800/1200, desktops 2000, large and
+     * high-resolution screens 2800.
+     */
+    srcSet:
+      "/images/hero-800.webp 800w, /images/hero-1200.webp 1200w, /images/hero-2000.webp 2000w, /images/hero-2800.webp 2800w",
+    sizes: "calc(100vw - 48px)",
     width: 2000,
     height: 1360,
     alt: "Warm, sunlit serviced apartment with elegant neutral interiors",
   },
   homeSplit: {
     src: "/images/home-split.webp",
-    width: 900,
-    height: 1200,
+    width: 1086,
+    height: 1448,
     alt: "Small double bed by the window with fresh towels",
   },
   /** On phones the split photo is the page's largest image, so it has an 800px copy. */
   whySplit: {
     src: "/images/why-split.webp",
     srcSet: "/images/why-split-800.webp 800w, /images/why-split.webp 1200w",
-    sizes: "(max-width: 720px) 100vw, 540px",
+    sizes: "(max-width: 720px) 100vw, 50vw",
     width: 1200,
     height: 1200,
     alt: "City view over Kilimani from a Pretty Fly Living window",
@@ -57,7 +63,8 @@ export const pageImages = {
   managementSplit: {
     src: "/images/management-split.webp",
     srcSet: "/images/management-split-800.webp 800w, /images/management-split.webp 1200w",
-    sizes: "(max-width: 720px) 100vw, 540px",
+    /** A wide panorama in a squarer box: the box's height decides, so desktops need the 1200px file. */
+    sizes: "(max-width: 720px) 100vw, 1200px",
     width: 1200,
     height: 554,
     alt: "Courtyard garden with seating in a Pretty Fly Living building",
