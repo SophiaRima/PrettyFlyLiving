@@ -172,7 +172,10 @@ export function AdminShell({ email, children }: { email: string; children: React
         <AdminNav email={email} />
       </aside>
 
-      <main className="min-w-0 px-4 py-6 sm:px-6 md:px-8 lg:px-10 lg:py-10">{children}</main>
+      <main className="min-w-0 px-4 py-6 sm:px-6 md:px-8 lg:px-10 lg:py-10">
+        {/* Lists and inbox cards stop growing on large monitors. */}
+        <div className="mx-auto max-w-[1440px]">{children}</div>
+      </main>
       <Toaster position="top-right" />
     </div>
   );

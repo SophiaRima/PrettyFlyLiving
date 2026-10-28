@@ -187,12 +187,14 @@ export function PhotoManager({
   firstIsCover?: boolean;
 }) {
   return (
-    <div className="grid gap-6">
+    // @container: the photo columns follow the space this panel has (not the
+    // window), so the sidebar doesn't leave three huge tiles on a big monitor.
+    <div className="@container grid gap-6">
       <PhotoUploader />
       {photos.length === 0 ? (
         <p className="text-sm text-muted-foreground">{emptyText}</p>
       ) : (
-        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <ul className="grid gap-4 @lg:grid-cols-2 @4xl:grid-cols-3 @6xl:grid-cols-4">
           {photos.map((photo, index) => (
             <PhotoCard key={photo.id} photo={photo} index={index} count={photos.length} firstIsCover={firstIsCover} />
           ))}
