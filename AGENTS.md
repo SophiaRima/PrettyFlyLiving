@@ -162,7 +162,7 @@ The concept is a hash-routed, hardcoded-data prototype. Rebuild its markup as Re
 | Section tints | `#eeece3`, `#eeece5` | page heroes, quote section |
 | WhatsApp | `#238b62` | floating button |
 
-The base font size is 90% on `:root`/`html`, buttons are 4px-radius rectangles, cards have 8px radii, and the primary content width is `min(1080px, 100% − 160px)` (client revision, §5.5; the concept had `min(1160px, 100% − 64px)`). All of this already comes from `site.css`.
+The base font size is 90% on `:root`/`html`, buttons are 4px-radius rectangles, cards have 8px radii, and the primary content width is `min(1440px, 100% − 96px)` (client revision, §5.5; the concept had `min(1160px, 100% − 64px)`). All of this already comes from `site.css`.
 
 ### 5.3 Logo
 
@@ -209,7 +209,7 @@ These were requested after the concept was approved and **override it**. Their C
 | Guide galleries | Every Things to Do guide has several photos (`guide_photos`, §6), not one. Guide pages replace the single cover with the concept's `.gallery` grid. The photo viewer steps through every photo (arrows, ← → keys, Esc) and shows "+N photos" when there are more than five. The cover photo always comes first. |
 | Things to Do index | Matches the client's updated reference: a "Browse by" row of topic shortcut chips under the filter bar (defined in `guideTopics` in `app/lib/site.ts`, each setting `?q=` or `?category=`), and **two cards per row**. Each card has a 3-photo collage (cover large on the left, two stacked on the right, sand gaps, no frames), "Category · Nairobi guide" with "N views" (photo count) on the right, a serif title, the excerpt, a divider, the guide's `highlights` as sage chips, and "Explore the local edit ↗". One column at ≤720px. |
 | Save heart | The empty ♡ on property cards is black (`#000`) for visibility on photos; the saved ♥ keeps the concept red. |
-| More whitespace | A narrower content column with wider side margins at every breakpoint: `min(1080px, 100% − 160px)` desktop, `min(100% − 120px, 900px)` at 981–1100px, `min(100% − 96px, 780px)` at 721–980px, 24px side margins at ≤720px (22px at ≤520px, 20px at ≤390px). Header, sections and footer all follow it. |
+| Side margins | `min(1440px, 100% − 96px)` above 980px (laptops and desktops; on 2026-10-28 the client found the earlier `min(1080px, 100% − 160px)` column too small on her monitor), `min(100% − 96px, 780px)` at 721–980px, 24px side margins at ≤720px (22px at ≤520px, 20px at ≤390px). Header, sections and footer all follow it. |
 | Hero gradient | The home hero photo is clear on the right. A soft paper-coloured gradient stays on the left behind the copy (fading out by ~72% of the width on desktop, ~90% on tablet). On phones the copy spans the width, so the gradient reaches across with a light tint on the right. |
 | Date fields | Native date inputs show black (`#000`) dates and a solid black calendar icon for visibility, on every public date field. |
 | Tagline | "Beautiful stays, thoughtfully managed." replaces the concept's "Feel at home, wherever you're from." (home hero note, and the close of the Why Us story). |

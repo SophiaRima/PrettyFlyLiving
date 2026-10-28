@@ -437,9 +437,13 @@ button { color: inherit; }
 
   .nav,
   .nav.open { display: flex; position: fixed; top: 0; right: 0; bottom: 0; left: auto; width: 50vw; height: 100dvh; padding: 0 20px 24px; flex-direction: column; align-items: stretch; gap: 0; background: var(--paper); border-bottom: 0; border-left: 1px solid var(--line); box-shadow: -14px 0 34px rgba(36, 40, 32, .14); overflow-y: auto; overscroll-behavior: contain; }
-  .nav { visibility: hidden; transform: translateX(100%); transition: transform .3s cubic-bezier(.23, 1, .32, 1), visibility .3s ease; }
+  /* Closed, the drawer is display:none: parked off-screen with a transform, the
+     phone browser counted it in the page width and the page scrolled sideways.
+     @starting-style + allow-discrete keep the slide in and out. */
+  .nav { display: none; visibility: hidden; transform: translateX(100%); transition: transform .3s cubic-bezier(.23, 1, .32, 1), visibility .3s ease, display .3s allow-discrete; }
   /* Visible immediately on open (so the X can take focus), hidden only after the slide-out. */
-  .nav.open { visibility: visible; transform: none; transition: transform .3s cubic-bezier(.23, 1, .32, 1), visibility 0s; }
+  .nav.open { display: flex; visibility: visible; transform: none; transition: transform .3s cubic-bezier(.23, 1, .32, 1), visibility 0s, display 0s allow-discrete; }
+  @starting-style { .nav.open { transform: translateX(100%); } }
 
   .nav-drawer-head { display: flex; align-items: center; justify-content: space-between; min-height: 64px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
   .nav-drawer-head .eyebrow { margin: 0; }
@@ -558,12 +562,10 @@ button { color: inherit; }
    instead of relying on the button's padding and inherited line-height. */
 .heart { color: #000; display: grid; place-items: center; padding: 0; line-height: 1; }
 
-/* 7. More whitespace: a narrower content column with wider side margins at
-   every breakpoint (header, sections and footer all use .container). */
-.container { width: min(1080px, calc(100% - 160px)); }
-@media (min-width: 981px) and (max-width: 1100px) {
-  .container { width: min(100% - 120px, 900px); }
-}
+/* 7. Side margins (header, sections and footer all use .container). Laptops
+   and desktops get 48px margins and a 1440px cap (2026-10-28: the client found
+   the earlier 1080px column too small on her monitor). */
+.container { width: min(1440px, calc(100% - 96px)); }
 @media (min-width: 721px) and (max-width: 980px) {
   .container { width: min(100% - 96px, 780px); }
 }
