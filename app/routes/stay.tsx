@@ -164,7 +164,7 @@ export default function Stay({ loaderData, actionData }: Route.ComponentProps) {
     <main>
       <div className="container">
         <div style={{ padding: "25px 0 0", fontSize: 11, color: "var(--muted)" }}>
-          <Link to="/">Home</Link> / <Link to="/stays">Our stays</Link> /{" "}
+          <Link viewTransition to="/">Home</Link> / <Link viewTransition to="/stays">Our stays</Link> /{" "}
           {property.name}
         </div>
         <div className="detail-grid">

@@ -38,7 +38,7 @@ export default function Guide({ loaderData }: Route.ComponentProps) {
         title={`${guide.title}.`}
         intro={guide.excerpt}
         action={
-          <Link className="btn" to="/things-to-do">
+          <Link viewTransition className="btn" to="/things-to-do">
             All city guides ↗
           </Link>
         }
@@ -66,12 +66,12 @@ export default function Guide({ loaderData }: Route.ComponentProps) {
             text="Find a comfortable base for your next city adventure."
             style={{ marginTop: 30 }}
           >
-            <Link className="btn" to="/stays">
+            <Link viewTransition className="btn" to="/stays">
               Explore our stays ↗
             </Link>
           </CtaBand>
           <p style={{ marginTop: 25 }}>
-            <Link className="text-link" to="/things-to-do">
+            <Link viewTransition className="text-link" to="/things-to-do">
               ← Back to all guides
             </Link>
           </p>

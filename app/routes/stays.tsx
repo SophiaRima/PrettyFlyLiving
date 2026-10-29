@@ -42,7 +42,7 @@ export default function Stays({ loaderData }: Route.ComponentProps) {
         title="Our stays."
         intro="Considered apartments in Nairobi, with the comforts of home and space to make the city your own."
         action={
-          <Link className="btn" to="/contact">
+          <Link viewTransition className="btn" to="/contact">
             Need a recommendation? ↗
           </Link>
         }
@@ -168,7 +168,7 @@ export default function Stays({ loaderData }: Route.ComponentProps) {
                     ? "Try different dates, a different neighbourhood or a broader price range."
                     : "Try a different neighbourhood or broaden your price range."}
                 </p>
-                <Link className="btn btn-light" to="/stays">
+                <Link viewTransition className="btn btn-light" to="/stays">
                   Clear filters
                 </Link>
               </div>

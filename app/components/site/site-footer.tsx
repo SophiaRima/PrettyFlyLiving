@@ -8,7 +8,7 @@ export function SiteFooter() {
       <div className="container">
         <div className="footer-grid">
           <div>
-            <Link className="brand" to="/" aria-label={`${site.name} home`}>
+            <Link viewTransition className="brand" to="/" aria-label={`${site.name} home`}>
               <img
                 src="/brand/logo-light.webp"
                 alt={site.name}
@@ -25,19 +25,19 @@ export function SiteFooter() {
           <div>
             <h2 className="footer-heading">Explore</h2>
             <div className="footer-links">
-              <Link to="/stays">Our stays</Link>
-              <Link to="/why-us">Why stay with us</Link>
-              <Link to="/things-to-do">Nairobi guides</Link>
-              <Link to="/management">Property management</Link>
+              <Link viewTransition to="/stays">Our stays</Link>
+              <Link viewTransition to="/why-us">Why stay with us</Link>
+              <Link viewTransition to="/things-to-do">Nairobi guides</Link>
+              <Link viewTransition to="/management">Property management</Link>
             </div>
           </div>
           <div>
             <h2 className="footer-heading">Guest support</h2>
             <div className="footer-links">
-              <Link to="/faqs">Frequently asked questions</Link>
-              <Link to="/contact">Contact us</Link>
-              <Link to="/contact">Booking enquiries</Link>
-              <Link to="/privacy-policy">Privacy &amp; terms</Link>
+              <Link viewTransition to="/faqs">Frequently asked questions</Link>
+              <Link viewTransition to="/contact">Contact us</Link>
+              <Link viewTransition to="/contact">Booking enquiries</Link>
+              <Link viewTransition to="/privacy-policy">Privacy &amp; terms</Link>
             </div>
           </div>
           <div>

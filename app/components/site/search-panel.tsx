@@ -3,7 +3,7 @@ import { Form } from "react-router";
 /** The concept's home search panel. GET /stays?area=&in=&out=&guests= */
 export function SearchPanel({ areas }: { areas: string[] }) {
   return (
-    <Form className="search-panel" id="home-search" method="get" action="/stays">
+    <Form className="search-panel" id="home-search" method="get" action="/stays" viewTransition>
       <div className="field">
         <label htmlFor="s-location">Where in Nairobi?</label>
         <select id="s-location" name="area" defaultValue="">

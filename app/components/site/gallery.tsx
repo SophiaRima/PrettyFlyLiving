@@ -102,7 +102,9 @@ function ImageModal({ photos, index, onIndexChange, onClose }: ImageModalProps) 
         <button className="modal-close" type="button" aria-label="Close" onClick={onClose} autoFocus>
           ×
         </button>
+        {/* Keyed so each photo remounts and fades in as the guest steps through. */}
         <img
+          key={photo.key}
           src={mediaUrl(photo.key)}
           alt={photo.alt || `Photo ${index + 1}`}
           width={photo.width ?? undefined}

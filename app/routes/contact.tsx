@@ -128,7 +128,7 @@ export default function Contact({ loaderData, actionData }: Route.ComponentProps
             </div>
             <div style={{ marginTop: 24 }}>
               <h3>Looking for a place to stay?</h3>
-              <Link className="btn btn-light" to="/stays">
+              <Link viewTransition className="btn btn-light" to="/stays">
                 Browse all stays ↗
               </Link>
             </div>

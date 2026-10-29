@@ -137,9 +137,11 @@ export function MobileBookBar({ monthlyPriceKes }: { monthlyPriceKes: number }) 
         className="btn"
         type="button"
         onClick={() =>
-          document
-            .querySelector(".booking-card")
-            ?.scrollIntoView({ behavior: "smooth", block: "center" })
+          document.querySelector(".booking-card")?.scrollIntoView({
+            // Guests who ask their device for less motion jump straight there.
+            behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+            block: "center",
+          })
         }
       >
         Request to book ↗

@@ -77,6 +77,7 @@ export default function ThingsToDo({ loaderData }: Route.ComponentProps) {
           <nav className="guide-topics" aria-label="Browse by topic">
             <span>Browse by</span>
             <Link
+              viewTransition
               className={!filters.q && !filters.category ? "active" : undefined}
               to="/things-to-do"
               preventScrollReset
@@ -92,6 +93,7 @@ export default function ThingsToDo({ loaderData }: Route.ComponentProps) {
                 (filters.category ?? "") === (topic.category ?? "");
               return (
                 <Link
+                  viewTransition
                   key={topic.label}
                   className={active ? "active" : undefined}
                   to={`/things-to-do?${params}`}
@@ -112,7 +114,7 @@ export default function ThingsToDo({ loaderData }: Route.ComponentProps) {
               <div className="empty-state">
                 <h3>No guides found just yet</h3>
                 <p>Try another search or category.</p>
-                <Link className="btn btn-light" to="/things-to-do">
+                <Link viewTransition className="btn btn-light" to="/things-to-do">
                   Clear filters
                 </Link>
               </div>
@@ -125,7 +127,7 @@ export default function ThingsToDo({ loaderData }: Route.ComponentProps) {
         title="Stay close to what you love."
         text="Explore our apartments and choose a neighbourhood that suits your plans."
       >
-        <Link className="btn" to="/stays">
+        <Link viewTransition className="btn" to="/stays">
           Find a stay ↗
         </Link>
       </CtaSection>

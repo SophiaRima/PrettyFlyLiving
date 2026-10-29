@@ -71,7 +71,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 Beautiful apartments. Thoughtful service. Room to settle in,
                 whether you’re here for a weekend or a little longer.
               </p>
-              <Link className="btn" to="/stays">
+              <Link viewTransition className="btn" to="/stays">
                 Browse our stays <span>↗</span>
               </Link>
               <div className="hero-note">
@@ -102,7 +102,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 most-loved neighbourhoods, chosen for comfort, convenience and
                 a little breathing room.
               </p>
-              <Link className="text-link" to="/stays">
+              <Link viewTransition className="text-link" to="/stays">
                 Explore all stays ↗
               </Link>
             </div>
@@ -133,7 +133,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 </div>
               ))}
             </div>
-            <Link className="btn" to="/why-us">
+            <Link viewTransition className="btn" to="/why-us">
               Why stay with us ↗
             </Link>
           </div>
@@ -154,7 +154,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 We want every guest to feel looked after, comfortable and glad
                 they chose us.
               </p>
-              <Link className="text-link" to="/why-us">
+              <Link viewTransition className="text-link" to="/why-us">
                 What makes us different ↗
               </Link>
             </div>
@@ -171,7 +171,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 <div className="eyebrow">Get to know the neighbourhood</div>
                 <h2>Make yourself at home in Nairobi.</h2>
               </div>
-              <Link className="text-link" to="/things-to-do">
+              <Link viewTransition className="text-link" to="/things-to-do">
                 Discover the city ↗
               </Link>
             </div>
@@ -189,7 +189,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         title="Your property. Our expertise."
         text="Thoughtful property management, with your returns and your home in mind."
       >
-        <Link className="btn" to="/management">
+        <Link viewTransition className="btn" to="/management">
           Explore property management ↗
         </Link>
       </CtaSection>

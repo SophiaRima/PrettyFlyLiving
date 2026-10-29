@@ -55,7 +55,7 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
         }
         intro="We bring together inviting spaces, thoughtful details and genuinely helpful hospitality  -  so you can focus on what brought you to Nairobi."
         action={
-          <Link className="btn" to="/stays">
+          <Link viewTransition className="btn" to="/stays">
             Find your stay ↗
           </Link>
         }
@@ -99,7 +99,7 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
             <p className="story-signoff">
               Pretty Fly Living. Beautiful stays, thoughtfully managed.
             </p>
-            <Link className="btn" to="/stays">
+            <Link viewTransition className="btn" to="/stays">
               Explore our stays ↗
             </Link>
           </div>
@@ -209,7 +209,7 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
         title="Find your place in Nairobi."
         text="Take a look around and find a stay that fits your trip."
       >
-        <Link className="btn" to="/stays">
+        <Link viewTransition className="btn" to="/stays">
           View all stays ↗
         </Link>
       </CtaSection>

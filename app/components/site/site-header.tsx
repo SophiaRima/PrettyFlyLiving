@@ -36,7 +36,7 @@ export function SiteHeader() {
   return (
     <header className={menuOpen ? "site-header menu-open" : "site-header"}>
       <div className="container nav-wrap">
-        <Link className="brand" to="/" aria-label={`${site.name} home`}>
+        <Link viewTransition className="brand" to="/" aria-label={`${site.name} home`}>
           <img
             src="/brand/logo.webp"
             alt={site.name}
@@ -81,16 +81,16 @@ export function SiteHeader() {
             </button>
           </div>
           {navItems.map((item) => (
-            <NavLink key={item.to} to={item.to} end>
+            <NavLink viewTransition key={item.to} to={item.to} end>
               {item.label}
             </NavLink>
           ))}
-          <Link className="btn nav-cta" to="/stays">
+          <Link viewTransition className="btn nav-cta" to="/stays">
             Find your stay ↗
           </Link>
         </nav>
         <div className="nav-actions">
-          <Link className="btn" to="/stays">
+          <Link viewTransition className="btn" to="/stays">
             Find your stay ↗
           </Link>
         </div>

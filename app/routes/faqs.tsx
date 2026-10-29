@@ -37,7 +37,7 @@ export default function Faqs({ loaderData }: Route.ComponentProps) {
         title="Good to know."
         intro="Find answers about staying with us or having Pretty Fly Living manage your property."
         action={
-          <Link className="btn" to="/contact">
+          <Link viewTransition className="btn" to="/contact">
             Still have a question? ↗
           </Link>
         }
@@ -98,7 +98,7 @@ export default function Faqs({ loaderData }: Route.ComponentProps) {
                 >
                   Email us ↗
                 </a>
-                <Link className="text-link" to="/contact">
+                <Link viewTransition className="text-link" to="/contact">
                   Contact our team ↗
                 </Link>
               </div>
@@ -136,7 +136,7 @@ export default function Faqs({ loaderData }: Route.ComponentProps) {
             {isGuests && (
               <p className="section-note">
                 Have a question?{" "}
-                <Link className="text-link" to="/contact">
+                <Link viewTransition className="text-link" to="/contact">
                   Contact Pretty Fly Living
                 </Link>
                 , and we’ll be happy to assist.
@@ -151,7 +151,7 @@ export default function Faqs({ loaderData }: Route.ComponentProps) {
           title="Find your next stay."
           text="Discover furnished apartments designed for extended stays, with the comfort and practical amenities you need to feel at home."
         >
-          <Link className="btn" to="/stays">
+          <Link viewTransition className="btn" to="/stays">
             Explore our stays ↗
           </Link>
         </CtaSection>
@@ -160,7 +160,7 @@ export default function Faqs({ loaderData }: Route.ComponentProps) {
           title="Let’s talk about your property."
           text="Whether you own a single apartment or multiple units, we’d love to learn more about your property and explore how we could work together."
         >
-          <Link className="btn" to="/management#owner-enquiry">
+          <Link viewTransition className="btn" to="/management#owner-enquiry">
             Enquire about property management ↗
           </Link>
         </CtaSection>

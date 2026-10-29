@@ -78,10 +78,10 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
             intro="The link may be old, or the page may have moved."
             action={
               <div className="cta-actions">
-                <Link className="btn" to="/">
+                <Link viewTransition className="btn" to="/">
                   Back to home ↗
                 </Link>
-                <Link className="btn btn-light" to="/stays">
+                <Link viewTransition className="btn btn-light" to="/stays">
                   Browse our stays ↗
                 </Link>
               </div>

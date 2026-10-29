@@ -1,4 +1,4 @@
-import type { MouseEvent } from "react";
+import { useState, type MouseEvent } from "react";
 import { Link, useNavigate } from "react-router";
 
 import { bedroomLabel, countLabel, formatKes } from "~/lib/site";
@@ -19,17 +19,20 @@ export function PropertyCard({ property, priority = false }: PropertyCardProps) 
   const { isSaved, toggle } = useSavedStays();
   const href = `/stays/${property.slug}`;
   const saved = isSaved(property.slug);
+  // Pop the heart only when the guest taps it, not when saved hearts load.
+  const [popped, setPopped] = useState(false);
 
   function onSave(event: MouseEvent<HTMLButtonElement>): void {
     event.preventDefault();
     event.stopPropagation();
+    setPopped(!saved);
     toggle(property.slug);
   }
 
   return (
     <article className="property-card">
       {/* Clicking the photo opens the stay, as in the concept. */}
-      <div className="property-image" onClick={() => navigate(href)}>
+      <div className="property-image" onClick={() => navigate(href, { viewTransition: true })}>
         <Img
           src={property.coverKey}
           alt={property.name}
@@ -41,7 +44,7 @@ export function PropertyCard({ property, priority = false }: PropertyCardProps) 
         {property.tag && <span className="pill">{property.tag}</span>}
         <button
           type="button"
-          className={saved ? "heart saved" : "heart"}
+          className={saved ? (popped ? "heart saved pop" : "heart saved") : "heart"}
           aria-label={`Save ${property.name}`}
           aria-pressed={saved}
           onClick={onSave}
@@ -68,7 +71,7 @@ export function PropertyCard({ property, priority = false }: PropertyCardProps) 
           <div className="price">
             {formatKes(property.monthlyPriceKes)} <small>/ month</small>
           </div>
-          <Link to={href}>View stay ↗</Link>
+          <Link viewTransition to={href}>View stay ↗</Link>
         </div>
       </div>
     </article>

@@ -7,7 +7,7 @@ import { CARD_SIZES, Img } from "./img";
 /** Home page photo tile (the concept's `.guide-card`). */
 export function GuideTile({ guide }: { guide: GuideCardData }) {
   return (
-    <Link className="guide-card" to={`/things-to-do/${guide.slug}`}>
+    <Link viewTransition className="guide-card" to={`/things-to-do/${guide.slug}`}>
       <Img
         src={guide.coverKey}
         alt={guide.title}
@@ -35,6 +35,7 @@ export function GuideArticleCard({ guide, priority = false }: { guide: GuideCard
   return (
     <article className="article-card guide-article">
       <Link
+        viewTransition
         className={`guide-collage count-${shown.length}`}
         to={href}
         tabIndex={-1}
@@ -62,7 +63,7 @@ export function GuideArticleCard({ guide, priority = false }: { guide: GuideCard
           {guide.photos.length > 0 && <span>{guide.photos.length} views</span>}
         </div>
         <h3>
-          <Link to={href}>{guide.title}</Link>
+          <Link viewTransition to={href}>{guide.title}</Link>
         </h3>
         <p>{guide.excerpt}</p>
         {guide.highlights.length > 0 && (
@@ -72,7 +73,7 @@ export function GuideArticleCard({ guide, priority = false }: { guide: GuideCard
             ))}
           </ul>
         )}
-        <Link className="text-link" to={href}>
+        <Link viewTransition className="text-link" to={href}>
           Explore the local edit ↗
         </Link>
       </div>

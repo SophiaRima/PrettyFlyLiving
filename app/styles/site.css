@@ -658,3 +658,51 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: 1; filter: brig
 @media (max-width: 720px) {
   .split, .quote-grid, .contact-grid, .faq-wrap, .form-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* 13. Gentle motion: pages cross-fade (links carry React Router's
+   viewTransition), the photo viewer and each photo fade in, accordions open
+   smoothly where the browser can animate to `auto` (others snap open as
+   before), the heart pops when a stay is saved, and form messages fade in.
+   Guests who ask their device for less motion get none of it, nor the
+   concept's hover lifts, photo zooms, menu slide and smooth scrolling. */
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: .22s; }
+
+@keyframes pfl-fade-in { from { opacity: 0; } }
+@keyframes pfl-fade-up { from { opacity: 0; transform: translateY(6px); } }
+@keyframes pfl-heart-pop { 40% { transform: scale(1.25); } }
+
+.image-modal { animation: pfl-fade-in .22s ease; }
+.image-modal img { animation: pfl-fade-in .3s ease; }
+.form-status.show { animation: pfl-fade-up .3s ease; }
+.heart.pop { animation: pfl-heart-pop .35s ease; }
+
+@supports (interpolate-size: allow-keywords) {
+  .accordion { interpolate-size: allow-keywords; }
+  .accordion::details-content {
+    block-size: 0;
+    overflow-y: clip;
+    transition: block-size .3s ease, content-visibility .3s allow-discrete;
+  }
+  .accordion[open]::details-content { block-size: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  /* Own rule: a browser without ::details-content would drop a whole list. */
+  .accordion::details-content { transition: none; }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+  .btn:hover,
+  .property-card:hover,
+  .property-card:hover .property-image img,
+  .guide-card:hover img,
+  .gallery button:hover img,
+  .guide-collage:hover img { transform: none; }
+}
