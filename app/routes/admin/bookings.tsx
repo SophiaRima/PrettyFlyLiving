@@ -89,7 +89,9 @@ export default function AdminBookings({ loaderData }: Route.ComponentProps) {
                     <Link to={`/admin/bookings/${booking.id}`} className="text-primary hover:underline">
                       {booking.name}
                     </Link>
-                    <div className="text-xs font-normal text-muted-foreground wrap-anywhere">{booking.contact}</div>
+                    <div className="text-xs font-normal text-muted-foreground wrap-anywhere">
+                      {booking.phone ? `${booking.contact} · ${booking.phone}` : booking.contact}
+                    </div>
                     <div className="mt-1 grid gap-1 text-xs font-normal text-muted-foreground md:hidden">
                       <span>
                         {booking.propertyName} · {formatShortDate(booking.checkIn)} → {formatShortDate(booking.checkOut)}

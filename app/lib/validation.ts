@@ -137,10 +137,8 @@ export const bookingRequestSchema = z.object({
     .min(1, "Please choose the number of guests.")
     .max(50),
   name: requiredText("your name", 100),
-  contact: requiredText("an email or phone number", 200).refine(
-    (v) => (v.includes("@") ? z.email().safeParse(v).success : isPhoneNumber(v)),
-    "Please enter a valid email address or phone number.",
-  ),
+  email: emailField,
+  phone: phoneField,
 });
 export type BookingRequestInput = z.infer<typeof bookingRequestSchema>;
 

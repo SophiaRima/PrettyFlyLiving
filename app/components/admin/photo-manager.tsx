@@ -1,11 +1,30 @@
 import {
+  closestCenter,
+  DndContext,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import {
   ArrowLeftIcon,
   ArrowRightIcon,
+  GripIcon,
   ImageUpIcon,
   StarIcon,
   Trash2Icon,
 } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useFetcher } from "react-router";
 
 import { Badge } from "~/components/ui/badge";
@@ -109,15 +128,22 @@ function PhotoCard({
   index,
   count,
   firstIsCover,
+  dragDisabled,
 }: {
   photo: ManagedPhoto;
   index: number;
   count: number;
   firstIsCover: boolean;
+  /** While a dragged order is still saving. */
+  dragDisabled: boolean;
 }) {
   const fetcher = useFetcher<AdminActionResult>();
   useSuccessToast(fetcher.data);
   const busy = fetcher.state !== "idle";
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: photo.id,
+    disabled: dragDisabled || busy,
+  });
 
   function confirmDelete(event: FormEvent<HTMLFormElement>): void {
     const submitter = (event.nativeEvent as SubmitEvent).submitter;
@@ -127,15 +153,37 @@ function PhotoCard({
   }
 
   return (
-    <li className="overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10" aria-busy={busy}>
-      <div className="relative aspect-4/3 bg-muted">
-        <img src={mediaUrl(photo.key)} alt={photo.alt} loading="lazy" className="size-full object-cover" />
+    <li
+      ref={setNodeRef}
+      style={{ transform: CSS.Translate.toString(transform), transition }}
+      className={`overflow-hidden rounded-xl bg-card ring-1 ring-foreground/10 ${isDragging ? "relative z-10 opacity-80 shadow-xl ring-primary" : ""}`}
+      aria-busy={busy}
+    >
+      {/* The photo is the drag handle: drag it (or hold it on a phone) to a
+          new place. With a keyboard: Space to pick up, arrows, Space to drop. */}
+      <div
+        {...attributes}
+        {...listeners}
+        aria-label={`Photo ${index + 1} of ${count}. Drag to change the order.`}
+        className="relative aspect-4/3 cursor-grab touch-manipulation bg-muted outline-none select-none focus-visible:ring-3 focus-visible:ring-ring active:cursor-grabbing"
+      >
+        <img
+          src={mediaUrl(photo.key)}
+          alt={photo.alt}
+          loading="lazy"
+          draggable={false}
+          className="pointer-events-none size-full object-cover"
+        />
         {firstIsCover && index === 0 && (
           <Badge className="absolute top-2 left-2">
             <StarIcon data-icon="inline-start" />
             Cover
           </Badge>
         )}
+        <Badge variant="secondary" className="absolute top-2 right-2" aria-hidden="true">
+          <GripIcon data-icon="inline-start" />
+          Drag
+        </Badge>
       </div>
       <fetcher.Form method="post" onSubmit={confirmDelete} className="grid gap-2 p-3">
         <input type="hidden" name="photoId" value={photo.id} />
@@ -175,7 +223,11 @@ function PhotoCard({
   );
 }
 
-/** Gallery editor: upload, describe, reorder and delete photos. */
+/**
+ * Gallery editor: upload, describe, reorder (drag, or the arrow buttons) and
+ * delete photos. A drop shows the new order at once and saves it in the
+ * background; if the save fails, the saved order comes back.
+ */
 export function PhotoManager({
   photos,
   emptyText,
@@ -186,19 +238,74 @@ export function PhotoManager({
   /** Properties use their first photo as the cover; guides have a separate cover. */
   firstIsCover?: boolean;
 }) {
+  const moveFetcher = useFetcher<AdminActionResult>();
+  useSuccessToast(moveFetcher.data);
+  const savedOrder = photos.map((photo) => photo.id);
+  const savedKey = savedOrder.join(",");
+  const [order, setOrder] = useState(savedOrder);
+
+  // Follow the saved order after every save, upload or delete, and go back
+  // to it when a dragged order couldn't be saved.
+  useEffect(() => setOrder(savedKey ? savedKey.split(",").map(Number) : []), [savedKey]);
+  useEffect(() => {
+    if (moveFetcher.data && !moveFetcher.data.ok) setOrder(savedKey ? savedKey.split(",").map(Number) : []);
+  }, [moveFetcher.data, savedKey]);
+
+  const sensors = useSensors(
+    // A small movement starts a mouse drag, so clicks still work; on a phone
+    // the photo is held for a moment first, so the page can still scroll.
+    useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 6 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  function onDragEnd({ active, over }: DragEndEvent): void {
+    if (!over || active.id === over.id) return;
+    const from = order.indexOf(Number(active.id));
+    const to = order.indexOf(Number(over.id));
+    if (from === -1 || to === -1) return;
+    setOrder(arrayMove(order, from, to));
+    moveFetcher.submit({ intent: "photo-move", photoId: String(active.id), toIndex: String(to) }, { method: "post" });
+  }
+
+  const byId = new Map(photos.map((photo) => [photo.id, photo]));
+  const shown = order.flatMap((id) => byId.get(id) ?? []);
+
   return (
     // @container: the photo columns follow the space this panel has (not the
     // window), so the sidebar doesn't leave three huge tiles on a big monitor.
     <div className="@container grid gap-6">
       <PhotoUploader />
-      {photos.length === 0 ? (
+      {shown.length === 0 ? (
         <p className="text-sm text-muted-foreground">{emptyText}</p>
       ) : (
-        <ul className="grid gap-4 @lg:grid-cols-2 @4xl:grid-cols-3 @6xl:grid-cols-4">
-          {photos.map((photo, index) => (
-            <PhotoCard key={photo.id} photo={photo} index={index} count={photos.length} firstIsCover={firstIsCover} />
-          ))}
-        </ul>
+        <>
+          <p className="-mb-2 text-sm text-muted-foreground">
+            Drag a photo to change the order{firstIsCover ? "; the first one is the cover" : ""}.
+          </p>
+          {moveFetcher.data && !moveFetcher.data.ok && (
+            <p role="alert" className="text-sm text-destructive">
+              {moveFetcher.data.message}
+            </p>
+          )}
+          {/* A fixed id keeps dnd-kit's screen-reader ids the same on the server and in the browser. */}
+          <DndContext id="photo-order" sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+            <SortableContext items={order} strategy={rectSortingStrategy}>
+              <ul className="grid gap-4 @lg:grid-cols-2 @4xl:grid-cols-3 @6xl:grid-cols-4">
+                {shown.map((photo, index) => (
+                  <PhotoCard
+                    key={photo.id}
+                    photo={photo}
+                    index={index}
+                    count={shown.length}
+                    firstIsCover={firstIsCover}
+                    dragDisabled={moveFetcher.state !== "idle"}
+                  />
+                ))}
+              </ul>
+            </SortableContext>
+          </DndContext>
+        </>
       )}
     </div>
   );

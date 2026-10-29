@@ -29,6 +29,7 @@ const PHOTO_INTENTS = new Set([
   "photo-earlier",
   "photo-later",
   "photo-cover",
+  "photo-move",
   "delete-photo",
 ]);
 
@@ -36,7 +37,7 @@ export function isPhotoIntent(intent: string): boolean {
   return PHOTO_INTENTS.has(intent);
 }
 
-/** Handles the PhotoManager's upload, alt text, reorder and delete buttons. */
+/** Handles the PhotoManager's upload, alt text, reorder (buttons or drag) and delete. */
 export async function handlePhotoIntent(
   intent: string,
   formData: FormData,
@@ -75,8 +76,18 @@ export async function handlePhotoIntent(
     }
     case "photo-earlier":
     case "photo-later":
-    case "photo-cover": {
-      const to = intent === "photo-cover" ? 0 : intent === "photo-earlier" ? index - 1 : index + 1;
+    case "photo-cover":
+    case "photo-move": {
+      // A drag posts the photo's new position; moveItem clamps it to the list.
+      const to =
+        intent === "photo-move"
+          ? Number(formData.get("toIndex"))
+          : intent === "photo-cover"
+            ? 0
+            : intent === "photo-earlier"
+              ? index - 1
+              : index + 1;
+      if (!Number.isInteger(to)) return formFailure("Please try moving the photo again.", {});
       const ids = moveItem(
         photos.map((p) => p.id),
         photoId,

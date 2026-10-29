@@ -120,6 +120,58 @@ export function stayRangeError(
   return null;
 }
 
+/** The dates picked on a stay's calendar; "" while not chosen yet. */
+export interface StayDates {
+  checkIn: string;
+  checkOut: string;
+}
+
+/** True when any night in [checkIn, checkOut) is blocked. */
+export function rangeHasBlockedNight(
+  checkIn: string,
+  checkOut: string,
+  blocked: ReadonlySet<string>,
+): boolean {
+  for (let night = checkIn; night < checkOut; night = addDays(night, 1)) {
+    if (blocked.has(night)) return true;
+  }
+  return false;
+}
+
+/**
+ * True when a tap on `date` would set the check-out: a check-in is picked
+ * but no check-out yet, and every night from check-in up to `date` is free.
+ * The check-out day's own night may be blocked (the guest leaves that day).
+ */
+export function canPickCheckOut(
+  current: StayDates,
+  date: string,
+  blocked: ReadonlySet<string>,
+): boolean {
+  return (
+    current.checkIn !== "" &&
+    current.checkOut === "" &&
+    date > current.checkIn &&
+    !rangeHasBlockedNight(current.checkIn, date, blocked)
+  );
+}
+
+/**
+ * The dates after a tap on the calendar: the first tap picks check-in, the
+ * next later one check-out. Any other tap (both already picked, a day on or
+ * before check-in, or a stay across a blocked night) starts again with the
+ * tapped day as check-in, unless that night is blocked.
+ */
+export function nextStayDates(
+  current: StayDates,
+  date: string,
+  blocked: ReadonlySet<string>,
+): StayDates {
+  if (canPickCheckOut(current, date, blocked)) return { checkIn: current.checkIn, checkOut: date };
+  if (blocked.has(date)) return current;
+  return { checkIn: date, checkOut: "" };
+}
+
 /** "12 Nov 2026", for emails and messages. */
 export function formatShortDate(isoDate: string): string {
   return new Intl.DateTimeFormat("en-KE", {

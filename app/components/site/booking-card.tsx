@@ -1,6 +1,7 @@
 import type { RefObject } from "react";
 import { Form } from "react-router";
 
+import type { StayDates } from "~/lib/dates";
 import type { FormFailure } from "~/lib/forms";
 import { formatKes, whatsappMessages, whatsappUrl } from "~/lib/site";
 import type { PropertyDetailData } from "~/lib/types";
@@ -10,8 +11,9 @@ import { FormGuard, FormStatus, fieldHelpers } from "./form-parts";
 interface BookingCardProps {
   property: Pick<PropertyDetailData, "name" | "area" | "sleeps" | "monthlyPriceKes" | "minNights">;
   today: string;
-  checkIn: string;
-  onCheckInChange: (date: string) => void;
+  /** Shared with the availability calendar. */
+  dates: StayDates;
+  onDatesChange: (dates: StayDates) => void;
   turnstileSiteKey: string;
   formRef: RefObject<HTMLFormElement | null>;
   sending: boolean;
@@ -23,8 +25,8 @@ interface BookingCardProps {
 export function BookingCard({
   property,
   today,
-  checkIn,
-  onCheckInChange,
+  dates,
+  onDatesChange,
   turnstileSiteKey,
   formRef,
   sending,
@@ -49,17 +51,25 @@ export function BookingCard({
           type="date"
           min={today}
           required
-          value={checkIn}
-          onChange={(event) => onCheckInChange(event.target.value)}
+          value={dates.checkIn}
+          onChange={(event) => {
+            const checkIn = event.target.value;
+            // A check-out on or before the new check-in no longer makes sense.
+            const checkOut = dates.checkOut > checkIn ? dates.checkOut : "";
+            onDatesChange({ checkIn, checkOut });
+          }}
         />
         {error("checkIn")}
         <label htmlFor="book-checkOut">Check-out date</label>
         <input
           className="form-control"
           {...field("checkOut")}
+          defaultValue={undefined}
           type="date"
-          min={checkIn || today}
+          min={dates.checkIn || today}
           required
+          value={dates.checkOut}
+          onChange={(event) => onDatesChange({ ...dates, checkOut: event.target.value })}
         />
         {error("checkOut")}
         <label htmlFor="book-guests">Guests</label>
@@ -80,14 +90,26 @@ export function BookingCard({
           autoComplete="name"
         />
         {error("name")}
-        <label htmlFor="book-contact">Email or phone</label>
+        <label htmlFor="book-email">Email</label>
         <input
           className="form-control"
-          {...field("contact")}
+          {...field("email")}
+          type="email"
           required
-          placeholder="How can we reach you?"
+          placeholder="you@example.com"
+          autoComplete="email"
         />
-        {error("contact")}
+        {error("email")}
+        <label htmlFor="book-phone">Phone / WhatsApp</label>
+        <input
+          className="form-control"
+          {...field("phone")}
+          type="tel"
+          required
+          placeholder="+254…"
+          autoComplete="tel"
+        />
+        {error("phone")}
         <FormGuard siteKey={turnstileSiteKey} action="booking" resetKey={result} />
         <button className="btn" type="submit" disabled={sending}>
           {sending ? "Sending…" : "Request to book ↗"}

@@ -312,6 +312,11 @@ button { color: inherit; }
 .calendar-head button:hover:not(:disabled) { background: var(--sage2); }
 .calendar-head button:disabled { opacity: .35; cursor: default; }
 .calendar button:disabled { cursor: default; }
+/* Picked stay: check-in and check-out in sage (the concept's .selected), the
+   nights between in the soft sage. A booked day picked as the check-out
+   loses its strike-through. */
+.calendar button.in-range { background: var(--sage2); }
+.calendar button.selected { text-decoration: none; }
 
 /* CTA band with more than one action (WhatsApp + email). */
 .cta-actions { display: flex; flex-wrap: wrap; gap: 10px; }

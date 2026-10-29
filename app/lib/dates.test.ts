@@ -8,7 +8,9 @@ import {
   firstWeekdayOfMonth,
   formatMonthLabel,
   isIsoDate,
+  nextStayDates,
   nightsBetween,
+  rangeHasBlockedNight,
   rangesOverlap,
   stayRangeError,
   subtractRange,
@@ -149,5 +151,43 @@ describe("subtractRange", () => {
       { start: "2026-11-01", end: "2026-11-10" },
       { start: "2026-11-12", end: "2026-12-01" },
     ]);
+  });
+});
+
+describe("calendar date picking", () => {
+  const none = { checkIn: "", checkOut: "" };
+  const blocked = new Set(["2026-11-20", "2026-11-21"]);
+
+  it("finds blocked nights in a stay, but not on the check-out day", () => {
+    expect(rangeHasBlockedNight("2026-11-01", "2026-11-25", blocked)).toBe(true);
+    expect(rangeHasBlockedNight("2026-11-01", "2026-11-20", blocked)).toBe(false);
+  });
+
+  it("picks check-in first, then a later day as check-out", () => {
+    const first = nextStayDates(none, "2026-11-01", blocked);
+    expect(first).toEqual({ checkIn: "2026-11-01", checkOut: "" });
+    expect(nextStayDates(first, "2026-11-15", blocked)).toEqual({ checkIn: "2026-11-01", checkOut: "2026-11-15" });
+  });
+
+  it("allows a blocked day as check-out when the nights before it are free", () => {
+    expect(nextStayDates({ checkIn: "2026-11-01", checkOut: "" }, "2026-11-20", blocked)).toEqual({
+      checkIn: "2026-11-01",
+      checkOut: "2026-11-20",
+    });
+  });
+
+  it("starts again on an earlier day, after a full pick, or across blocked nights", () => {
+    const picking = { checkIn: "2026-11-10", checkOut: "" };
+    expect(nextStayDates(picking, "2026-11-05", blocked)).toEqual({ checkIn: "2026-11-05", checkOut: "" });
+    expect(nextStayDates(picking, "2026-11-10", blocked)).toEqual({ checkIn: "2026-11-10", checkOut: "" });
+    expect(nextStayDates(picking, "2026-11-25", blocked)).toEqual({ checkIn: "2026-11-25", checkOut: "" });
+    const picked = { checkIn: "2026-11-01", checkOut: "2026-11-15" };
+    expect(nextStayDates(picked, "2026-12-01", blocked)).toEqual({ checkIn: "2026-12-01", checkOut: "" });
+  });
+
+  it("ignores a blocked day that can't be a check-out", () => {
+    const picked = { checkIn: "2026-11-01", checkOut: "2026-11-15" };
+    expect(nextStayDates(picked, "2026-11-21", blocked)).toBe(picked);
+    expect(nextStayDates(none, "2026-11-20", blocked)).toBe(none);
   });
 });

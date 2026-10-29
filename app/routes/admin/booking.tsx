@@ -17,7 +17,7 @@ import { FormError, SelectField, TextAreaField, useSuccessToast } from "~/compon
 import { BookingStatusBadge, bookingStatusLabel, ReplyButton } from "~/components/admin/inbox";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
-import { contactReplyLink, formatReceived } from "~/lib/admin";
+import { bookingReplyLinks, formatReceived, type ReplyLink } from "~/lib/admin";
 import { bookingStatuses } from "~/lib/constants";
 import { formatShortDate, nightsBetween } from "~/lib/dates";
 import { replyMessages } from "~/lib/site";
@@ -85,6 +85,16 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   );
 }
 
+/** A guest's email or phone, linked to its prefilled reply when there is one. */
+function ReplyText({ link, text }: { link: ReplyLink | null; text: string }) {
+  if (!link) return <>{text}</>;
+  return (
+    <a href={link.href} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+      {text}
+    </a>
+  );
+}
+
 export default function AdminBooking({ loaderData, actionData }: Route.ComponentProps) {
   const { booking, datesBlocked, today } = loaderData;
   useSuccessToast(actionData);
@@ -92,8 +102,9 @@ export default function AdminBooking({ loaderData, actionData }: Route.Component
   const failure = actionData && !actionData.ok ? actionData : undefined;
 
   const nights = nightsBetween(booking.checkIn, booking.checkOut);
-  const reply = contactReplyLink(
+  const replies = bookingReplyLinks(
     booking.contact,
+    booking.phone,
     `Your stay at ${booking.propertyName}`,
     replyMessages.booking({
       name: booking.name,
@@ -125,7 +136,8 @@ export default function AdminBooking({ loaderData, actionData }: Route.Component
           </span>
         }
       >
-        {reply && <ReplyButton link={reply} />}
+        {replies.contact && <ReplyButton link={replies.contact} />}
+        {replies.phone && <ReplyButton link={replies.phone} />}
       </AdminPageHeader>
 
       <div className="mb-6 empty:hidden">
@@ -171,15 +183,14 @@ export default function AdminBooking({ loaderData, actionData }: Route.Component
             <CardContent>
               <dl className="grid gap-3 text-sm">
                 <Row label="Name">{booking.name}</Row>
-                <Row label="Email or phone">
-                  {reply ? (
-                    <a href={reply.href} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                      {booking.contact}
-                    </a>
-                  ) : (
-                    booking.contact
-                  )}
+                <Row label={booking.phone ? "Email" : "Email or phone"}>
+                  <ReplyText link={replies.contact} text={booking.contact} />
                 </Row>
+                {booking.phone && (
+                  <Row label="Phone / WhatsApp">
+                    <ReplyText link={replies.phone} text={booking.phone} />
+                  </Row>
+                )}
               </dl>
             </CardContent>
           </Card>

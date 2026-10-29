@@ -128,8 +128,13 @@ export const bookingRequests = sqliteTable(
     checkOut: text("check_out").notNull(),
     guests: integer("guests").notNull(),
     name: text("name").notNull(),
-    /** Email or phone, exactly as the guest typed it. */
+    /**
+     * The guest's email. Requests sent before 2026-10-29 had one "Email or
+     * phone" field, kept here exactly as the guest typed it.
+     */
     contact: text("contact").notNull(),
+    /** Phone / WhatsApp, from 2026-10-29 (null on older requests). */
+    phone: text("phone"),
     status: text("status", { enum: bookingStatuses }).notNull().default("new"),
     adminNotes: text("admin_notes"),
     createdAt: createdAt(),

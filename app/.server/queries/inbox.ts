@@ -33,7 +33,8 @@ export async function createBookingRequest(
       checkOut: input.checkOut,
       guests: input.guests,
       name: input.name,
-      contact: input.contact,
+      contact: input.email,
+      phone: input.phone,
     })
     .returning({ id: bookingRequests.id });
   return row.id;
@@ -144,7 +145,10 @@ export interface BookingRequestRow {
   checkOut: string;
   guests: number;
   name: string;
+  /** The guest's email (older requests: email or phone, as typed). */
   contact: string;
+  /** Phone / WhatsApp; null on requests sent before 2026-10-29. */
+  phone: string | null;
   status: BookingStatus;
   createdAt: string;
 }
@@ -158,6 +162,7 @@ const bookingColumns = {
   guests: bookingRequests.guests,
   name: bookingRequests.name,
   contact: bookingRequests.contact,
+  phone: bookingRequests.phone,
   status: bookingRequests.status,
   createdAt: bookingRequests.createdAt,
 };

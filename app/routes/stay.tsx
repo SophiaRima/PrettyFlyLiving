@@ -12,7 +12,7 @@ import { BookingCard, MobileBookBar } from "~/components/site/booking-card";
 import { Gallery } from "~/components/site/gallery";
 import { PropertyCard } from "~/components/site/property-card";
 import { cloudflareContext } from "~/context";
-import { addDays, formatShortDate, nightsBetween, stayRangeError } from "~/lib/dates";
+import { addDays, formatShortDate, nightsBetween, stayRangeError, type StayDates } from "~/lib/dates";
 import { pageMeta, stayJsonLd } from "~/lib/seo";
 import { bedroomLabel, countLabel, formatKes, whatsappMessages, whatsappUrl } from "~/lib/site";
 import { bookingRequestSchema } from "~/lib/validation";
@@ -100,11 +100,12 @@ export async function action({ request, params, context }: Route.ActionArgs) {
       ["Nights", String(nightsBetween(booking.checkIn, booking.checkOut))],
       ["Guests", String(booking.guests)],
       ["Name", booking.name],
-      ["Email or phone", booking.contact],
+      ["Email", booking.email],
+      ["Phone / WhatsApp", booking.phone],
       ["Listed price", `${formatKes(property.monthlyPriceKes)} / month`],
     ],
     adminPath: `/admin/bookings/${id}`,
-    replyTo: booking.contact.includes("@") ? booking.contact : undefined,
+    replyTo: booking.email,
     idempotencyKey: `booking-request/${id}`,
   });
 
@@ -118,7 +119,8 @@ export async function action({ request, params, context }: Route.ActionArgs) {
         checkOut,
         guests: booking.guests,
         name: booking.name,
-        contact: booking.contact,
+        email: booking.email,
+        phone: booking.phone,
       }),
     ),
   };
@@ -147,8 +149,11 @@ function GoodToKnow({ text }: { text: string }) {
 
 export default function Stay({ loaderData, actionData }: Route.ComponentProps) {
   const { property, similar, today, calendarEnd, turnstileSiteKey } = loaderData;
-  const [checkIn, setCheckIn] = useState(
-    actionData && !actionData.ok ? (actionData.values.checkIn ?? "") : "",
+  // Shared by the calendar and the booking card's date fields.
+  const [dates, setDates] = useState<StayDates>(() =>
+    actionData && !actionData.ok
+      ? { checkIn: actionData.values.checkIn ?? "", checkOut: actionData.values.checkOut ?? "" }
+      : { checkIn: "", checkOut: "" },
   );
   const blocked = new Set(loaderData.blocked);
   const sending = useNavigation().state === "submitting";
@@ -157,7 +162,7 @@ export default function Stay({ loaderData, actionData }: Route.ComponentProps) {
   useEffect(() => {
     if (!actionData?.ok) return;
     formRef.current?.reset();
-    setCheckIn("");
+    setDates({ checkIn: "", checkOut: "" });
   }, [actionData]);
 
   return (
@@ -209,16 +214,16 @@ export default function Stay({ loaderData, actionData }: Route.ComponentProps) {
               <div className="detail-section">
                 <h3>Availability</h3>
                 <p>
-                  Choose your preferred dates in the enquiry panel. Our team
-                  will confirm availability before your reservation is
-                  finalised.
+                  Tap your check-in date, then your check-out date, or choose
+                  them in the enquiry panel. Our team will confirm availability
+                  before your reservation is finalised.
                 </p>
                 <AvailabilityCalendar
                   today={today}
                   until={calendarEnd}
                   blocked={blocked}
-                  selected={checkIn}
-                  onSelect={setCheckIn}
+                  dates={dates}
+                  onChange={setDates}
                 />
               </div>
 
@@ -266,8 +271,8 @@ export default function Stay({ loaderData, actionData }: Route.ComponentProps) {
             <BookingCard
               property={property}
               today={today}
-              checkIn={checkIn}
-              onCheckInChange={setCheckIn}
+              dates={dates}
+              onDatesChange={setDates}
               turnstileSiteKey={turnstileSiteKey}
               formRef={formRef}
               sending={sending}

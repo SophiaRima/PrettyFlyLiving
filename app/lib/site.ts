@@ -110,9 +110,10 @@ export const whatsappMessages = {
     checkOut: string;
     guests: number;
     name: string;
-    contact: string;
+    email: string;
+    phone: string;
   }): string =>
-    `Hello Pretty Fly Living, I'd like to request a stay at ${request.property} (${request.area}). Check-in: ${request.checkIn}; check-out: ${request.checkOut}; guests: ${request.guests}. Name: ${request.name}. Contact: ${request.contact}. Please confirm availability and total price.`,
+    `Hello Pretty Fly Living, I'd like to request a stay at ${request.property} (${request.area}). Check-in: ${request.checkIn}; check-out: ${request.checkOut}; guests: ${request.guests}. Name: ${request.name}. Email: ${request.email}. Phone: ${request.phone}. Please confirm availability and total price.`,
 } as const;
 
 /** Concept's money() format: "KES 180,000". */

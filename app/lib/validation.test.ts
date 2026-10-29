@@ -34,18 +34,20 @@ describe("bookingRequestSchema", () => {
     checkOut: "2026-12-01",
     guests: "2",
     name: " Amina ",
-    contact: "amina@example.com",
+    email: "amina@example.com",
+    phone: "+254 712 345 678",
   };
 
   it("parses and trims a valid request", () => {
     const result = bookingRequestSchema.parse(valid);
-    expect(result).toMatchObject({ guests: 2, name: "Amina" });
+    expect(result).toMatchObject({ guests: 2, name: "Amina", email: "amina@example.com", phone: "+254 712 345 678" });
   });
 
-  it("takes either an email or a phone number as contact", () => {
-    expect(bookingRequestSchema.safeParse({ ...valid, contact: "+254 712 345 678" }).success).toBe(true);
-    expect(bookingRequestSchema.safeParse({ ...valid, contact: "amina@" }).success).toBe(false);
-    expect(bookingRequestSchema.safeParse({ ...valid, contact: "soon" }).success).toBe(false);
+  it("needs both a valid email and a valid phone", () => {
+    expect(bookingRequestSchema.safeParse({ ...valid, email: "amina@" }).success).toBe(false);
+    expect(bookingRequestSchema.safeParse({ ...valid, email: "" }).success).toBe(false);
+    expect(bookingRequestSchema.safeParse({ ...valid, phone: "soon" }).success).toBe(false);
+    expect(bookingRequestSchema.safeParse({ ...valid, phone: "" }).success).toBe(false);
   });
 
   it("requires real dates and a name", () => {

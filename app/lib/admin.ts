@@ -88,6 +88,24 @@ export function contactReplyLink(contact: string, subject: string, body: string)
   return href ? { kind: "whatsapp", href } : null;
 }
 
+/**
+ * Reply links for a booking request: one for its `contact` (the email, or on
+ * requests before 2026-10-29 an email or phone as typed) and a WhatsApp one
+ * for its separate phone, when it has one.
+ */
+export function bookingReplyLinks(
+  contact: string,
+  phone: string | null,
+  subject: string,
+  body: string,
+): { contact: ReplyLink | null; phone: ReplyLink | null } {
+  const whatsapp = phone ? whatsappReplyUrl(phone, body) : null;
+  return {
+    contact: contactReplyLink(contact, subject, body),
+    phone: whatsapp ? { kind: "whatsapp", href: whatsapp } : null,
+  };
+}
+
 /** "22 Oct 2026, 11:20" in Nairobi time, from a SQLite CURRENT_TIMESTAMP (UTC). */
 export function formatReceived(timestamp: string): string {
   const date = new Date(`${timestamp.replace(" ", "T")}Z`);

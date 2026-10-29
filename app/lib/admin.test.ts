@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  bookingReplyLinks,
   contactReplyLink,
   emailReplyUrl,
   formatReceived,
@@ -92,6 +93,14 @@ describe("reply links", () => {
       href: "https://wa.me/254712345678?text=Hello",
     });
     expect(contactReplyLink("call me", "S", "B")).toBeNull();
+  });
+
+  it("gives a booking with a separate phone both email and WhatsApp replies", () => {
+    expect(bookingReplyLinks("guest@example.com", "0712345678", "S", "Hello")).toEqual({
+      contact: { kind: "email", href: "mailto:guest%40example.com?subject=S&body=Hello" },
+      phone: { kind: "whatsapp", href: "https://wa.me/254712345678?text=Hello" },
+    });
+    expect(bookingReplyLinks("0712345678", null, "S", "Hello").phone).toBeNull();
   });
 });
 
