@@ -94,7 +94,7 @@ export default function AdminEnquiries({ loaderData }: Route.ComponentProps) {
                 <dl className="mt-4 grid gap-x-6 gap-y-3 text-sm wrap-anywhere sm:grid-cols-3">
                   <Detail label="Location" value={enquiry.propertyArea} />
                   <Detail label="Units" value={enquiry.units} />
-                  <Detail label="Property type" value={enquiry.propertyType} />
+                  <Detail label="Property type(s)" value={enquiry.propertyType} />
                   <Detail label="Same location" value={enquiry.sameLocation} />
                   <Detail label="Furnishing" value={enquiry.furnishing} />
                   <Detail label="Listed online" value={enquiry.listedOnline} />

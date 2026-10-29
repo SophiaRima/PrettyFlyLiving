@@ -19,7 +19,7 @@ export function meta(): Route.MetaDescriptors {
   return pageMeta({
     title: "Property management in Nairobi  -  Pretty Fly Living",
     description:
-      "Thoughtful, end-to-end property management in Nairobi: listings, pricing, guest communication, cleaning, maintenance, Airbnb and Booking.com.",
+      "Thoughtful, end-to-end property management in Nairobi: listings, pricing, guest communication, cleaning, maintenance and booking channels.",
     path: "/management",
   });
 }
@@ -31,7 +31,7 @@ const services: readonly ServiceItem[] = [
   { icon: "♡", title: "Guest communication", text: "Enquiry handling, practical information and responsive support throughout the guest journey." },
   { icon: "⌑", title: "Check-in & check-out", text: "Coordinated arrival and departure processes with clear guest instructions." },
   { icon: "✳", title: "Cleaning & maintenance", text: "Cleaning coordination, property checks and maintenance follow-up with agreed providers." },
-  { icon: "★", title: "Reviews & channel management", text: "Guest feedback support and management of Airbnb, Booking.com and other agreed channels." },
+  { icon: "★", title: "Reviews & channel management", text: "Guest feedback support and management of Booking.com and other agreed channels." },
 ];
 
 const steps = [
@@ -59,16 +59,10 @@ export async function action({ request, context }: Route.ActionArgs) {
       ["Name", enquiry.name],
       ["Email", enquiry.email],
       ["Phone / WhatsApp", enquiry.phone],
-      ["Preferred contact", enquiry.preferredContact ?? "-"],
       ["Property location", enquiry.location],
-      ["Units to manage", String(enquiry.units)],
-      ["Property type", enquiry.propertyType],
-      ["Same location", enquiry.sameLocation ?? "-"],
-      ["Furnishing", enquiry.furnishing ?? "-"],
-      ["Listed online", enquiry.listedOnline ?? "-"],
-      ["Listing links", enquiry.listingLinks ?? "-"],
-      ["Support needed", enquiry.support.length > 0 ? enquiry.support.join("; ") : "-"],
-      ["Message", enquiry.message ?? "-"],
+      ["Property type(s)", enquiry.type],
+      ["Number of units", String(enquiry.units)],
+      ["Help wanted", enquiry.message ?? "-"],
     ],
     adminPath: "/admin/enquiries",
     replyTo: enquiry.email,

@@ -69,70 +69,36 @@ describe("contact and owner forms", () => {
 });
 
 describe("ownerEnquirySchema", () => {
-  const single = {
-    location: "Kilimani, Nairobi",
-    units: "1",
-    type: "Studio",
+  const enquiry = {
     name: "Sam",
     email: "sam@example.com",
     phone: "0712345678",
+    location: "Kilimani",
+    type: "Studio, one bedroom",
+    units: "3",
+    message: "",
   };
   const firstIssue = (input: Record<string, string>) => {
     const parsed = ownerEnquirySchema.safeParse(input);
     return parsed.success ? null : parsed.error.issues[0];
   };
 
-  it("accepts one unit with its type, and leaves blank answers out", () => {
-    const parsed = ownerEnquirySchema.parse({ ...single, furnishing: "", preferredContact: "" });
-    expect(parsed).toMatchObject({ units: 1, propertyType: "Studio", unitBreakdown: null, support: [] });
-    expect(parsed.furnishing).toBeUndefined();
-    expect(parsed.preferredContact).toBeUndefined();
+  it("accepts typed property types and a unit count, with the message optional", () => {
+    const parsed = ownerEnquirySchema.parse(enquiry);
+    expect(parsed).toMatchObject({ type: "Studio, one bedroom", units: 3, location: "Kilimani" });
+    expect(parsed.message).toBeUndefined();
   });
 
-  it("needs a property type for a single unit", () => {
-    expect(firstIssue({ ...single, type: "" })?.path).toEqual(["type"]);
-    expect(firstIssue({ ...single, type: "Castle" })?.path).toEqual(["type"]);
+  it("needs the property type(s) and a whole number of units", () => {
+    expect(firstIssue({ ...enquiry, type: " " })?.path).toEqual(["type"]);
+    expect(firstIssue({ ...enquiry, units: "" })?.path).toEqual(["units"]);
+    expect(firstIssue({ ...enquiry, units: "2.5" })?.path).toEqual(["units"]);
   });
 
-  it("gathers numbered unit rows for several units and summarises them", () => {
-    const parsed = ownerEnquirySchema.parse({
-      ...single,
-      units: "3",
-      type: "",
-      unitType1: "Studio",
-      unitCount1: "2",
-      unitType2: "",
-      unitCount2: "",
-      unitType3: "1-bedroom apartment",
-      unitCount3: "1",
-    });
-    expect(parsed.unitBreakdown).toEqual([
-      { type: "Studio", count: 2 },
-      { type: "1-bedroom apartment", count: 1 },
-    ]);
-    expect(parsed.propertyType).toBe("2 × Studio, 1 × 1-bedroom apartment");
-  });
-
-  it("needs at least one complete row for several units", () => {
-    expect(firstIssue({ ...single, units: "4" })?.path).toEqual(["unitRows"]);
-    expect(firstIssue({ ...single, units: "4", unitType1: "Studio" })?.path[0]).toBe("unitRows");
-    expect(firstIssue({ ...single, units: "4", unitType1: "Castle", unitCount1: "2" })?.path[0]).toBe("unitRows");
-  });
-
-  it("gathers ticked support options and rejects unknown ones", () => {
-    const parsed = ownerEnquirySchema.parse({ ...single, support2: "Listing creation and optimisation", support9: "Property inspections" });
-    expect(parsed.support).toEqual(["Listing creation and optimisation", "Property inspections"]);
-    expect(firstIssue({ ...single, support1: "Free money" })?.path[0]).toBe("support");
-  });
-
-  it("only accepts the listed radio answers", () => {
-    expect(ownerEnquirySchema.safeParse({ ...single, furnishing: "Fully furnished", preferredContact: "WhatsApp" }).success).toBe(true);
-    expect(firstIssue({ ...single, furnishing: "Half" })?.path).toEqual(["furnishing"]);
-  });
-
-  it("needs the contact details", () => {
-    expect(firstIssue({ ...single, phone: "" })?.path).toEqual(["phone"]);
-    expect(firstIssue({ ...single, units: "" })?.path).toEqual(["units"]);
+  it("needs the contact details and location", () => {
+    expect(firstIssue({ ...enquiry, phone: "" })?.path).toEqual(["phone"]);
+    expect(firstIssue({ ...enquiry, email: "not-an-email" })?.path).toEqual(["email"]);
+    expect(firstIssue({ ...enquiry, location: "" })?.path).toEqual(["location"]);
   });
 });
 

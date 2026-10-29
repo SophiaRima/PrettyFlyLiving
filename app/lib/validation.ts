@@ -1,18 +1,6 @@
 import { z } from "zod";
 
-import {
-  bookingStatuses,
-  enquiryTypes,
-  guideCategories,
-  OWNER_UNIT_ROWS_MAX,
-  ownerContactMethods,
-  ownerFurnishingOptions,
-  ownerListedOnlineOptions,
-  ownerPropertyTypes,
-  ownerSameLocationOptions,
-  ownerSupportOptions,
-  type OwnerUnitRow,
-} from "./constants";
+import { bookingStatuses, enquiryTypes, guideCategories } from "./constants";
 import { parseLines, slugify } from "./admin";
 import { isIsoDate } from "./dates";
 
@@ -166,93 +154,24 @@ export const contactMessageSchema = z.object({
 });
 export type ContactMessageInput = z.infer<typeof contactMessageSchema>;
 
-/** Property Management owner enquiry form. */
-/** An optional radio answer: blank or missing becomes undefined. */
-const optionalChoice = <T extends readonly [string, ...string[]]>(options: T) =>
-  z
-    .union([z.literal(""), z.enum(options, { error: "Please choose one of the options." })])
-    .optional()
-    .transform((v) => (v ? v : undefined));
-
-const optionalLongText = (max: number) =>
-  z
+/**
+ * Property Management owner enquiry: the concept's short form (client,
+ * 2026-10-29). Property type(s) and units are typed in, not chosen.
+ */
+export const ownerEnquirySchema = z.object({
+  name: requiredText("your name", 100),
+  email: emailField,
+  phone: phoneField,
+  location: requiredText("your property's location", 120),
+  type: requiredText("your property type(s)", 200),
+  units: wholeNumber("the number of units", 1, 500),
+  message: z
     .string()
     .trim()
-    .max(max, `Please keep this under ${max} characters.`)
+    .max(3000, "Please keep this under 3000 characters.")
     .optional()
-    .transform((v) => (v ? v : undefined));
-
-/**
- * The form posts repeated answers under numbered names (unitType1,
- * unitCount1 … support1 …), since the shared form reader keeps one value per
- * name. This gathers them into `unitRows` and `support` before validation.
- */
-function gatherOwnerLists(input: unknown): unknown {
-  if (typeof input !== "object" || input === null) return input;
-  const values = input as Record<string, unknown>;
-  const text = (key: string): string => (typeof values[key] === "string" ? (values[key] as string).trim() : "");
-  const unitRows: { type: string; count: string }[] = [];
-  for (let i = 1; i <= OWNER_UNIT_ROWS_MAX; i++) {
-    const row = { type: text(`unitType${i}`), count: text(`unitCount${i}`) };
-    if (row.type || row.count) unitRows.push(row);
-  }
-  const support = ownerSupportOptions.map((_, i) => text(`support${i + 1}`)).filter(Boolean);
-  return { ...values, unitRows, support };
-}
-
-const ownerUnitRowSchema = z.object({
-  type: z.enum(ownerPropertyTypes, { error: "Please choose a property type in each row." }),
-  count: z
-    .string()
-    .regex(/^\d+$/, "Please enter the number of units in each row.")
-    .transform(Number)
-    .pipe(z.number().int().min(1, "Please enter at least 1 unit in each row.").max(500)),
+    .transform((v) => (v ? v : undefined)),
 });
-
-/** Property Management Enquiry Form (client copy, 2026-10). */
-export const ownerEnquirySchema = z.preprocess(
-  gatherOwnerLists,
-  z
-    .object({
-      location: requiredText("where your property is", 120),
-      units: wholeNumber("how many units you'd like us to manage", 1, 500),
-      type: optionalChoice(ownerPropertyTypes),
-      unitRows: z.array(ownerUnitRowSchema).max(OWNER_UNIT_ROWS_MAX),
-      sameLocation: optionalChoice(ownerSameLocationOptions),
-      furnishing: optionalChoice(ownerFurnishingOptions),
-      listedOnline: optionalChoice(ownerListedOnlineOptions),
-      listingLinks: optionalLongText(1000),
-      support: z.array(z.enum(ownerSupportOptions)),
-      message: optionalLongText(3000),
-      name: requiredText("your full name", 100),
-      email: emailField,
-      phone: phoneField,
-      preferredContact: optionalChoice(ownerContactMethods),
-    })
-    .superRefine((v, issue) => {
-      if (v.units === 1 && !v.type) {
-        issue.addIssue({ code: "custom", path: ["type"], message: "Please choose your property type." });
-      }
-      if (v.units > 1 && v.unitRows.length === 0) {
-        issue.addIssue({
-          code: "custom",
-          path: ["unitRows"],
-          message: "Please add each property type and how many units of it you have.",
-        });
-      }
-    })
-    .transform(({ unitRows, type, ...rest }) => {
-      const several = rest.units > 1;
-      const breakdown: OwnerUnitRow[] | null = several ? unitRows : null;
-      return {
-        ...rest,
-        unitBreakdown: breakdown,
-        propertyType: breakdown
-          ? breakdown.map((row) => `${row.count} × ${row.type}`).join(", ")
-          : (type ?? ""),
-      };
-    }),
-);
 export type OwnerEnquiryInput = z.infer<typeof ownerEnquirySchema>;
 
 // ---------------------------------------------------------------- admin
