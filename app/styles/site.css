@@ -583,15 +583,24 @@ button { color: inherit; }
   .container { width: calc(100% - 40px); }
 }
 
-/* 8. Hero: the photo shows clearly on the right; a soft paper gradient stays
-   on the left only, behind the copy. On phones the copy spans the width, so
-   the gradient reaches further across. */
-.hero-photo:after { background: linear-gradient(90deg, rgba(246,242,233,.94) 0%, rgba(246,242,233,.82) 40%, rgba(246,242,233,0) 72%); }
-@media (min-width: 721px) and (max-width: 980px) {
-  .hero-photo:after { background: linear-gradient(90deg, rgba(246,242,233,.94) 0%, rgba(246,242,233,.8) 55%, rgba(246,242,233,0) 90%); }
+/* 8. Hero: the photo stays clear. Above 980px the paper gradient covers only
+   the headline's band on the left (the copy is at most 540px wide) and fades
+   out just past it (sooner on small laptops, where the copy's padding is
+   narrower). At 980px and below the copy would cover most of the
+   photo, and a tall box zoomed into a narrow slice of it, so the photo sits
+   above the copy at its own shape, with no gradient at all. */
+.hero-photo:after { background: linear-gradient(90deg, rgba(246,242,233,.92) 0, rgba(246,242,233,.86) min(500px, 48%), rgba(246,242,233,0) min(660px, 64%)); }
+@media (max-width: 980px) {
+  .hero-frame { min-height: 0; border-radius: 0; overflow: visible; background: none; }
+  .hero-photo { position: relative; inset: auto; aspect-ratio: 16 / 10; border-radius: 12px; overflow: hidden; background: #cfc8b8; }
+  .hero-photo:after { display: none; }
+  .hero-copy { max-width: 620px; padding: 36px 0 0; }
+  .search-panel { margin-top: 32px; width: 100%; }
 }
 @media (max-width: 720px) {
-  .hero-photo:after { background: linear-gradient(90deg, rgba(246,242,233,.92) 0%, rgba(246,242,233,.74) 65%, rgba(246,242,233,.2) 100%); }
+  .hero-photo { aspect-ratio: 4 / 3; border-radius: 8px; }
+  .hero-copy { padding-top: 28px; }
+  .search-panel { margin-top: 26px; }
 }
 
 /* 9. Date fields: black dates and a solid black calendar icon for

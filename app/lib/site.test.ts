@@ -65,7 +65,7 @@ describe("thumbKey and mediaSrcSet", () => {
 
   it("has no small copy for seed URLs, public files or small copies themselves", () => {
     expect(thumbKey("https://images.unsplash.com/photo-1?w=900")).toBeNull();
-    expect(thumbKey("/images/hero-2000.webp")).toBeNull();
+    expect(thumbKey("/images/hero-living-1280.webp")).toBeNull();
     expect(thumbKey("properties/0123456789abcdef0123456789abcdef-800.webp")).toBeNull();
   });
 

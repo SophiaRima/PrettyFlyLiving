@@ -31,19 +31,24 @@ export const navItems = [
  */
 export const pageImages = {
   hero: {
-    src: "/images/hero-2000.webp",
+    src: "/images/hero-living-1280.webp",
     /**
-     * The hero spans the full-width container (100% − 48px), so sizes must
-     * say so: with the old "1080px" a 1920px desktop loaded the 1200px file
-     * stretched to 1872px. Phones take 800/1200, desktops 2000, large and
-     * high-resolution screens 2800.
+     * The photo is 1920px wide, so 1920 is the largest copy (never upscaled
+     * at export). sizes is the width the photo is drawn at, not the box:
+     * - 1180px+: the box is wider than the photo's shape, so it fills the
+     *   container width (capped at 1872px).
+     * - 981–1179px: the 640px-tall box is narrower than the photo's shape,
+     *   so the photo is drawn 640 × 1.76 ≈ 1130px wide.
+     * - ≤980px: the photo sits above the copy in a 16:10 (tablet) or 4:3
+     *   (phone) box, drawn up to 1.33 × the container width.
      */
     srcSet:
-      "/images/hero-800.webp 800w, /images/hero-1200.webp 1200w, /images/hero-2000.webp 2000w, /images/hero-2800.webp 2800w",
-    sizes: "calc(100vw - 48px)",
-    width: 2000,
-    height: 1360,
-    alt: "Warm, sunlit serviced apartment with elegant neutral interiors",
+      "/images/hero-living-640.webp 640w, /images/hero-living-960.webp 960w, /images/hero-living-1280.webp 1280w, /images/hero-living-1600.webp 1600w, /images/hero-living-1920.webp 1920w",
+    sizes:
+      "(min-width: 1920px) 1872px, (min-width: 1180px) calc(100vw - 48px), (min-width: 981px) 1130px, calc((100vw - 44px) * 1.33)",
+    width: 1920,
+    height: 1088,
+    alt: "Sunlit living room with a sofa, wooden coffee table and floor-to-ceiling windows looking out over Nairobi’s trees and skyline",
   },
   homeSplit: {
     src: "/images/home-split.webp",
