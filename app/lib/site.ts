@@ -35,17 +35,14 @@ export const pageImages = {
     /**
      * The photo is 1920px wide, so 1920 is the largest copy (never upscaled
      * at export). sizes is the width the photo is drawn at, not the box:
-     * - 1131px+: the full-bleed box is wider than the photo's shape, so it
-     *   fills the screen width.
-     * - 981–1130px: the 640px-tall box is narrower than the photo's shape,
-     *   so the photo is drawn 640 × 1.76 ≈ 1130px wide.
+     * - 981px+: the short full-bleed box is wider than the photo's shape, so
+     *   the photo fills the screen width.
      * - ≤980px: the photo sits above the copy in a 16:10 (tablet) or 4:3
      *   (phone) box, drawn up to 1.33 × the container width.
      */
     srcSet:
       "/images/hero-living-640.webp 640w, /images/hero-living-960.webp 960w, /images/hero-living-1280.webp 1280w, /images/hero-living-1600.webp 1600w, /images/hero-living-1920.webp 1920w",
-    sizes:
-      "(min-width: 1131px) 100vw, (min-width: 981px) 1130px, calc((100vw - 44px) * 1.33)",
+    sizes: "(min-width: 981px) 100vw, calc((100vw - 44px) * 1.33)",
     width: 1920,
     height: 1088,
     alt: "Sunlit living room with a sofa, wooden coffee table and floor-to-ceiling windows looking out over Nairobi’s trees and skyline",

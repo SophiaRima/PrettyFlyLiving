@@ -58,37 +58,41 @@ export function SiteHeader() {
             <path d="M3 6h18M3 12h18M3 18h18" />
           </svg>
         </button>
-        {/* Mobile only: dims the uncovered half of the screen; tap to close. */}
-        <div
-          className="nav-backdrop"
-          aria-hidden="true"
-          onClick={() => setMenuOpen(false)}
-        />
-        <nav className={menuOpen ? "nav open" : "nav"} id="nav" aria-label="Main">
-          {/* Mobile drawer header with its own close (X) button. */}
-          <div className="nav-drawer-head">
-            <span className="eyebrow">Menu</span>
-            <button
-              ref={closeRef}
-              className="nav-close"
-              type="button"
-              aria-label="Close navigation"
-              onClick={() => setMenuOpen(false)}
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path d="M6 6l12 12M18 6L6 18" />
-              </svg>
-            </button>
-          </div>
-          {navItems.map((item) => (
-            <NavLink viewTransition key={item.to} to={item.to} end>
-              {item.label}
-            </NavLink>
-          ))}
-          <Link viewTransition className="btn nav-cta" to="/stays">
-            Find your stay ↗
-          </Link>
-        </nav>
+        {/* Mobile: a screen-sized layer that clips the sliding drawer, so the
+            drawer never widens the page. Desktop: no box at all. */}
+        <div className="nav-layer">
+          {/* Mobile only: dims the uncovered half of the screen; tap to close. */}
+          <div
+            className="nav-backdrop"
+            aria-hidden="true"
+            onClick={() => setMenuOpen(false)}
+          />
+          <nav className={menuOpen ? "nav open" : "nav"} id="nav" aria-label="Main">
+            {/* Mobile drawer header with its own close (X) button. */}
+            <div className="nav-drawer-head">
+              <span className="eyebrow">Menu</span>
+              <button
+                ref={closeRef}
+                className="nav-close"
+                type="button"
+                aria-label="Close navigation"
+                onClick={() => setMenuOpen(false)}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+            </div>
+            {navItems.map((item) => (
+              <NavLink viewTransition key={item.to} to={item.to} end>
+                {item.label}
+              </NavLink>
+            ))}
+            <Link viewTransition className="btn nav-cta" to="/stays">
+              Find your stay ↗
+            </Link>
+          </nav>
+        </div>
         <div className="nav-actions">
           <Link viewTransition className="btn" to="/stays">
             Find your stay ↗
