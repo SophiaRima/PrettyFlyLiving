@@ -646,3 +646,15 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: 1; filter: brig
 @media (min-width: 1500px) {
   .guide-article-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
+/* 12. Narrow phones (under ~375px) never scroll sideways. A plain `1fr`
+   column can't shrink below its widest child, so one wide element (the
+   300px Turnstile widget did it) made the stay page and the owner form wider
+   than the screen, cutting off text, photos and the sticky book bar. The
+   one-column stacks may now shrink to the screen. */
+@media (max-width: 980px) {
+  .detail-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .split, .quote-grid, .contact-grid, .faq-wrap, .form-grid { grid-template-columns: minmax(0, 1fr); }
+}

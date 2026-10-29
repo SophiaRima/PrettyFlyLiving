@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 interface TurnstileApi {
   render(
     element: HTMLElement,
-    options: { sitekey: string; action: string; theme: "light"; size: "flexible" },
+    options: { sitekey: string; action: string; theme: "light"; size: "flexible" | "compact" },
   ): string;
   reset(widgetId: string): void;
   remove(widgetId: string): void;
@@ -16,6 +16,8 @@ declare global {
 }
 
 const SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+/** The flexible widget never shrinks below this, so narrower spaces get the compact one. */
+const FLEXIBLE_MIN_WIDTH = 300;
 let scriptLoading: Promise<void> | null = null;
 
 function loadTurnstile(): Promise<void> {
@@ -60,7 +62,8 @@ export function Turnstile({ siteKey, action, resetKey }: TurnstileProps) {
           sitekey: siteKey,
           action,
           theme: "light",
-          size: "flexible",
+          // On narrow phones a 300px widget would push the page wider than the screen.
+          size: container.current.clientWidth < FLEXIBLE_MIN_WIDTH ? "compact" : "flexible",
         });
       })
       .catch((error: unknown) => console.error(error));
