@@ -2,13 +2,8 @@ import type { SyntheticEvent } from "react";
 
 import { mediaSrcSet, mediaUrl } from "~/lib/media";
 
-/**
- * `sizes` for photos in cards and tiles: full width on phones, a column
- * otherwise. On the full-width layout the widest card (Explore similar stays,
- * guide collages) is about a third of the screen, so 400px loaded the small
- * copy for 800px cards on large monitors.
- */
-export const CARD_SIZES = "(max-width: 720px) 100vw, 33vw";
+/** `sizes` for photos in cards and tiles: full width on phones, a column otherwise. */
+export const CARD_SIZES = "(max-width: 720px) 100vw, 400px";
 
 interface ImgProps {
   /** R2 key, absolute URL or /public path. */

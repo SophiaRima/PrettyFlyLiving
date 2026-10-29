@@ -35,9 +35,9 @@ export const pageImages = {
     /**
      * The photo is 1920px wide, so 1920 is the largest copy (never upscaled
      * at export). sizes is the width the photo is drawn at, not the box:
-     * - 1180px+: the box is wider than the photo's shape, so it fills the
-     *   container width (capped at 1872px).
-     * - 981–1179px: the 640px-tall box is narrower than the photo's shape,
+     * - 1131px+: the full-bleed box is wider than the photo's shape, so it
+     *   fills the screen width.
+     * - 981–1130px: the 640px-tall box is narrower than the photo's shape,
      *   so the photo is drawn 640 × 1.76 ≈ 1130px wide.
      * - ≤980px: the photo sits above the copy in a 16:10 (tablet) or 4:3
      *   (phone) box, drawn up to 1.33 × the container width.
@@ -45,7 +45,7 @@ export const pageImages = {
     srcSet:
       "/images/hero-living-640.webp 640w, /images/hero-living-960.webp 960w, /images/hero-living-1280.webp 1280w, /images/hero-living-1600.webp 1600w, /images/hero-living-1920.webp 1920w",
     sizes:
-      "(min-width: 1920px) 1872px, (min-width: 1180px) calc(100vw - 48px), (min-width: 981px) 1130px, calc((100vw - 44px) * 1.33)",
+      "(min-width: 1131px) 100vw, (min-width: 981px) 1130px, calc((100vw - 44px) * 1.33)",
     width: 1920,
     height: 1088,
     alt: "Sunlit living room with a sofa, wooden coffee table and floor-to-ceiling windows looking out over Nairobi’s trees and skyline",
@@ -60,7 +60,7 @@ export const pageImages = {
   whySplit: {
     src: "/images/why-split.webp",
     srcSet: "/images/why-split-800.webp 800w, /images/why-split.webp 1200w",
-    sizes: "(max-width: 720px) 100vw, 50vw",
+    sizes: "(max-width: 720px) 100vw, 540px",
     width: 1200,
     height: 1200,
     alt: "City view over Kilimani from a Pretty Fly Living window",
@@ -68,7 +68,7 @@ export const pageImages = {
   managementSplit: {
     src: "/images/management-split.webp",
     srcSet: "/images/management-split-800.webp 800w, /images/management-split.webp 1200w",
-    /** A wide panorama in a squarer box: the box's height decides, so desktops need the 1200px file. */
+    /** A wide panorama in a 520px-tall box: the box's height decides, so desktops need the 1200px file. */
     sizes: "(max-width: 720px) 100vw, 1200px",
     width: 1200,
     height: 554,

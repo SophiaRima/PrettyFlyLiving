@@ -46,20 +46,21 @@ export default function Home({ loaderData }: Route.ComponentProps) {
   return (
     <main>
       <section className="hero">
-        <div className="container">
-          <div className="hero-frame">
-            <div className="hero-photo">
-              {/* The LCP image: never lazy. React adds a matching <link rel="preload"> in <head> for it. */}
-              <img
-                src={pageImages.hero.src}
-                srcSet={pageImages.hero.srcSet}
-                sizes={pageImages.hero.sizes}
-                width={pageImages.hero.width}
-                height={pageImages.hero.height}
-                alt={pageImages.hero.alt}
-                fetchPriority="high"
-              />
-            </div>
+        {/* Full bleed above 980px (site.css revision 7), the content column below. */}
+        <div className="container hero-frame">
+          <div className="hero-photo">
+            {/* The LCP image: never lazy. React adds a matching <link rel="preload"> in <head> for it. */}
+            <img
+              src={pageImages.hero.src}
+              srcSet={pageImages.hero.srcSet}
+              sizes={pageImages.hero.sizes}
+              width={pageImages.hero.width}
+              height={pageImages.hero.height}
+              alt={pageImages.hero.alt}
+              fetchPriority="high"
+            />
+          </div>
+          <div className="hero-inner">
             <div className="hero-copy">
               <div className="eyebrow">Serviced apartments · Nairobi</div>
               <h1>
@@ -79,6 +80,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               </div>
             </div>
           </div>
+        </div>
+        <div className="container">
           <SearchPanel areas={areas} />
           <div className="intro-strip">
             <span>Considered spaces</span>

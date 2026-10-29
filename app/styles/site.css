@@ -562,34 +562,42 @@ button { color: inherit; }
    instead of relying on the button's padding and inherited line-height. */
 .heart { color: #000; display: grid; place-items: center; padding: 0; line-height: 1; }
 
-/* 7. Side margins (header, sections and footer all use .container). Full
-   width at every screen size with only a 24px edge (2026-10-28: the client
-   asked for the padding around the site to be removed). */
-.container { width: calc(100% - 48px); }
+/* 7. Side margins (header, sections and footer all use .container).
+   Desktops (above 980px) keep the concept's centred column (2026-10-29: the
+   client's Airbnb reference; the full-width layout of 2026-10-28 is undone).
+   Tablets and phones have a 24px edge. */
+@media (max-width: 980px) {
+  .container { width: calc(100% - 48px); }
+}
 @media (max-width: 520px) {
   .container { width: calc(100% - 44px); }
-}
-/* The hero copy's 7% side padding grows with the full-width hero and broke
-   the headline into four lines on wide screens, so cap it. */
-@media (min-width: 981px) {
-  .hero-copy { padding-left: min(7%, 96px); padding-right: min(7%, 96px); }
-  /* A fixed 640px height made the full-width hero a long strip on wide
-     screens (2.9:1 at 1920px), showing only half the photo, zoomed in. The
-     height now grows with the width, keeping about the concept's
-     proportions, but never taller than the screen. The copy stays centred. */
-  .hero-frame { min-height: clamp(640px, 45vw, calc(100svh - 120px)); display: flex; align-items: center; }
 }
 @media (max-width: 390px) {
   .container { width: calc(100% - 40px); }
 }
+/* Full-bleed hero on desktops: the photo fills the screen edge to edge, right
+   under the header, with square corners, like the client's Airbnb reference.
+   The copy lines up with the search panel inside the content column. The
+   height grows with the width so the photo isn't cut into a long strip
+   (2.9:1 at 1920px with a fixed 640px), but never taller than the screen. */
+@media (min-width: 981px) {
+  .hero { padding-top: 0; }
+  .hero-frame.container { width: auto; }
+  .hero-frame { border-radius: 0; min-height: clamp(640px, 45vw, calc(100svh - 120px)); display: flex; align-items: center; }
+  .hero-inner { width: min(1160px, calc(100% - 64px)); margin-inline: auto; }
+  .hero-copy { padding-left: 64px; padding-right: 96px; }
+}
+@media (min-width: 981px) and (max-width: 1100px) {
+  .hero-inner { width: min(calc(100% - 48px), 960px); }
+}
 
 /* 8. Hero: the photo stays clear. Above 980px the paper gradient covers only
-   the headline's band on the left (the copy is at most 540px wide) and fades
-   out just past it (sooner on small laptops, where the copy's padding is
-   narrower). At 980px and below the copy would cover most of the
-   photo, and a tall box zoomed into a narrow slice of it, so the photo sits
-   above the copy at its own shape, with no gradient at all. */
-.hero-photo:after { background: linear-gradient(90deg, rgba(246,242,233,.92) 0, rgba(246,242,233,.86) min(500px, 48%), rgba(246,242,233,0) min(660px, 64%)); }
+   the headline's band on the left (the copy is at most 540px wide from the
+   content column's left edge) and fades out just past it. At 980px and below
+   the copy would cover most of the photo, and a tall box zoomed into a
+   narrow slice of it, so the photo sits above the copy at its own shape,
+   with no gradient at all. */
+.hero-photo:after { background: linear-gradient(90deg, rgba(246,242,233,.92) 0, rgba(246,242,233,.86) calc((100% - min(1160px, 100% - 64px)) / 2 + 500px), rgba(246,242,233,0) calc((100% - min(1160px, 100% - 64px)) / 2 + 660px)); }
 @media (max-width: 980px) {
   .hero-frame { min-height: 0; border-radius: 0; overflow: visible; background: none; }
   .hero-photo { position: relative; inset: auto; aspect-ratio: 16 / 10; border-radius: 12px; overflow: hidden; background: #cfc8b8; }
@@ -613,39 +621,9 @@ input[type="date"]::-webkit-datetime-edit-month-field,
 input[type="date"]::-webkit-datetime-edit-year-field { color: #000; }
 input[type="date"]::-webkit-calendar-picker-indicator { opacity: 1; filter: brightness(0); cursor: pointer; }
 
-/* 10. Photo boxes keep their proportions on the full-width layout. With fixed
-   pixel heights, boxes that grew wider turned into long strips (a stay card
-   was 2.6:1 at 1920px), zooming into the middle of each photo. Above 720px
-   the heights now follow the widths, at about the concept's proportions;
-   phones keep their fixed heights. */
-@media (min-width: 721px) {
-  .property-card .property-image { height: auto; aspect-ratio: 3 / 2; }
-  .article-card .property-image { height: auto; aspect-ratio: 16 / 9; }
-}
-@media (min-width: 981px) {
-  .split-image { height: auto; aspect-ratio: 6 / 5; max-height: 760px; }
-  /* Management's photo is a wide panorama (1200x554): a squarer box would
-     crop it to half its width and stretch it, so it keeps a 520px height. */
-  .split-image.split-image-wide { aspect-ratio: auto; height: 520px; }
-  /* Stay pages only: the guide-page gallery sits in a fixed 790px column. */
-  .detail-grid .gallery { grid-template-rows: clamp(210px, 16vw, 330px) clamp(170px, 13vw, 270px); }
-  .guide-collage { height: auto; aspect-ratio: 11 / 5; }
-}
-
-/* 11. Wide screens adapt instead of stretching. Forms, the FAQ list and the
-   booking card keep comfortable widths, guide cards go three to a row, and
-   above 1920px screens (where everything kept growing) the page stays at the
-   1920px layout, centred. */
-.container { width: min(calc(100% - 48px), 1872px); }
-@media (min-width: 1101px) {
-  .contact-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 860px); }
-  .faq-wrap { grid-template-columns: 240px minmax(0, 960px); }
-  .detail-grid { grid-template-columns: minmax(0, 1fr) minmax(320px, 440px); }
-  .detail-content { max-width: 960px; }
-}
-@media (min-width: 1500px) {
-  .guide-article-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
+/* 10–11. (Removed 2026-10-29: the proportional photo boxes and wide-screen
+   adaptations existed only for the full-width layout, which the client
+   undid. The concept's fixed heights and widths apply again.) */
 
 /* 12. Narrow phones (under ~375px) never scroll sideways. A plain `1fr`
    column can't shrink below its widest child, so one wide element (the
