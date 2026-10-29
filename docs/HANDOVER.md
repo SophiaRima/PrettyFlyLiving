@@ -12,7 +12,7 @@ The site went live on 27 October 2026. Guests can browse stays, check availabili
 | --- | --- |
 | Website | Live at https://prettyflyliving.com. `www` and plain `http://` redirect there. |
 | Stays | 1 published: Little Urban Nook (Kilimani), 31 photos |
-| Reviews | 11 real Airbnb reviews: 9 published, the 4★ and 3★ ones waiting for Sophiah's decision |
+| Reviews | 11 real guest reviews: 9 published, the 4★ and 3★ ones waiting for Sophiah's decision |
 | FAQs | 10 for guests, 10 for owners |
 | Extra services | 3: Airport Transfers; Nairobi, With a Local; Extra Cleaning and Laundry |
 | Nairobi guides | 6 draft guides (one per category, 5 photos each) loaded on 27 Oct 2026, waiting for Sophiah to review and publish under Nairobi guides. Photo credits are at the end of each guide. |
@@ -66,14 +66,14 @@ Everything below happens in the dashboard at prettyflyliving.com/admin. The **Ov
 4. Once the stay is agreed and paid as you arrange it, click **Confirm & block dates**. The request becomes *Confirmed* and those nights disappear from the stay's calendar for other guests.
 5. If it doesn't go ahead, set it to *Declined*, or delete it: **Delete** on its row in the list, or **Delete request** at the bottom of its page. Deleting a confirmed request leaves its nights blocked; unblock them on the calendar if the stay is off.
 
-### Keeping calendars in step with Airbnb
+### Keeping calendars in step with other booking sites
 
-The site does not sync with Airbnb or Booking.com. When a stay is booked elsewhere, block those dates on the site the same day: **Properties → the stay → Calendar**, select the nights, then click Block these nights. Do the same on Airbnb when a booking comes through this site.
+The site does not sync with other booking sites. When a stay is booked elsewhere, block those dates on the site the same day: **Properties → the stay → Calendar**, select the nights, then click Block these nights. Do the same on those sites when a booking comes through this site.
 
 ### Other inboxes
 
 - **Messages**: the Contact page form. Reply from the message, then click **Mark handled**.
-- **Owner enquiries**: the Property Management form, with the owner's answers to all four steps.
+- **Owner enquiries**: the Property Management form: the owner's name, email, phone / WhatsApp, property location, property type(s), number of units and what they'd like help with.
 
 Each message and enquiry also has a **Delete** button, for spam or anything you no longer need. Deleting can't be undone.
 
@@ -101,7 +101,7 @@ These live in the website's code, not the dashboard, so changing them means a sm
 - **Page photos** that aren't stays, guides or services: the Home hero and the photos beside the text on Home, Why Us and Property Management.
 - **The "Max monthly price" options** on Our Stays (now KES 60,000 to 250,000) and the "Browse by" shortcuts on Things to Do.
 - **Where alert emails go** (now contact@prettyflyliving.com).
-- **Design, layout and new features**, such as online payments or calendar sync with Airbnb.
+- **Design, layout and new features**, such as online payments or calendar sync with other booking sites.
 - **Domain, DNS and email settings** in Cloudflare and Truehost.
 
 ## When something goes wrong
