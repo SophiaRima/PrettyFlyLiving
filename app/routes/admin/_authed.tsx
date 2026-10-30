@@ -16,9 +16,7 @@ const requireSession: Route.MiddlewareFunction = async ({ request, context }, ne
     throw redirect(`/admin/login?next=${encodeURIComponent(back)}`);
   }
   context.set(adminUserContext, session.user);
-  const response = await next();
-  if (session.refreshedCookie) response.headers.append("Set-Cookie", session.refreshedCookie);
-  return response;
+  return next();
 };
 
 export const middleware: Route.MiddlewareFunction[] = [requireSession];

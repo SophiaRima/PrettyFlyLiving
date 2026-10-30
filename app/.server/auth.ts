@@ -9,15 +9,16 @@ import { DUMMY_HASH, hashPassword, verifyPassword } from "./password";
 
 /*
  * Admin sessions (AGENTS.md section 9): a 32-byte random token in an
- * HttpOnly cookie. D1 only stores its SHA-256 hash, with a 30-day sliding
- * expiry. Logout deletes the row.
+ * HttpOnly browser-session cookie (no Max-Age), so closing the browser signs
+ * out. D1 only stores its SHA-256 hash, and the session ends after 2 hours
+ * without use, which also covers browsers that restore session cookies and
+ * phones that never close the browser. Logout deletes the row.
  */
 
 const SESSION_COOKIE = "pfl_admin_session";
-const SESSION_DAYS = 30;
-const DAY_MS = 24 * 60 * 60 * 1000;
-/** Extend the expiry at most once a day, to save D1 writes. */
-const REFRESH_AFTER_MS = DAY_MS;
+const SESSION_IDLE_MS = 2 * 60 * 60 * 1000;
+/** Extend the expiry at most every 5 minutes, to save D1 writes. */
+const REFRESH_AFTER_MS = 5 * 60 * 1000;
 
 const LOGIN_MAX_FAILURES = 5;
 const LOGIN_WINDOW = "-15 minutes";
@@ -37,8 +38,10 @@ function newToken(): string {
   return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replace(/=+$/, "");
 }
 
-function sessionCookie(token: string, maxAgeSeconds: number): string {
-  return `${SESSION_COOKIE}=${token}; Max-Age=${maxAgeSeconds}; Path=/; HttpOnly; Secure; SameSite=Lax`;
+/** Without `maxAgeSeconds` the cookie lasts until the browser closes. */
+function sessionCookie(token: string, maxAgeSeconds?: number): string {
+  const maxAge = maxAgeSeconds === undefined ? "" : `; Max-Age=${maxAgeSeconds}`;
+  return `${SESSION_COOKIE}=${token}${maxAge}; Path=/; HttpOnly; Secure; SameSite=Lax`;
 }
 
 function readSessionToken(request: Request): string | null {
@@ -69,16 +72,14 @@ export async function createSession(db: Database, userId: number): Promise<strin
   await db.insert(sessions).values({
     id: await sha256Hex(token),
     userId,
-    expiresAt: new Date(Date.now() + SESSION_DAYS * DAY_MS).toISOString(),
+    expiresAt: new Date(Date.now() + SESSION_IDLE_MS).toISOString(),
     signedInAt: new Date().toISOString(),
   });
-  return sessionCookie(token, SESSION_DAYS * 24 * 60 * 60);
+  return sessionCookie(token);
 }
 
 export interface SessionCheck {
   user: AdminUser;
-  /** Set-Cookie header when the expiry was extended. */
-  refreshedCookie?: string;
 }
 
 /** The signed-in admin for this request, or null. Slides the expiry forward. */
@@ -102,20 +103,22 @@ export async function getSession(db: Database, request: Request): Promise<Sessio
 
   const now = Date.now();
   const expiresAt = Date.parse(row.expiresAt);
-  if (!(expiresAt > now)) {
+  // A later expiry than the idle limit allows is a row from the old 30-day
+  // sessions (before 2026-10-30); the minute covers clock skew between servers.
+  if (!(expiresAt > now) || expiresAt > now + SESSION_IDLE_MS + 60_000) {
     await db.delete(sessions).where(eq(sessions.id, id));
     return null;
   }
 
   const user = { id: row.userId, email: row.email, signedInAt: row.signedInAt };
-  const fullExpiry = now + SESSION_DAYS * DAY_MS;
+  const fullExpiry = now + SESSION_IDLE_MS;
   if (fullExpiry - expiresAt < REFRESH_AFTER_MS) return { user };
 
   await db
     .update(sessions)
     .set({ expiresAt: new Date(fullExpiry).toISOString() })
     .where(eq(sessions.id, id));
-  return { user, refreshedCookie: sessionCookie(token, SESSION_DAYS * 24 * 60 * 60) };
+  return { user };
 }
 
 /** Ends the current session and returns the Set-Cookie header that clears it. */

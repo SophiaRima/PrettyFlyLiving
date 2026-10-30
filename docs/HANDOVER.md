@@ -52,7 +52,7 @@ What to know about the admin login:
 - Sophiah can change her login email or password herself under **Settings**, within 10 minutes of signing in. Changing the password signs out every other device.
 - There is no "forgot password" link. A forgotten password is reset by a developer using the pepper, so losing the pepper means a developer must replace it (a five-minute job, not a disaster).
 - Five wrong passwords from one connection lock sign-ins from it for 15 minutes.
-- A sign-in lasts 30 days on a device; **Log out** ends it.
+- A sign-in ends when the browser is closed, or after 2 hours without using the dashboard, whichever comes first; **Log out** ends it straight away. Save long edits (a guide, a description) within 2 hours of your last click, or they may be lost when you're asked to sign in again.
 
 ## Running the site day to day
 
