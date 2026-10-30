@@ -37,7 +37,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 const benefits = [
   ["01 · Thoughtful locations", "Neighbourhoods close to the things that bring you to Nairobi."],
   ["02 · Ready to live in", "Comfortable furnishings and the everyday essentials already here."],
-  ["03 · A little flexibility", "Options for quick getaways and longer stays alike."],
+  ["03 · A little flexibility", "Monthly stays, with room to stay on when plans change."],
   ["04 · Human support", "Friendly, responsive help throughout your stay."],
 ] as const;
 
@@ -70,7 +70,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               </h1>
               <p>
                 Beautiful apartments. Thoughtful service. Room to settle in,
-                whether you’re here for a weekend or a little longer.
+                whether you’re here for a month or a little longer.
               </p>
               <Link viewTransition className="btn" to="/stays">
                 Browse our stays <span>↗</span>

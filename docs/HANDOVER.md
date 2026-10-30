@@ -1,6 +1,6 @@
 # Pretty Fly Living: Website Handover
 
-As of 27 October 2026 · 45Creatives
+As of 30 October 2026 · 45Creatives
 
 prettyflyliving.com is live on Cloudflare in Sophiah's own accounts, costs nothing to run today, and is managed from the admin dashboard at prettyflyliving.com/admin.
 
@@ -8,7 +8,7 @@ prettyflyliving.com is live on Cloudflare in Sophiah's own accounts, costs nothi
 
 The site went live on 27 October 2026. Guests can browse stays, check availability and send booking requests; Sophiah answers them from the dashboard.
 
-| Area | State on 27 Oct 2026 |
+| Area | State on 30 Oct 2026 |
 | --- | --- |
 | Website | Live at https://prettyflyliving.com. `www` and plain `http://` redirect there. |
 | Stays | 1 published: Little Urban Nook (Kilimani), 31 photos |
@@ -16,8 +16,8 @@ The site went live on 27 October 2026. Guests can browse stays, check availabili
 | FAQs | 10 for guests, 10 for owners |
 | Extra services | 3: Airport Transfers; Nairobi, With a Local; Extra Cleaning and Laundry |
 | Nairobi guides | 6 draft guides (one per category, 5 photos each) loaded on 27 Oct 2026, waiting for Sophiah to review and publish under Nairobi guides. Photo credits are at the end of each guide. |
-| Email alerts | Not arriving yet: Truehost has not activated contact@prettyflyliving.com. Every request is still saved in the dashboard. |
-| prettyflyliving.co.ke | Not redirecting yet: its nameservers at the registrar are broken. |
+| Email alerts | Working since 28 Oct 2026: Resend delivers an alert to contact@prettyflyliving.com for every request. Every request is also saved in the dashboard. |
+| prettyflyliving.co.ke | Redirects to https://prettyflyliving.com (since 28 Oct 2026). |
 
 There are no online payments. A booking request is never a confirmed reservation: Sophiah confirms by WhatsApp or email, then blocks the dates.
 
@@ -60,8 +60,8 @@ Everything below happens in the dashboard at prettyflyliving.com/admin. The **Ov
 
 ### A booking request, start to finish
 
-1. A guest sends a request from a stay's page. It appears under **Booking requests** as *New*, and an alert email goes to contact@prettyflyliving.com.
-2. Open it and click **Reply by email** or **Reply on WhatsApp**: your own email app or WhatsApp opens with a message already written.
+1. On a stay's page, a guest taps their check-in and check-out days on the calendar (or types them), then sends a request with their name, email and phone / WhatsApp. It appears under **Booking requests** as *New*, and an alert email goes to contact@prettyflyliving.com.
+2. Open it and click **Reply by email** or **Reply on WhatsApp** (the guest gives both): your own email app or WhatsApp opens with a message already written.
 3. Set the status to *Contacted* and add private notes if useful.
 4. Once the stay is agreed and paid as you arrange it, click **Confirm & block dates**. The request becomes *Confirmed* and those nights disappear from the stay's calendar for other guests.
 5. If it doesn't go ahead, set it to *Declined*, or delete it: **Delete** on its row in the list, or **Delete request** at the bottom of its page. Deleting a confirmed request leaves its nights blocked; unblock them on the calendar if the stay is off.
@@ -91,6 +91,8 @@ On a phone or tablet, the dashboard's sections are under the **Menu** button at 
 | Extra services on Why Us | Extra services | Each card's button opens WhatsApp about that service. |
 
 Photos can be JPEG, PNG or WebP up to 10 MB. The dashboard shrinks and converts them before uploading, so phone photos are fine.
+
+To reorder photos, drag them (on a phone or tablet, hold a photo, then drag), or use the arrows and **Move to front**. Every save in the dashboard shows on the website straight away.
 
 ## What only a developer can change
 
@@ -124,15 +126,16 @@ Most problems are fixed in a dashboard setting; anything marked *developer* need
 
 These are the items left before the handover is complete.
 
-- [ ] Truehost activates contact@prettyflyliving.com, then send a test booking request and check the alert arrives
-- [ ] Fix the prettyflyliving.co.ke nameservers at KWE Holding, then a developer redirects it to prettyflyliving.com
+- [ ] Send a test booking request and check the alert shows up in the contact@ inbox (Resend reports it delivered)
+- [ ] Approve the gentle motion added on 29 Oct 2026 (pages fade into each other; photos and FAQ answers open smoothly), or ask for it to be removed
+- [ ] Decide whether to add a small cookie notice bar. It isn't legally needed: the site sets no tracking cookies, and the Privacy Policy covers it
 - [ ] 45Creatives hands the password pepper to Sophiah's password manager
 - [ ] Confirm the registrar and renewal date for prettyflyliving.com
 - [ ] Confirm the GitHub repository is owned by Sophiah's account, with 45Creatives as a collaborator only
 - [ ] Decide on the two unpublished reviews (4★ and 3★) under **Reviews**
 - [ ] Review the six draft Nairobi guides and tick Published (the first four are already Featured for the Home page)
 - [ ] Dashboard training session with Sophiah
-- [ ] After a quiet month, tighten the email DMARC policy (developer) and consider turning on HSTS in Cloudflare
+- [ ] After a quiet month, consider turning on HSTS in Cloudflare (developer)
 
 ## Appendix: for the next developer
 
@@ -145,7 +148,7 @@ Start with `AGENTS.md` in the repository: it is the source of truth for the prod
 | Resource | Name | Notes |
 | --- | --- | --- |
 | Worker | `prettyflyliving` | Custom domains prettyflyliving.com and www (www, and http on the main domain, 301 to https://prettyflyliving.com in `workers/app.ts`) |
-| D1 | `prettyflyliving-db` | Western Europe. Migrations 0000–0005 applied. |
+| D1 | `prettyflyliving-db` | Western Europe. Migrations 0000–0007 applied. |
 | R2 | `prettyflyliving-media` | Content-hashed keys, plus an 800px copy (`<hash>-800.webp`) of each upload |
 | Secrets | `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, `PASSWORD_PEPPER` | `wrangler secret put` |
 | Vars | `SITE_URL`, `NOTIFY_EMAIL`, `EMAIL_FROM`, `TURNSTILE_SITE_KEY` | In `wrangler.jsonc` |
@@ -159,17 +162,25 @@ Start with `AGENTS.md` in the repository: it is the source of truth for the prod
 
 `scripts/seed-production.sql` loaded the launch content on 27 Oct 2026. Never run it again: production content is edited in the dashboard.
 
+### Page cache
+
+`workers/page-cache.ts` keeps anonymous public GET pages on prettyflyliving.com in the edge cache. It skips `/admin`, `/media`, signed-in admins and any response with `Set-Cookie`. The cache key holds the `content_version` row (bumped by every successful dashboard save in the admin layout middleware), Nairobi's date and the build's asset version, so edits and deploys show at once. Copies are kept at most 1 hour as a backstop, and the `X-Page-Cache: miss|hit` header shows what happened.
+
+A data fix made with SQL instead of the dashboard must bump the version too, or pages stay cached for up to an hour: `INSERT INTO content_version (id, version) VALUES (1, 1) ON CONFLICT(id) DO UPDATE SET version = version + 1;`
+
 ### DNS (Cloudflare zone prettyflyliving.com)
 
-- Mail (Truehost): MX `workplaceproemail.com` (10) and `workplaceproemail.net` (20); SPF `v=spf1 include:_spf.cloudoon.com ~all`; DKIM selector `smarthost`; DMARC `v=DMARC1; p=none;`. Mail hostnames stay DNS-only, never proxied.
+- Mail (Truehost): MX `workplaceproemail.com` (10) and `workplaceproemail.net` (20); SPF `v=spf1 +mx include:_spf.cloudoon.com ~all`; DKIM selector `smarthost`; DMARC `v=DMARC1; p=quarantine; sp=quarantine; fo=1; adkim=r; aspf=r`. Mail hostnames stay DNS-only, never proxied.
 - Resend: verified sending domain `send.prettyflyliving.com` (DKIM, return-path and MX records on `send`).
 - Website: the apex and www records belong to the Worker's custom domains; don't edit them by hand.
+
+prettyflyliving.co.ke is a separate Cloudflare zone (registrar KWE Holding). Its proxied placeholder `A` records (`@` and `www`, 192.0.2.1) exist only so a single redirect rule can send every request, with its path and query, to https://prettyflyliving.com with a 301. The Worker plays no part. The zone sends no email: null MX `0 .`, SPF `v=spf1 -all`, DMARC `v=DMARC1; p=reject;`.
 
 ### Known issues and next steps
 
 - **CPU**: live requests use 17–100 ms of CPU against the free plan's nominal 10 ms. No 1102 errors so far; if they appear, move to Workers Paid rather than trimming code.
 - **Cloudflare bot script**: `/cdn-cgi/challenge-platform/scripts/jsd/main.js` is still injected into pages after Bot Fight Mode was turned off. It costs the home page some Lighthouse points; it is harmless otherwise.
-- **Lighthouse (mobile, 27 Oct 2026)**: accessibility 100 and SEO 100 on every page, performance 70–89.
-- **.co.ke redirect**: once its nameservers work, add the zone to Cloudflare, add `prettyflyliving.co.ke` (and www) as custom domains in `wrangler.jsonc`, and add the hosts to `redirectHosts` in `workers/app.ts`.
-- **Email**: move DMARC to `p=quarantine` once a Gmail "Show original" test passes SPF, DKIM and DMARC.
+- **Lighthouse (mobile, 27 Oct 2026, after the page cache)**: performance 92–97, accessibility 100 and SEO 100 on every page.
+- **Email**: confirm a Gmail "Show original" test of mail from contact@ passes SPF, DKIM and DMARC.
+- **Media revalidation**: `/media/*` answers a request with `If-None-Match` with a full 200, not a 304. Harmless, because photos are immutable and browsers don't revalidate them.
 - **Backups**: D1 Time Travel can restore the database to an earlier point in time; check its retention on the current plan before relying on it.

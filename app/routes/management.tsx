@@ -100,7 +100,7 @@ export default function Management({ loaderData, actionData }: Route.ComponentPr
             <div className="eyebrow">A more considered way to host</div>
             <h2>Better care for your property. Less on your plate.</h2>
             <p>
-              Managing a short-stay property takes time, attention and a great
+              Managing a furnished rental takes time, attention and a great
               deal of coordination. Pretty Fly Living helps owners with the
               everyday details  -  from presenting the property well to
               supporting guests and keeping operations moving.

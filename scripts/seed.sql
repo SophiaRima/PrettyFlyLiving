@@ -46,7 +46,7 @@ INSERT INTO properties (id, slug, name, area, address, property_type, tag, ratin
 
 INSERT INTO properties (id, slug, name, area, address, property_type, tag, rating, description, good_to_know, bedrooms, bathrooms, sleeps, monthly_price_kes, min_nights, amenities, is_featured, is_published, sort_order) VALUES
 (7, 'little-urban-nook', 'Little Urban Nook', 'Kilimani', 'Near Yaya Centre, Kilimani, Nairobi', 'Apartment', 'Near Yaya Centre', 4.7,
- 'The Little Urban Nook is best suited for one guest looking for a clean, comfortable and private place to stay in a prime location. Whether you’re in Nairobi for business, a quick city escape or simply passing through, you’ll have the essentials you need for a relaxing stay, and a peaceful little space to return to after a busy day. Small space, thoughtfully done, and everything you need in one little nook.',
+ 'The Little Urban Nook is best suited for one guest looking for a clean, comfortable and private place to stay in a prime location. Whether you’re in Nairobi for business, a project or a few months in the city, you’ll have the essentials you need for a relaxing stay, and a peaceful little space to return to after a busy day. Small space, thoughtfully done, and everything you need in one little nook.',
  'Airport pick-up and drop-off can be arranged at an additional cost. Longer stays come with special discounts, complimentary cleaning, and free early check-in and late check-out when available.
 Please note that a new building is going up on the next plot, so there may be construction noise during working hours: Monday to Friday from about 9am to 5pm, and Saturday from 9am to about 2pm. There is no work on Sundays, and the digging stage is expected to finish soon.
 Check-in and check-out: Check in after 3:00 PM and check out before 10:00 AM. Self check-in with a lockbox.
@@ -128,7 +128,7 @@ INSERT INTO property_photos (property_id, r2_key, alt, width, height, sort_order
 -- are seeded unpublished; Sophiah can publish them from /admin/reviews.
 INSERT INTO reviews (guest_name, context, body, rating, property_id, is_featured, sort_order, is_published) VALUES
 ('Nelson', NULL, 'The place was incredibly neat, comfortable, and honestly even better than the pictures and description suggest; they simply don’t do it justice. The host was very responsive, collaborative, and easy to communicate with, which made the whole experience even better. I would definitely recommend the place.', 5, 7, 1, 1, 1),
-('Jack', NULL, 'Great little place. Extremely clean. Bathroom was really good. Had a smart TV. It is small but it is very fit for purpose and personally I thought it was great. Especially for shorter term stays. Would 100% return. Great communication and easy check in also! Very secure place', 5, 7, 0, 2, 1),
+('Jack', NULL, 'Great little place. Extremely clean. Bathroom was really good. Had a smart TV. It is small but it is very fit for purpose and personally I thought it was great. Would 100% return. Great communication and easy check in also! Very secure place', 5, 7, 0, 2, 1),
 ('Alisha', NULL, 'Lovely stay! Sophiah was great and very responsive. The flat was cozy and clean, and I felt very safe', 5, 7, 0, 3, 1),
 ('Patrick', NULL, 'Incredibly nice place, comfortable bed and the host is superb. Great value for money!', 5, 7, 0, 4, 1),
 ('Faris', NULL, 'Great view in a great location. I will come back for sure.', 5, 7, 0, 5, 1),
