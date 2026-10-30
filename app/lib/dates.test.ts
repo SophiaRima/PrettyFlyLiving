@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import {
   addDays,
   addMonths,
+  canPickCheckOut,
+  earliestCheckOut,
   expandNights,
   daysInMonth,
   firstWeekdayOfMonth,
@@ -183,6 +185,16 @@ describe("calendar date picking", () => {
     expect(nextStayDates(picking, "2026-11-25", blocked)).toEqual({ checkIn: "2026-11-25", checkOut: "" });
     const picked = { checkIn: "2026-11-01", checkOut: "2026-11-15" };
     expect(nextStayDates(picked, "2026-12-01", blocked)).toEqual({ checkIn: "2026-12-01", checkOut: "" });
+  });
+
+  it("needs the minimum stay before a day can be the check-out", () => {
+    const picking = { checkIn: "2026-12-01", checkOut: "" };
+    expect(earliestCheckOut("2026-12-01", 30)).toBe("2026-12-31");
+    expect(canPickCheckOut(picking, "2026-12-30", blocked, 30)).toBe(false);
+    expect(nextStayDates(picking, "2026-12-30", blocked, 30)).toEqual({ checkIn: "2026-12-30", checkOut: "" });
+    expect(nextStayDates(picking, "2026-12-31", blocked, 30)).toEqual({ checkIn: "2026-12-01", checkOut: "2026-12-31" });
+    // A long enough stay across blocked nights still can't be picked.
+    expect(canPickCheckOut({ checkIn: "2026-11-01", checkOut: "" }, "2026-12-05", blocked, 30)).toBe(false);
   });
 
   it("ignores a blocked day that can't be a check-out", () => {

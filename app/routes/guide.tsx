@@ -56,14 +56,13 @@ export default function Guide({ loaderData }: Route.ComponentProps) {
           />
           <h2>Make it part of your stay</h2>
           <p>
-            Whether you are visiting for a few days or getting to know the
-            city over a longer stay, leave space for the places and
-            experiences that make Nairobi yours. Our team can help point you
-            in the right direction.
+            Whether you are here for a month or settling in for longer, leave
+            space for the places and experiences that make Nairobi yours. Our
+            team can help point you in the right direction.
           </p>
           <CtaBand
             title="Make Nairobi your own."
-            text="Find a comfortable base for your next city adventure."
+            text="Find a comfortable home for your time in Nairobi."
             style={{ marginTop: 30 }}
           >
             <Link viewTransition className="btn" to="/stays">

@@ -15,7 +15,7 @@ The site went live on 27 October 2026. Guests can browse stays, check availabili
 | Reviews | 11 real guest reviews: 9 published, the 4★ and 3★ ones waiting for Sophiah's decision |
 | FAQs | 10 for guests, 10 for owners |
 | Extra services | 3: Airport Transfers; Nairobi, With a Local; Extra Cleaning and Laundry |
-| Nairobi guides | 6 draft guides (one per category, 5 photos each) loaded on 27 Oct 2026, waiting for Sophiah to review and publish under Nairobi guides. Photo credits are at the end of each guide. |
+| Nairobi guides | 6 guides (one per category, 5 photos each), all published. Photo credits are at the end of each guide. |
 | Email alerts | Working since 28 Oct 2026: Resend delivers an alert to contact@prettyflyliving.com for every request. Every request is also saved in the dashboard. |
 | prettyflyliving.co.ke | Redirects to https://prettyflyliving.com (since 28 Oct 2026). |
 
@@ -60,7 +60,7 @@ Everything below happens in the dashboard at prettyflyliving.com/admin. The **Ov
 
 ### A booking request, start to finish
 
-1. On a stay's page, a guest taps their check-in and check-out days on the calendar (or types them), then sends a request with their name, email and phone / WhatsApp. It appears under **Booking requests** as *New*, and an alert email goes to contact@prettyflyliving.com.
+1. On a stay's page, a guest taps their check-in and check-out days on the calendar (or types them; stays are at least 30 nights, and a shorter stay can't be picked), then sends a request with their name, email and phone / WhatsApp. It appears under **Booking requests** as *New*, and an alert email goes to contact@prettyflyliving.com.
 2. Open it and click **Reply by email** or **Reply on WhatsApp** (the guest gives both): your own email app or WhatsApp opens with a message already written.
 3. Set the status to *Contacted* and add private notes if useful.
 4. Once the stay is agreed and paid as you arrange it, click **Confirm & block dates**. The request becomes *Confirmed* and those nights disappear from the stay's calendar for other guests.
@@ -132,8 +132,7 @@ These are the items left before the handover is complete.
 - [ ] 45Creatives hands the password pepper to Sophiah's password manager
 - [ ] Confirm the registrar and renewal date for prettyflyliving.com
 - [ ] Confirm the GitHub repository is owned by Sophiah's account, with 45Creatives as a collaborator only
-- [ ] Decide on the two unpublished reviews (4★ and 3★) under **Reviews**
-- [ ] Review the six draft Nairobi guides and tick Published (the first four are already Featured for the Home page)
+- [ ] Decide on the two unpublished reviews (Yohan 4★, Lailah 3★) under **Reviews**. Lailah's says the room suits "staying a short time", which contradicts the 30-night minimum, so it is best left unpublished
 - [ ] Dashboard training session with Sophiah
 - [ ] After a quiet month, consider turning on HSTS in Cloudflare (developer)
 

@@ -26,7 +26,7 @@ export const defaultShareImage: PageImage = {
 
 /** The concept's home description, reused for the business itself. */
 const businessDescription =
-  "Thoughtfully selected serviced apartments in Nairobi for short and extended stays. Explore Pretty Fly Living.";
+  "Thoughtfully selected serviced apartments in Nairobi for monthly and longer stays. Explore Pretty Fly Living.";
 
 const businessId = `${site.url}/#business`;
 

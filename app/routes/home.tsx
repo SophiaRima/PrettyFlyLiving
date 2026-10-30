@@ -18,7 +18,7 @@ export function meta(): Route.MetaDescriptors {
   return pageMeta({
     title: "Pretty Fly Living  -  Your Home in Nairobi",
     description:
-      "Thoughtfully selected serviced apartments in Nairobi for short and extended stays. Explore Pretty Fly Living.",
+      "Thoughtfully selected serviced apartments in Nairobi for monthly and longer stays. Explore Pretty Fly Living.",
     path: "/",
   });
 }

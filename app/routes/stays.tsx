@@ -2,12 +2,14 @@ import { Link } from "react-router";
 
 import { getAreas, getPublishedProperties } from "~/.server/queries/properties";
 import { dbFromContext, nairobiToday } from "~/.server/request";
+import { keepCheckOutAfter } from "~/components/site/check-out-field";
 import { CtaSection } from "~/components/site/cta-band";
 import { LiveFilterForm } from "~/components/site/live-filter-form";
 import { PageHero } from "~/components/site/page-hero";
 import { PropertyCard } from "~/components/site/property-card";
+import { earliestCheckOut, nightsBetween } from "~/lib/dates";
 import { pageMeta } from "~/lib/seo";
-import { formatKes, priceBrackets, site, whatsappMessages, whatsappUrl } from "~/lib/site";
+import { formatKes, minStayNights, priceBrackets, site, whatsappMessages, whatsappUrl } from "~/lib/site";
 import { parseSearchParams, stayFiltersSchema } from "~/lib/validation";
 
 import type { Route } from "./+types/stays";
@@ -81,6 +83,7 @@ export default function Stays({ loaderData }: Route.ComponentProps) {
                 type="date"
                 min={today}
                 defaultValue={filters.in ?? ""}
+                onChange={(event) => keepCheckOutAfter(event.currentTarget, minStayNights)}
               />
             </label>
             <label className="filter-field" htmlFor="filter-out">
@@ -89,7 +92,7 @@ export default function Stays({ loaderData }: Route.ComponentProps) {
                 id="filter-out"
                 name="out"
                 type="date"
-                min={today}
+                min={earliestCheckOut(filters.in ?? today, minStayNights)}
                 defaultValue={filters.out ?? ""}
               />
             </label>
@@ -164,9 +167,11 @@ export default function Stays({ loaderData }: Route.ComponentProps) {
               <div className="empty-state">
                 <h3>No stays found just yet</h3>
                 <p>
-                  {filters.in
-                    ? "Try different dates, a different neighbourhood or a broader price range."
-                    : "Try a different neighbourhood or broaden your price range."}
+                  {filters.in && filters.out && nightsBetween(filters.in, filters.out) < minStayNights
+                    ? `Our stays start at ${minStayNights} nights. Try a check-out date at least ${minStayNights} nights after your check-in.`
+                    : filters.in
+                      ? "Try different dates, a different neighbourhood or a broader price range."
+                      : "Try a different neighbourhood or broaden your price range."}
                 </p>
                 <Link viewTransition className="btn btn-light" to="/stays">
                   Clear filters

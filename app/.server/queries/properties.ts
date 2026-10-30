@@ -16,6 +16,7 @@ import {
   type SQL,
 } from "drizzle-orm";
 
+import { nightsBetween } from "~/lib/dates";
 import type { PhotoData, PropertyCardData, PropertyDetailData } from "~/lib/types";
 import type { PropertyInput, StayFilters } from "~/lib/validation";
 
@@ -130,6 +131,8 @@ export async function getPublishedProperties(
   if (filters.max) conditions.push(lte(properties.monthlyPriceKes, filters.max));
   if (filters.guests) conditions.push(gte(properties.sleeps, filters.guests));
   if (filters.in && filters.out) {
+    // Hide stays whose minimum is longer than the dates asked for.
+    conditions.push(lte(properties.minNights, nightsBetween(filters.in, filters.out)));
     // Hide stays with any blocked night in [in, out).
     conditions.push(
       notExists(

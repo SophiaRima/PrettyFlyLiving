@@ -76,6 +76,13 @@ export const pageImages = {
 /** How many published reviews Why Us shows (featured first, then by sort order). */
 export const whyUsReviewCount = 6;
 
+/**
+ * The client rents for 30+ nights (2026-10-29), the default `min_nights`.
+ * The home search and the /stays date filter start check-out this many
+ * nights after check-in; each stay page uses its own `min_nights`.
+ */
+export const minStayNights = 30;
+
 /** "Max monthly price" options on /stays: the client's KES 60,000–250,000 range. */
 export const priceBrackets = [60000, 100000, 150000, 200000, 250000] as const;
 

@@ -207,7 +207,7 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
 
       <CtaSection
         title="Find your place in Nairobi."
-        text="Take a look around and find a stay that fits your trip."
+        text="Take a look around and find a stay that fits your plans."
       >
         <Link viewTransition className="btn" to="/stays">
           View all stays ↗

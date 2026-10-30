@@ -21,21 +21,24 @@ interface AvailabilityCalendarProps {
   until: string;
   /** Unavailable nights (YYYY-MM-DD). */
   blocked: ReadonlySet<string>;
+  /** The stay's minimum length; a check-out needs at least this many nights. */
+  minNights: number;
   dates: StayDates;
   onChange: (dates: StayDates) => void;
 }
 
 /**
  * The concept's `.calendar` grid with month navigation added (monthly stays
- * span several months). The first tap picks check-in, the next later one
- * check-out (client, 2026-10-29), and the nights between are highlighted.
- * Past and blocked days are disabled, except a blocked day that can be the
- * check-out (the guest leaves that day).
+ * span several months). The first tap picks check-in, the next one at least
+ * `minNights` later check-out (client, 2026-10-29), and the nights between
+ * are highlighted. Past and blocked days are disabled, except a blocked day
+ * that can be the check-out (the guest leaves that day).
  */
 export function AvailabilityCalendar({
   today,
   until,
   blocked,
+  minNights,
   dates,
   onChange,
 }: AvailabilityCalendarProps) {
@@ -85,7 +88,7 @@ export function AvailabilityCalendar({
           // Past days and days beyond the known window can't be chosen.
           const isPast = date < today || date >= until;
           const isBlocked = !isPast && blocked.has(date);
-          const unavailable = isPast || (isBlocked && !canPickCheckOut(dates, date, blocked));
+          const unavailable = isPast || (isBlocked && !canPickCheckOut(dates, date, blocked, minNights));
           const isEnd = date === checkIn || date === checkOut;
           const inRange = checkOut !== "" && date > checkIn && date < checkOut;
           const classes = [
@@ -108,7 +111,7 @@ export function AvailabilityCalendar({
               // Starts with the visible day number, so the spoken name matches it.
               aria-label={`${i + 1} ${monthLabel}${status}${role}`}
               aria-pressed={isEnd}
-              onClick={() => onChange(nextStayDates(dates, date, blocked))}
+              onClick={() => onChange(nextStayDates(dates, date, blocked, minNights))}
             >
               {i + 1}
             </button>

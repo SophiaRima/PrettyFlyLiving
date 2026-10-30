@@ -138,36 +138,44 @@ export function rangeHasBlockedNight(
   return false;
 }
 
+/** The first day a guest can check out, `minNights` after check-in. */
+export function earliestCheckOut(checkIn: string, minNights: number): string {
+  return addDays(checkIn, Math.max(1, minNights));
+}
+
 /**
  * True when a tap on `date` would set the check-out: a check-in is picked
- * but no check-out yet, and every night from check-in up to `date` is free.
- * The check-out day's own night may be blocked (the guest leaves that day).
+ * but no check-out yet, the stay is at least `minNights` long, and every
+ * night from check-in up to `date` is free. The check-out day's own night
+ * may be blocked (the guest leaves that day).
  */
 export function canPickCheckOut(
   current: StayDates,
   date: string,
   blocked: ReadonlySet<string>,
+  minNights = 1,
 ): boolean {
   return (
     current.checkIn !== "" &&
     current.checkOut === "" &&
-    date > current.checkIn &&
+    date >= earliestCheckOut(current.checkIn, minNights) &&
     !rangeHasBlockedNight(current.checkIn, date, blocked)
   );
 }
 
 /**
  * The dates after a tap on the calendar: the first tap picks check-in, the
- * next later one check-out. Any other tap (both already picked, a day on or
- * before check-in, or a stay across a blocked night) starts again with the
- * tapped day as check-in, unless that night is blocked.
+ * next one at least `minNights` later check-out. Any other tap (both already
+ * picked, a day too soon after check-in, or a stay across a blocked night)
+ * starts again with the tapped day as check-in, unless that night is blocked.
  */
 export function nextStayDates(
   current: StayDates,
   date: string,
   blocked: ReadonlySet<string>,
+  minNights = 1,
 ): StayDates {
-  if (canPickCheckOut(current, date, blocked)) return { checkIn: current.checkIn, checkOut: date };
+  if (canPickCheckOut(current, date, blocked, minNights)) return { checkIn: current.checkIn, checkOut: date };
   if (blocked.has(date)) return current;
   return { checkIn: date, checkOut: "" };
 }

@@ -37,7 +37,7 @@ export default function PrivacyPolicy() {
 
           <h2>What we collect</h2>
           <p>
-            <strong>Booking requests:</strong> your name, an email address or
+            <strong>Booking requests:</strong> your name, email address and
             phone number, the stay you are interested in, your dates and the
             number of guests.
           </p>

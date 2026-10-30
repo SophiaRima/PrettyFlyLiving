@@ -214,14 +214,16 @@ export default function Stay({ loaderData, actionData }: Route.ComponentProps) {
               <div className="detail-section">
                 <h3>Availability</h3>
                 <p>
-                  Tap your check-in date, then your check-out date, or choose
-                  them in the enquiry panel. Our team will confirm availability
-                  before your reservation is finalised.
+                  Stays here are at least {property.minNights} nights. Tap your
+                  check-in date, then your check-out date, or choose them in the
+                  enquiry panel. Our team will confirm availability before your
+                  reservation is finalised.
                 </p>
                 <AvailabilityCalendar
                   today={today}
                   until={calendarEnd}
                   blocked={blocked}
+                  minNights={property.minNights}
                   dates={dates}
                   onChange={setDates}
                 />
@@ -230,10 +232,11 @@ export default function Stay({ loaderData, actionData }: Route.ComponentProps) {
               <div className="detail-section">
                 <h3>Frequently asked about this stay</h3>
                 <details className="accordion">
-                  <summary>Can I stay for a month or longer?</summary>
+                  <summary>How long can I stay?</summary>
                   <p>
-                    Yes, this home is suitable for extended stays. Send your
-                    dates and our team will confirm the best available rate.
+                    Stays here start at {property.minNights} nights, and longer
+                    stays are welcome. Send your dates and our team will confirm
+                    the best available rate.
                   </p>
                 </details>
                 <details className="accordion">

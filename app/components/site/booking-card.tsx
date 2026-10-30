@@ -1,7 +1,7 @@
 import type { RefObject } from "react";
 import { Form } from "react-router";
 
-import type { StayDates } from "~/lib/dates";
+import { earliestCheckOut, type StayDates } from "~/lib/dates";
 import type { FormFailure } from "~/lib/forms";
 import { formatKes, whatsappMessages, whatsappUrl } from "~/lib/site";
 import type { PropertyDetailData } from "~/lib/types";
@@ -54,8 +54,9 @@ export function BookingCard({
           value={dates.checkIn}
           onChange={(event) => {
             const checkIn = event.target.value;
-            // A check-out on or before the new check-in no longer makes sense.
-            const checkOut = dates.checkOut > checkIn ? dates.checkOut : "";
+            // A check-out sooner than the minimum stay no longer makes sense.
+            const checkOut =
+              checkIn && dates.checkOut >= earliestCheckOut(checkIn, property.minNights) ? dates.checkOut : "";
             onDatesChange({ checkIn, checkOut });
           }}
         />
@@ -66,7 +67,7 @@ export function BookingCard({
           {...field("checkOut")}
           defaultValue={undefined}
           type="date"
-          min={dates.checkIn || today}
+          min={earliestCheckOut(dates.checkIn || today, property.minNights)}
           required
           value={dates.checkOut}
           onChange={(event) => onDatesChange({ ...dates, checkOut: event.target.value })}
