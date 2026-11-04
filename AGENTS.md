@@ -95,7 +95,8 @@ Browser ──► Cloudflare Worker (React Router SSR: loaders/actions)
 
 ```
 design/concept/index.html      CLIENT-APPROVED DESIGN (read-only reference, see §5)
-design/logo-original.jpg       logo as supplied by the client
+design/logo.jpg                current logo source (client, 2026-11-04; no tagline)
+design/logo-original.jpg       first logo as supplied by the client (with tagline; test fixture)
 workers/app.ts                 Worker entry: createRequestHandler, passes env/ctx as context
 wrangler.jsonc                 D1 (DB) + R2 (MEDIA) bindings, vars, custom domain
 drizzle/                       generated SQL migrations
@@ -166,7 +167,7 @@ The base font size is 90% on `:root`/`html`, buttons are 4px-radius rectangles, 
 
 ### 5.3 Logo
 
-- The client's logo (`design/logo-original.jpg`: house outline in terracotta, botanical sprig, "Pretty Fly" script and "Living" in forest green, tagline "Beautiful. Comfortable. Secure") **replaces the concept's text wordmark** in the header and footer brand slots (`.brand`).
+- The client's logo (`design/logo.jpg`, supplied 2026-11-04: house outline in terracotta, a fuller botanical sprig, "Pretty Fly" script and "Living" in forest green, no tagline; it replaced `design/logo-original.jpg`, which had the tagline "Beautiful. Comfortable. Secure") **replaces the concept's text wordmark** in the header and footer brand slots (`.brand`). Every file in `public/brand/` is exported from `design/logo.jpg`.
 - Use a cropped, **transparent** export in `public/brand/`. Prefer SVG; use a 2× PNG until an SVG exists. Never place the JPG with its cream background on the site.
 - Header: drop the tagline line and size the logo to fit the header height (64px tall above 720px, raised from 52px at the client's request on 2026-11-04 in the same 76px header; 44px at ≤720px; header file `logo-header.webp`, a 2× export) without changing the header height. Check that the "Pretty Fly" script stays legible. If it doesn't, ask for a horizontal lockup instead of shrinking it further.
 - Footer: the footer is dark (`#242820`), so use a **light/reversed** version of the logo. Keep the concept's footer text ("Thoughtfully selected spaces…") beside it.

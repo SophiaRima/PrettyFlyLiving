@@ -12,7 +12,7 @@ export function SiteFooter() {
               <img
                 src="/brand/logo-light.webp"
                 alt={site.name}
-                width={101}
+                width={91}
                 height={72}
                 loading="lazy"
               />

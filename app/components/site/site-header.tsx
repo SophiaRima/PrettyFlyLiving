@@ -40,7 +40,7 @@ export function SiteHeader() {
           <img
             src="/brand/logo-header.webp"
             alt={site.name}
-            width={90}
+            width={81}
             height={64}
             loading="eager"
           />

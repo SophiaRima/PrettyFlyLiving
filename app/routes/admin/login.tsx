@@ -74,7 +74,7 @@ export default function AdminLogin({ loaderData, actionData }: Route.ComponentPr
           <img
             src="/brand/logo.png"
             alt="Pretty Fly Living"
-            width={109}
+            width={99}
             height={78}
             className="mx-auto mb-2 h-16 w-auto"
           />
