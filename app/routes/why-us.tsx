@@ -8,7 +8,7 @@ import { PageHero } from "~/components/site/page-hero";
 import { QuoteCard } from "~/components/site/quote-card";
 import { ServiceGrid, type ServiceItem } from "~/components/site/service-grid";
 import { pageMeta } from "~/lib/seo";
-import { pageImages, whatsappMessages, whatsappUrl, whyUsReviewCount } from "~/lib/site";
+import { pageImages, whyUsReviewCount } from "~/lib/site";
 
 import type { Route } from "./+types/why-us";
 
@@ -163,14 +163,9 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
                     <p>{service.description}</p>
                     {service.details && <p className="service-details">{service.details}</p>}
                     {service.ctaLabel && (
-                      <a
-                        className="btn btn-light"
-                        href={whatsappUrl(whatsappMessages.service(service.title))}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                      <Link viewTransition className="btn btn-light" to="/contact">
                         {service.ctaLabel} ↗
-                      </a>
+                      </Link>
                     )}
                   </div>
                 </article>

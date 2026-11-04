@@ -73,7 +73,7 @@ The site does not sync with other booking sites. When a stay is booked elsewhere
 ### Other inboxes
 
 - **Messages**: the Contact page form. Reply from the message, then click **Mark handled**.
-- **Owner enquiries**: the Property Management form: the owner's name, email, phone / WhatsApp, property location, property type(s), number of units and what they'd like help with.
+- **Owner enquiries**: the Property Management form: the owner's name, email, phone / WhatsApp, Property location(s), property type(s), number of units and what they'd like help with.
 
 Each message and enquiry also has a **Delete** button, for spam or anything you no longer need. Deleting can't be undone.
 
@@ -88,7 +88,7 @@ On a phone or tablet, the dashboard's sections are under the **Menu** button at 
 | Reviews | Reviews | Never publish a review that wasn't really written. The featured one appears on Home. |
 | FAQs | FAQs | Separate lists for guests and property owners. |
 | Nairobi guides (Things to Do) | Nairobi guides | Written in Markdown with a preview; each guide has a Photos tab. Links to venues open in a new tab. |
-| Extra services on Why Us | Extra services | Each card's button opens WhatsApp about that service. |
+| Extra services on Why Us | Extra services | Each card's button opens the Contact page. |
 
 Photos can be JPEG, PNG or WebP up to 10 MB. The dashboard shrinks and converts them before uploading, so phone photos are fine.
 
