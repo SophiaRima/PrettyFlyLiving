@@ -114,7 +114,7 @@ export default function Management({ loaderData, actionData }: Route.ComponentPr
               Discuss your property ↗
             </a>
           </div>
-          <div className="split-image">
+          <div className="split-image split-photo-dining">
             <Img {...pageImages.managementSplit} priority />
           </div>
         </div>

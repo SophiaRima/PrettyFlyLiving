@@ -63,16 +63,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           <div className="hero-inner">
             <div className="hero-copy">
               <div className="eyebrow">Serviced apartments · Nairobi</div>
-              <h1 className="hero-title-long">
-                {/* Phones show only the last line (client, 2026-11-04). */}
-                <span className="hero-title-lead">
-                  Beautiful spaces.
-                  <br />
-                  Thoughtful hospitality.
-                  <br />
-                </span>
-                A place to feel at home.
-              </h1>
+              {/* Only this line, on every screen (client, 2026-11-04). */}
+              <h1 className="hero-title-long">A place to feel at home.</h1>
               <p>
                 Discover beautifully furnished apartments, attentive service and
                 all the comfort you need to settle in. Whether you’re staying
@@ -144,7 +136,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               Why stay with us ↗
             </Link>
           </div>
-          <div className="split-image">
+          <div className="split-image split-photo-living">
             <Img {...pageImages.homeSplit} />
             <div className="image-caption">A softer landing in the city.</div>
           </div>

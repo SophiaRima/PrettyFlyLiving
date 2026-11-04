@@ -103,7 +103,7 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
               Explore our stays ↗
             </Link>
           </div>
-          <div className="split-image">
+          <div className="split-image split-photo-bedroom">
             <Img {...pageImages.whySplit} priority />
           </div>
         </div>

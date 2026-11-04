@@ -48,29 +48,34 @@ export const pageImages = {
     height: 2560,
     alt: "Living room with brown recliner sofas, a crystal chandelier, a marble feature wall with a TV, and glass doors looking out over the Nairobi skyline",
   },
+  /*
+   * The split photos are the client's (2026-11-04). Each has an 800px copy for
+   * phones. The split box is about 550 × 520px on desktops, so a landscape photo
+   * is drawn as wide as the box is tall × its shape (sizes below).
+   */
   homeSplit: {
-    src: "/images/home-split.webp",
-    width: 1086,
-    height: 1448,
-    alt: "Small double bed by the window with fresh towels",
+    src: "/images/home-split-living.webp",
+    srcSet: "/images/home-split-living-800.webp 800w, /images/home-split-living.webp 1600w",
+    sizes: "(max-width: 720px) 100vw, 720px",
+    width: 1600,
+    height: 1158,
+    alt: "Living room with a blue fabric sofa, a round wooden coffee table, a wall-mounted TV and sheer curtains over the balcony doors",
   },
-  /** On phones the split photo is the page's largest image, so it has an 800px copy. */
   whySplit: {
-    src: "/images/why-split.webp",
-    srcSet: "/images/why-split-800.webp 800w, /images/why-split.webp 1200w",
-    sizes: "(max-width: 720px) 100vw, 540px",
-    width: 1200,
-    height: 1200,
-    alt: "City view over Kilimani from a Pretty Fly Living window",
+    src: "/images/why-split-bedroom.webp",
+    srcSet: "/images/why-split-bedroom-800.webp 800w, /images/why-split-bedroom.webp 1600w",
+    sizes: "(max-width: 720px) 100vw, 780px",
+    width: 1600,
+    height: 1066,
+    alt: "Double bed with crisp white linen, patterned cushions and rolled towels beside a sunny window",
   },
   managementSplit: {
-    src: "/images/management-split.webp",
-    srcSet: "/images/management-split-800.webp 800w, /images/management-split.webp 1200w",
-    /** A wide panorama in a 520px-tall box: the box's height decides, so desktops need the 1200px file. */
-    sizes: "(max-width: 720px) 100vw, 1200px",
-    width: 1200,
-    height: 554,
-    alt: "Courtyard garden with seating in a Pretty Fly Living building",
+    src: "/images/management-split-dining.webp",
+    srcSet: "/images/management-split-dining-800.webp 800w, /images/management-split-dining.webp 1066w",
+    sizes: "(max-width: 720px) 100vw, 560px",
+    width: 1066,
+    height: 1600,
+    alt: "Round wooden dining table with four chairs and three round wall mirrors under a pendant light",
   },
 } as const;
 

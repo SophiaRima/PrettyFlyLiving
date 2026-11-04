@@ -43,7 +43,7 @@ export function SearchPanel({ areas }: { areas: string[] }) {
           inputMode="numeric"
           min={1}
           step={1}
-          defaultValue={2}
+          placeholder="Number of guests"
         />
       </div>
       <button className="btn" type="submit">
