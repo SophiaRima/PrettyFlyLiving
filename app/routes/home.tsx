@@ -72,7 +72,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               </h1>
               <p>
                 Discover beautifully furnished apartments, attentive service and
-                all the comforts you need to settle in. Whether you’re staying
+                all the comfort you need to settle in. Whether you’re staying
                 for a month or longer, we make extended stays feel effortless.
               </p>
               <Link viewTransition className="btn" to="/stays">
@@ -87,7 +87,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <div className="container">
           <SearchPanel areas={areas} />
           <div className="intro-strip">
-            <span>spaces made for comforts</span>
+            <span>spaces made for comfort</span>
             <span>Great locations</span>
             <span>Local tips and advice</span>
             <span>Here when you need us</span>
@@ -104,9 +104,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             </div>
             <div>
               <p>
-                Discover thoughtfully furnished apartments in Nairobi’s
-                most-loved neighbourhoods, chosen for comfort, convenience and
-                a little breathing room.
+                Find a comfortable place to call home in Nairobi. Our furnished apartments offer convenient locations, lovely spaces and everything you need for a longer stay.
               </p>
               <Link viewTransition className="text-link" to="/stays">
                 Explore all stays ↗

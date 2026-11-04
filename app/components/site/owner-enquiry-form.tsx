@@ -45,7 +45,7 @@ export function OwnerEnquiryForm({ failure, sent, sending, siteKey, resetKey }: 
           {error("phone")}
         </div>
         <div className="form-group">
-          <label htmlFor="owner-location">Property location *</label>
+          <label htmlFor="owner-location">Property location(s) *</label>
           <input {...field("location")} required placeholder="e.g. Kilimani" />
           {error("location")}
         </div>

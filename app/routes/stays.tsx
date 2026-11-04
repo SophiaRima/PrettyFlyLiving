@@ -18,7 +18,7 @@ export function meta(): Route.MetaDescriptors {
   return pageMeta({
     title: "Our stays  -  Pretty Fly Living",
     description:
-      "Considered serviced apartments in Nairobi, with the comforts of home and space to make the city your own.",
+      "Considered serviced apartments in Nairobi, with the comfort of home and space to make the city your own.",
     path: "/stays",
   });
 }
@@ -47,7 +47,7 @@ export default function Stays({ loaderData }: Route.ComponentProps) {
       <PageHero
         eyebrow="Find your place"
         title="Our stays."
-        intro="Considered apartments in Nairobi, with the comforts of home and space to make the city your own."
+        intro="Comfortable, well-furnished apartments in Nairobi, giving you the space and freedom to settle in."
         action={
           <Link viewTransition className="btn" to="/contact">
             Need a recommendation? ↗

@@ -31,7 +31,7 @@ const services: readonly ServiceItem[] = [
   { icon: "♡", title: "Guest communication", text: "Enquiry handling, practical information and responsive support throughout the guest journey." },
   { icon: "⌑", title: "Check-in & check-out", text: "Coordinated arrival and departure processes with clear guest instructions." },
   { icon: "✳", title: "Cleaning & maintenance", text: "Cleaning coordination, property checks and maintenance follow-up with agreed providers." },
-  { icon: "★", title: "Reviews & channel management", text: "Guest feedback support and management of Booking.com and other agreed channels." },
+  { icon: "★", title: "Reviews & channel management", text: " Guest feedback support and management of your property on prettyflyliving, airbnb, booking.com and other agreed channels" },
 ];
 
 const steps = [
@@ -59,7 +59,7 @@ export async function action({ request, context }: Route.ActionArgs) {
       ["Name", enquiry.name],
       ["Email", enquiry.email],
       ["Phone / WhatsApp", enquiry.phone],
-      ["Property location", enquiry.location],
+      ["Property location(s)", enquiry.location],
       ["Property type(s)", enquiry.type],
       ["Number of units", String(enquiry.units)],
       ["Help wanted", enquiry.message ?? "-"],
@@ -86,7 +86,7 @@ export default function Management({ loaderData, actionData }: Route.ComponentPr
             Our expertise.
           </>
         }
-        intro="Thoughtful, end-to-end property management designed to make hosting simpler and your property work harder."
+        intro="We take care of the day-to-day management of your property, helping you save time, attract more guests and get the most out of your investment."
         action={
           <a className="btn" href="#owner-enquiry">
             Talk to our team ↗
