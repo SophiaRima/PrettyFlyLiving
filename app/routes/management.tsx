@@ -31,7 +31,7 @@ const services: readonly ServiceItem[] = [
   { icon: "♡", title: "Guest communication", text: "Enquiry handling, practical information and responsive support throughout the guest journey." },
   { icon: "⌑", title: "Check-in & check-out", text: "Coordinated arrival and departure processes with clear guest instructions." },
   { icon: "✳", title: "Cleaning & maintenance", text: "Cleaning coordination, property checks and maintenance follow-up with agreed providers." },
-  { icon: "★", title: "Reviews & channel management", text: " Guest feedback support and management of your property on prettyflyliving, airbnb, booking.com and other agreed channels" },
+  { icon: "★", title: "Reviews & channel management", text: "Guest feedback support and management of your property on Pretty Fly Living, Booking.com and other agreed channels." },
 ];
 
 const steps = [
