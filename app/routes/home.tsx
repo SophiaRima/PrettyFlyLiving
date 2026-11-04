@@ -64,10 +64,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
             <div className="hero-copy">
               <div className="eyebrow">Serviced apartments · Nairobi</div>
               <h1 className="hero-title-long">
-                Beautiful spaces.
-                <br />
-                Thoughtful hospitality.
-                <br />
+                {/* Phones show only the last line (client, 2026-11-04). */}
+                <span className="hero-title-lead">
+                  Beautiful spaces.
+                  <br />
+                  Thoughtful hospitality.
+                  <br />
+                </span>
                 A place to feel at home.
               </h1>
               <p>
