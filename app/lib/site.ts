@@ -31,21 +31,22 @@ export const navItems = [
  */
 export const pageImages = {
   hero: {
-    src: "/images/hero-living-1280.webp",
+    src: "/images/hero-lounge-1280.webp",
     /**
-     * The photo is 1920px wide, so 1920 is the largest copy (never upscaled
-     * at export). sizes is the width the photo is drawn at, not the box:
+     * The client's living-room photo (3840 × 2560 source, 2026-11-04),
+     * exported from 640 to 3200px so full-bleed desktops stay sharp at 2×.
+     * sizes is the width the photo is drawn at, not the box:
      * - 981px+: the short full-bleed box is wider than the photo's shape, so
      *   the photo fills the screen width.
      * - ≤980px: the photo sits above the copy in a 16:10 (tablet) or 4:3
      *   (phone) box, drawn up to 1.33 × the container width.
      */
     srcSet:
-      "/images/hero-living-640.webp 640w, /images/hero-living-960.webp 960w, /images/hero-living-1280.webp 1280w, /images/hero-living-1600.webp 1600w, /images/hero-living-1920.webp 1920w",
+      "/images/hero-lounge-640.webp 640w, /images/hero-lounge-960.webp 960w, /images/hero-lounge-1280.webp 1280w, /images/hero-lounge-1600.webp 1600w, /images/hero-lounge-1920.webp 1920w, /images/hero-lounge-2560.webp 2560w, /images/hero-lounge-3200.webp 3200w",
     sizes: "(min-width: 981px) 100vw, calc((100vw - 44px) * 1.33)",
-    width: 1920,
-    height: 1088,
-    alt: "Sunlit living room with a sofa, wooden coffee table and floor-to-ceiling windows looking out over Nairobi’s trees and skyline",
+    width: 3840,
+    height: 2560,
+    alt: "Living room with brown recliner sofas, a crystal chandelier, a marble feature wall with a TV, and glass doors looking out over the Nairobi skyline",
   },
   homeSplit: {
     src: "/images/home-split.webp",
