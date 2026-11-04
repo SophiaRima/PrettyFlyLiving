@@ -8,10 +8,10 @@ export const site = {
   tagline: "Serviced apartments · Nairobi",
   /** Sophiah's domain mailbox (Truehost). */
   email: "contact@prettyflyliving.com",
-  /** International format, digits only, for wa.me links (+254 708 854755). */
-  whatsappNumber: "254708854755",
-  /** Display format; tel: links strip the spaces. Same number as WhatsApp (0708 854755). */
-  phone: "+254 708 854 755",
+  /** International format, digits only, for wa.me links (+254 183 508315). */
+  whatsappNumber: "254183508315",
+  /** Display format; tel: links strip the spaces. Same number as WhatsApp (0183 508315). */
+  phone: "+254 183 508 315",
   location: "Nairobi, Kenya",
 } as const;
 

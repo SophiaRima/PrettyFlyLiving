@@ -98,7 +98,7 @@ To reorder photos, drag them (on a phone or tablet, hold a photo, then drag), or
 
 These live in the website's code, not the dashboard, so changing them means a small code update and a redeploy.
 
-- **Contact details**: the WhatsApp number (+254 708 854 755), phone, email address and the pre-written WhatsApp messages.
+- **Contact details**: the WhatsApp number (+254 183 508 315), phone, email address and the pre-written WhatsApp messages.
 - **Page wording** on Home, Why Us, Property Management, Contact and the Privacy Policy, and the FAQ page intros.
 - **Page photos** that aren't stays, guides or services: the Home hero and the photos beside the text on Home, Why Us and Property Management.
 - **The "Max monthly price" options** on Our Stays (now KES 60,000 to 250,000) and the "Browse by" shortcuts on Things to Do.
