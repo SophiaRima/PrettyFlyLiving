@@ -78,7 +78,7 @@ function currentNavItem(pathname: string): { label: string; icon: LucideIcon } |
 function AdminLogo() {
   return (
     <Link to="/admin" className="flex items-center gap-3">
-      <img src="/brand/logo.png" alt="Pretty Fly Living" width={51} height={40} className="h-10 w-auto" />
+      <img src="/brand/logo-v2.png" alt="Pretty Fly Living" width={51} height={40} className="h-10 w-auto" />
       <span className="text-xs tracking-wide text-muted-foreground uppercase">Admin</span>
     </Link>
   );

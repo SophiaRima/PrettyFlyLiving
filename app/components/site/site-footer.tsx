@@ -10,7 +10,7 @@ export function SiteFooter() {
           <div>
             <Link viewTransition className="brand" to="/" aria-label={`${site.name} home`}>
               <img
-                src="/brand/logo-light.webp"
+                src="/brand/logo-light-v2.webp"
                 alt={site.name}
                 width={91}
                 height={72}

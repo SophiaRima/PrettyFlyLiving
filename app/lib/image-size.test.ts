@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import logoJpeg from "../../design/logo-original.jpg?inline";
-import iconPng from "../../public/brand/apple-touch-icon.png?inline";
+import iconPng from "../../public/brand/apple-touch-icon-v2.png?inline";
 import photoWebp from "../../scripts/seed-media/properties/11f3f516ba42dded022c86e0c984034d.webp?inline";
 
 import { readImageSize } from "./image-size";

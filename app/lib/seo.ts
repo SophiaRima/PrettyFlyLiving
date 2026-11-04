@@ -20,7 +20,7 @@ interface PageImage {
 
 /** The share image generated from the logo (1200 × 630). */
 export const defaultShareImage: PageImage = {
-  src: "/brand/og-default.jpg",
+  src: "/brand/og-default-v2.jpg",
   alt: "Pretty Fly Living",
 };
 
@@ -56,7 +56,7 @@ export function lodgingBusinessJsonLd(): JsonLd {
     name: site.name,
     description: businessDescription,
     url: absoluteUrl("/"),
-    logo: imageUrl("/brand/icon-512.png"),
+    logo: imageUrl("/brand/icon-512-v2.png"),
     image: imageUrl(defaultShareImage.src),
     telephone: site.phone,
     email: site.email,

@@ -6,7 +6,8 @@
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Logos and page photos keep their names between versions, so only a day.
+# Logos and page photos are cached a day. When a logo changes, export it
+# under a new name (logo-header-v3.webp, ...) so nobody sees the old one.
 /brand/*
   Cache-Control: public, max-age=86400
 /images/*

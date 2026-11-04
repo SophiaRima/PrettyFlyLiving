@@ -72,7 +72,7 @@ export default function AdminLogin({ loaderData, actionData }: Route.ComponentPr
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <img
-            src="/brand/logo.png"
+            src="/brand/logo-v2.png"
             alt="Pretty Fly Living"
             width={99}
             height={78}

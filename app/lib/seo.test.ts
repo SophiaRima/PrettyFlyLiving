@@ -60,7 +60,7 @@ describe("absoluteUrl and imageUrl", () => {
 
   it("serves R2 keys from /media and keeps public paths and absolute URLs", () => {
     expect(imageUrl("photos/a.webp")).toBe("https://prettyflyliving.com/media/photos/a.webp");
-    expect(imageUrl("/brand/og-default.jpg")).toBe("https://prettyflyliving.com/brand/og-default.jpg");
+    expect(imageUrl("/brand/og-default-v2.jpg")).toBe("https://prettyflyliving.com/brand/og-default-v2.jpg");
     expect(imageUrl("https://images.unsplash.com/x.jpg")).toBe("https://images.unsplash.com/x.jpg");
   });
 });
@@ -84,7 +84,7 @@ describe("pageMeta", () => {
   it("falls back to the default share image", () => {
     expect(tags).toContainEqual({
       property: "og:image",
-      content: "https://prettyflyliving.com/brand/og-default.jpg",
+      content: "https://prettyflyliving.com/brand/og-default-v2.jpg",
     });
   });
 

@@ -22,9 +22,9 @@ import type { Route } from "./+types/root";
 export const links: Route.LinksFunction = () => [
   { rel: "preload", href: sansLatin, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
   { rel: "preload", href: serifLatin, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
-  { rel: "icon", href: "/favicon.ico", sizes: "48x48" },
-  { rel: "icon", href: "/brand/icon-192.png", type: "image/png", sizes: "192x192" },
-  { rel: "apple-touch-icon", href: "/brand/apple-touch-icon.png" },
+  { rel: "icon", href: "/brand/favicon-v2.ico", sizes: "48x48" },
+  { rel: "icon", href: "/brand/icon-192-v2.png", type: "image/png", sizes: "192x192" },
+  { rel: "apple-touch-icon", href: "/brand/apple-touch-icon-v2.png" },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
