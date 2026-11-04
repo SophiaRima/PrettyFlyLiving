@@ -5,7 +5,7 @@ import { dbFromContext } from "~/.server/request";
 import { CtaSection } from "~/components/site/cta-band";
 import { PageHero } from "~/components/site/page-hero";
 import { faqJsonLd, pageMeta } from "~/lib/seo";
-import { site, whatsappMessages, whatsappUrl } from "~/lib/site";
+import { whatsappMessages, whatsappUrl } from "~/lib/site";
 
 import type { Route } from "./+types/faqs";
 
@@ -90,14 +90,9 @@ export default function Faqs({ loaderData }: Route.ComponentProps) {
                 >
                   WhatsApp us ↗
                 </a>
-                <a
-                  className="text-link"
-                  href={`mailto:${site.email}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <Link viewTransition className="text-link" to="/contact">
                   Email us ↗
-                </a>
+                </Link>
                 <Link viewTransition className="text-link" to="/contact">
                   Contact our team ↗
                 </Link>

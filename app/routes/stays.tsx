@@ -9,7 +9,7 @@ import { PageHero } from "~/components/site/page-hero";
 import { PropertyCard } from "~/components/site/property-card";
 import { earliestCheckOut, nightsBetween } from "~/lib/dates";
 import { pageMeta } from "~/lib/seo";
-import { formatKes, maxSearchGuests, minStayNights, priceBrackets, site, whatsappMessages, whatsappUrl } from "~/lib/site";
+import { formatKes, guestFilterMax, minStayNights, priceBrackets, whatsappMessages, whatsappUrl } from "~/lib/site";
 import { parseSearchParams, stayFiltersSchema } from "~/lib/validation";
 
 import type { Route } from "./+types/stays";
@@ -33,7 +33,12 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return { stays, areas, filters, today: nairobiToday() };
 }
 
-const GUEST_OPTIONS = Array.from({ length: maxSearchGuests }, (_, i) => i + 1);
+const GUEST_OPTIONS = Array.from({ length: guestFilterMax }, (_, i) => i + 1);
+
+/** 1 to guestFilterMax, plus the searched number when it is larger. */
+function guestOptions(searched: number | undefined): number[] {
+  return searched && searched > guestFilterMax ? [...GUEST_OPTIONS, searched] : GUEST_OPTIONS;
+}
 
 export default function Stays({ loaderData }: Route.ComponentProps) {
   const { stays, areas, filters, today } = loaderData;
@@ -105,7 +110,7 @@ export default function Stays({ loaderData }: Route.ComponentProps) {
               defaultValue={filters.guests ? String(filters.guests) : ""}
             >
               <option value="">Any guests</option>
-              {GUEST_OPTIONS.map((n) => (
+              {guestOptions(filters.guests).map((n) => (
                 <option key={n} value={n}>
                   {n} guest{n > 1 ? "s" : ""}
                 </option>
@@ -195,14 +200,9 @@ export default function Stays({ loaderData }: Route.ComponentProps) {
           >
             Chat on WhatsApp ↗
           </a>
-          <a
-            className="btn btn-ghost"
-            href={`mailto:${site.email}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <Link viewTransition className="btn btn-ghost" to="/contact">
             Email us ↗
-          </a>
+          </Link>
         </div>
       </CtaSection>
     </main>
