@@ -1,6 +1,6 @@
 import { Form } from "react-router";
 
-import { minStayNights } from "~/lib/site";
+import { maxSearchGuests, minStayNights } from "~/lib/site";
 
 import { keepCheckOutAfter } from "./check-out-field";
 
@@ -35,13 +35,18 @@ export function SearchPanel({ areas }: { areas: string[] }) {
       </div>
       <div className="field">
         <label htmlFor="s-guests">Guests</label>
-        <select id="s-guests" name="guests" defaultValue="2">
-          {[1, 2, 3, 4, 5, 6].map((n) => (
-            <option key={n} value={n}>
-              {n} guest{n > 1 ? "s" : ""}
-            </option>
-          ))}
-        </select>
+        {/* Typed, not a dropdown (client, 2026-11-04): 1 to maxSearchGuests. */}
+        <input
+          id="s-guests"
+          name="guests"
+          type="number"
+          inputMode="numeric"
+          min={1}
+          max={maxSearchGuests}
+          step={1}
+          defaultValue={2}
+          aria-label={`Guests, 1 to ${maxSearchGuests}`}
+        />
       </div>
       <button className="btn" type="submit">
         Find a stay ↗

@@ -18,8 +18,7 @@ export function SiteFooter() {
               />
             </Link>
             <p style={{ maxWidth: 260, marginTop: 20 }}>
-              Thoughtfully selected spaces. Considered hospitality. A more
-              comfortable way to experience Nairobi.
+              Beautiful. Comfortable. Secure
             </p>
           </div>
           <div>

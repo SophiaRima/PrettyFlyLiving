@@ -83,6 +83,12 @@ export const whyUsReviewCount = 6;
  */
 export const minStayNights = 30;
 
+/**
+ * Most guests the home search accepts (client, 2026-11-04: typed, 1 to 10).
+ * The /stays guests filter offers the same range so a home search fills it.
+ */
+export const maxSearchGuests = 10;
+
 /** "Max monthly price" options on /stays: the client's KES 60,000–250,000 range. */
 export const priceBrackets = [60000, 100000, 150000, 200000, 250000] as const;
 

@@ -50,7 +50,7 @@ export default function WhyUs({ loaderData }: Route.ComponentProps) {
           <>
             A stay that feels
             <br />
-            like you.
+            just right.
           </>
         }
         intro="We bring together inviting spaces, thoughtful details and genuinely helpful hospitality  -  so you can focus on what brought you to Nairobi."

@@ -9,7 +9,7 @@ import { PageHero } from "~/components/site/page-hero";
 import { PropertyCard } from "~/components/site/property-card";
 import { earliestCheckOut, nightsBetween } from "~/lib/dates";
 import { pageMeta } from "~/lib/seo";
-import { formatKes, minStayNights, priceBrackets, site, whatsappMessages, whatsappUrl } from "~/lib/site";
+import { formatKes, maxSearchGuests, minStayNights, priceBrackets, site, whatsappMessages, whatsappUrl } from "~/lib/site";
 import { parseSearchParams, stayFiltersSchema } from "~/lib/validation";
 
 import type { Route } from "./+types/stays";
@@ -33,7 +33,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   return { stays, areas, filters, today: nairobiToday() };
 }
 
-const GUEST_OPTIONS = [1, 2, 3, 4, 5, 6];
+const GUEST_OPTIONS = Array.from({ length: maxSearchGuests }, (_, i) => i + 1);
 
 export default function Stays({ loaderData }: Route.ComponentProps) {
   const { stays, areas, filters, today } = loaderData;

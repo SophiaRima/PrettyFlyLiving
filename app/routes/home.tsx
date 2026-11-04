@@ -18,7 +18,7 @@ export function meta(): Route.MetaDescriptors {
   return pageMeta({
     title: "Pretty Fly Living  -  Your Home in Nairobi",
     description:
-      "Thoughtfully selected serviced apartments in Nairobi for monthly and longer stays. Explore Pretty Fly Living.",
+      " Beautiful. Comfortable. Secure",
     path: "/",
   });
 }
@@ -37,7 +37,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 const benefits = [
   ["01 · Thoughtful locations", "Neighbourhoods close to the things that bring you to Nairobi."],
   ["02 · Ready to live in", "Comfortable furnishings and the everyday essentials already here."],
-  ["03 · A little flexibility", "Monthly stays, with room to stay on when plans change."],
+  ["03 · A little flexibility", " A month, a few months or longer. Stay for as long as you need."],
   ["04 · Human support", "Friendly, responsive help throughout your stay."],
 ] as const;
 
@@ -63,14 +63,17 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           <div className="hero-inner">
             <div className="hero-copy">
               <div className="eyebrow">Serviced apartments · Nairobi</div>
-              <h1>
-                Your home
+              <h1 className="hero-title-long">
+                Beautiful spaces.
                 <br />
-                in Nairobi.
+                Thoughtful hospitality.
+                <br />
+                A place to feel at home.
               </h1>
               <p>
-                Beautiful apartments. Thoughtful service. Room to settle in,
-                whether you’re here for a month or a little longer.
+                Discover beautifully furnished apartments, attentive service and
+                all the comforts you need to settle in. Whether you’re staying
+                for a month or longer, we make extended stays feel effortless.
               </p>
               <Link viewTransition className="btn" to="/stays">
                 Browse our stays <span>↗</span>
@@ -84,9 +87,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <div className="container">
           <SearchPanel areas={areas} />
           <div className="intro-strip">
-            <span>Considered spaces</span>
-            <span>Comforts that matter</span>
-            <span>Local knowledge</span>
+            <span>spaces made for comforts</span>
+            <span>Great locations</span>
+            <span>Local tips and advice</span>
             <span>Here when you need us</span>
           </div>
         </div>

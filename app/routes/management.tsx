@@ -19,14 +19,14 @@ export function meta(): Route.MetaDescriptors {
   return pageMeta({
     title: "Property management in Nairobi  -  Pretty Fly Living",
     description:
-      "Thoughtful, end-to-end property management in Nairobi: listings, pricing, guest communication, cleaning, maintenance and booking channels.",
+      "We take care of the day-to-day management of your property, helping you save time, attract more guests and get the most out of your investment.",
     path: "/management",
   });
 }
 
 /** "What We Do" from the brief, as the concept's service cards. */
 const services: readonly ServiceItem[] = [
-  { icon: "⌂", title: "Listing creation & optimisation", text: "Clear descriptions, considered imagery and listing presentation across suitable booking channels." },
+  { icon: "⌂", title: "Listing creation & optimisation", text: "We create attractive, well-written property listings with quality photos and clear descriptions, showcasing your property on Pretty Fly Living and other suitable booking platforms to reach more potential guests." },
   { icon: "↗", title: "Pricing & revenue support", text: "Thoughtful rate reviews and calendar management based on season, demand and your goals." },
   { icon: "♡", title: "Guest communication", text: "Enquiry handling, practical information and responsive support throughout the guest journey." },
   { icon: "⌑", title: "Check-in & check-out", text: "Coordinated arrival and departure processes with clear guest instructions." },
@@ -38,7 +38,7 @@ const steps = [
   ["Get to know your property", "We learn about the home, your objectives and what matters to you."],
   ["Build the right plan", "We agree on services, responsibilities, reporting and fees."],
   ["Prepare to host", "We coordinate listing details, guest information and operational readiness."],
-  ["Manage and improve", "We stay close to the details and review what can work better."],
+  ["Manage and improve", " We oversee the day-to-day running of your property, keep track of its performance and look for ways to improve results."],
 ] as const;
 
 export function loader({ context }: Route.LoaderArgs) {
