@@ -38,10 +38,10 @@ export function SiteHeader() {
       <div className="container nav-wrap">
         <Link viewTransition className="brand" to="/" aria-label={`${site.name} home`}>
           <img
-            src="/brand/logo.webp"
+            src="/brand/logo-header.webp"
             alt={site.name}
-            width={73}
-            height={52}
+            width={90}
+            height={64}
             loading="eager"
           />
         </Link>

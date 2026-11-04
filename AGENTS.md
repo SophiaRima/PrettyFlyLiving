@@ -168,7 +168,7 @@ The base font size is 90% on `:root`/`html`, buttons are 4px-radius rectangles, 
 
 - The client's logo (`design/logo-original.jpg`: house outline in terracotta, botanical sprig, "Pretty Fly" script and "Living" in forest green, tagline "Beautiful. Comfortable. Secure") **replaces the concept's text wordmark** in the header and footer brand slots (`.brand`).
 - Use a cropped, **transparent** export in `public/brand/`. Prefer SVG; use a 2× PNG until an SVG exists. Never place the JPG with its cream background on the site.
-- Header: drop the tagline line and size the logo to fit the header height (about 52px tall on desktop, 44px at ≤720px) without changing the header height. Check that the "Pretty Fly" script stays legible. If it doesn't, ask for a horizontal lockup instead of shrinking it further.
+- Header: drop the tagline line and size the logo to fit the header height (64px tall above 720px, raised from 52px at the client's request on 2026-11-04 in the same 76px header; 44px at ≤720px; header file `logo-header.webp`, a 2× export) without changing the header height. Check that the "Pretty Fly" script stays legible. If it doesn't, ask for a horizontal lockup instead of shrinking it further.
 - Footer: the footer is dark (`#242820`), so use a **light/reversed** version of the logo. Keep the concept's footer text ("Thoughtfully selected spaces…") beside it.
 - Logo `alt` is "Pretty Fly Living". Generate the favicon, `apple-touch-icon` and the default OG image from the logo.
 - Do not adopt the logo's terracotta as a UI colour. The site palette stays the concept's (§5.2).

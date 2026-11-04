@@ -284,8 +284,10 @@ button { color: inherit; }
 .search-panel .field:focus-within { outline: 2px solid var(--sage); outline-offset: 2px; border-radius: 8px; }
 
 /* Client logo replaces the concept's text wordmark (AGENTS.md 5.3). The
-   concept's global img rule would stretch it, so size it explicitly. */
-.brand img { width: auto; height: 52px; object-fit: contain; }
+   concept's global img rule would stretch it, so size it explicitly. The
+   header logo is 64px (client, 2026-11-04: 52px looked small on desktop),
+   inside the same 76px header; logo-header.webp is its 2x export. */
+.brand img { width: auto; height: 64px; object-fit: contain; }
 .site-footer .brand img { height: 72px; }
 @media (max-width: 720px) {
   .brand img { height: 44px; }
