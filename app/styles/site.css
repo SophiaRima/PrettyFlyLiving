@@ -715,3 +715,9 @@ input[type="date"]::-webkit-calendar-picker-indicator { opacity: 1; filter: brig
 .split-photo-living img { object-position: 30% 50%; }
 .split-photo-bedroom img { object-position: 30% 50%; }
 .split-photo-dining img { object-position: 50% 75%; }
+
+/* 17. Explore similar stays (2026-11-05): the concept's inline 1fr 1fr kept
+   two half-width cards on phones; from 721px it stays two columns, at
+   ≤720px one full-width card per row like the other property grids. */
+.similar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 720px) { .similar-grid { grid-template-columns: 1fr; } }

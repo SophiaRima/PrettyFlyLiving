@@ -258,10 +258,7 @@ export default function Stay({ loaderData, actionData }: Route.ComponentProps) {
               {similar.length > 0 && (
                 <div className="detail-section">
                   <h3>Explore similar stays</h3>
-                  <div
-                    className="property-grid"
-                    style={{ gridTemplateColumns: "1fr 1fr" }}
-                  >
+                  <div className="property-grid similar-grid">
                     {similar.map((stay) => (
                       <PropertyCard key={stay.slug} property={stay} />
                     ))}
